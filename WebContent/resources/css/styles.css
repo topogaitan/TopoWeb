@@ -1,0 +1,88 @@
+html {
+	background-image:url(/RGF_TopoWeb/resources/img/Ptolomeo-world-map.jpg);
+	background-position: center;
+}
+
+body {
+	background: #FFECC1;
+	margin-left: 10em;
+	margin-right: 10em;
+	margin-bottom: 5em;
+	margin-top: 5em;
+	/* line-height: 1.6em */
+}
+
+#container {
+	margin: 1rem auto;	
+	width: 80%;	
+	max-width: 75rem; 
+	padding: 2em;
+	font-family: sans-serif !important;
+	font-size: 0.8em !important;
+}
+
+#footer {
+	margin-top: 2em; 
+	font-size: 0.7em;
+}
+
+.titleOne {
+	font-size: 1.6em !important;
+}
+
+.panel, .fieldset {
+	background-color: #D2B48C !important;
+	margin-top: 1em !important;
+}
+
+.centerInFragment {
+	margin: 0.5em;
+}
+
+.gmap {
+	width: 100%;
+	height: 30em;
+}
+
+.ui-menuitem-text {
+	font-size: 0.8em !important;
+}
+
+.separatorTop {
+	margin-top: 1em !important;
+	margin-bottom: 2em !important;
+	height: 0.2em;
+	background-color: rgb(210, 180, 140);
+}
+
+.separatorBottom {
+	margin-top: 2em !important;
+	margin-bottom: 1em !important;
+	height: 0.2em;
+	background-color: rgb(210, 180, 140);
+}
+
+.ui-datatable tbody td.derecha{
+	text-align:right;
+}
+
+.ui-datatable tbody td.central{
+	text-align:center;
+}
+
+.ui-growl-error, .ui-growl-fatal, .ui-messages .ui-messages-error, 
+.ui-message.ui-message-error, .ui-messages .ui-messages-fatal, 
+.ui-message.ui-message-fatal{
+	color: #fff;
+	background-color: #ff0000;
+	border-color: #ff0000;
+}
+
+.outputLabelMargin{
+	margin-left: 8em;
+	margin-right: 0.5em;
+}
+
+.ui-chkbox-box.ui-state-disabled{
+	opacity: 0.7 !important;
+}

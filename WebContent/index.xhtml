@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>topoGaitan</title>
+
+	<h:outputStylesheet name="css/styles.css" />
+
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+	</f:facet>
+
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPOB13MjdXCihUK6kdL59Tk-7cPiUOJTQ"></script>
+	<!-- <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
+	<!-- <script type="text/javascript" charset="UTF-8" src="http://maps.google.com/maps-api-v3/api/js/26/7/intl/es_ALL/common.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="http://maps.google.com/maps-api-v3/api/js/26/7/intl/es_ALL/util.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="http://maps.google.com/maps-api-v3/api/js/26/7/intl/es_ALL/marker.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="http://maps.google.com/maps-api-v3/api/js/26/7/intl/es_ALL/map.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="http://maps.google.com/maps-api-v3/api/js/26/7/intl/es_ALL/onion.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="http://maps.google.com/maps-api-v3/api/js/26/7/intl/es_ALL/stats.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="http://maps.google.com/maps-api-v3/api/js/26/7/intl/es_ALL/controls.js"></script> -->
+
+</h:head>
+<h:body>
+	<div id="container">
+		<h:form id="formCalculos">
+			
+			<p:growl id="messagesGrowl" sticky="true" showSummary="true" showDetail="true" autoUpdate="false"/>
+		
+			<p:outputLabel styleClass="titleOne">Cálculos topográficos</p:outputLabel>
+			<p:separator styleClass="separatorTop"></p:separator>
+			
+			<!-- INICIO FRAGMENT CALCULOS -->
+			<p:fragment id="fragmentToolbarCalculos">
+				<p:panel id="panelToolbarCalculos" styleClass="panel">
+					<p:toolbar id="toolbar" styleClass="centerInFragment">
+						<f:facet name="right">
+							<p:commandButton id="btNuevo" value="Nuevo" icon="ui-icon-document" 
+								disabled="#{principalController.disabledButtonsToolbar}"
+								action="#{principalController.accionBotonNuevo}" 
+								update="formCalculos">
+							</p:commandButton>
+							<p:commandButton type="button" title="Guardar" icon="ui-icon-disk" 
+								disabled="true">
+							</p:commandButton>
+							<p:commandButton type="button" title="Borrar" icon="ui-icon-trash" 
+								disabled="true">
+							</p:commandButton>
+							<p:commandButton type="button" title="Imprimir" icon="ui-icon-print" 
+								disabled="true">
+							</p:commandButton>
+						</f:facet>
+	
+						<f:facet name="left">
+							<p:menuButton id="mButtonCalculos" value="Cálculos" disabled="#{!principalController.disabledButtonsToolbar}">
+								<p:menuitem value="Intersección Directa" actionListener="#{principalController.activarIntersecDirecta}" 
+									update="fragmentToolbarCalculos fragmentGoogle fragmentCargaFichero" />
+								<p:menuitem value="Intersección Inversa" actionListener="#{principalController.activarIntersecInversa}" 
+									update="fragmentToolbarCalculos fragmentGoogle fragmentCargaFichero" />
+							</p:menuButton>
+						</f:facet>
+					</p:toolbar>
+				</p:panel>
+			</p:fragment>
+			<!-- FIN FRAGMENT CALCULOS -->
+			
+			<!-- INICIO FRAGMENT CARGA FICHERO -->
+			<p:fragment id="fragmentCargaFichero">
+				<p:panel id="panelToolbarFichero" styleClass="panel" rendered="#{principalController.renderedGoogleMaps}">
+					<p:fileUpload id="cargaFichero" styleClass="centerInFragment" mode="advanced" dragDropSupport="true" skinSimple="true"
+						fileUploadListener="#{principalController.cargaFicheroObservaciones}"
+						allowTypes="/(\.|\/)(gif|jpe?g|png|txt|rgf|pto|obs)$/" 
+						uploadLabel="Cargar" cancelLabel="Cancelar" label="Buscar fichero" 
+						update="fragmentCargaFichero fragmentDataTableObsIntersecDirecta fragmentDataTableObsIntersecInversa messagesGrowl" />
+					<h:panelGrid id="pgCheckCargaFicheros" styleClass="centerInFragment" columns="4">
+						<p:outputLabel styleClass="outputLabelMargin" value="Cargado fichero de coordenadas " />
+						<p:selectBooleanCheckbox disabled="true" 
+							value="#{not empty principalController.nubePuntos.listPuntos}" />
+						<p:outputLabel styleClass="outputLabelMargin" value="Cargado fichero de observaciones " />
+						<p:selectBooleanCheckbox disabled="true" 
+							value="#{not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta or 
+											not empty principalController.estadilloObsIntersInversa.listObsIntersInversa}" />
+    			</h:panelGrid>
+				</p:panel>
+			</p:fragment>
+			<!-- FIN FRAGMENT CARGA FICHERO -->
+			
+			<!-- INICIO FRAGMENT TABLA OBSERVACIONES INTERSECCION DIRECTA -->
+			<p:fragment id="fragmentDataTableObsIntersecDirecta">
+			<p:panel id="panelToolbarObsIntersecDirecta" styleClass="panel" 
+				rendered="#{not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta}">
+				<p:dataTable id="dataTableObsIntersecDirecta" styleClass="centerInFragment" var="observacion"
+					value="#{principalController.estadilloObsIntersDirecta.listObsIntersDirecta}">
+					<f:facet name="header">
+	            Observaciones Intersección Directa
+	        </f:facet>
+	        <p:column headerText="Estacion" styleClass="central" sortBy="#{observacion.idEstacion}">
+	            <h:outputText value="#{observacion.idEstacion}" />
+	        </p:column>
+	 
+	        <p:column headerText="Visado" styleClass="central" sortBy="#{observacion.idVisado}">
+	            <h:outputText value="#{observacion.idVisado}" />
+	        </p:column>
+	 
+	        <p:column headerText="LH" styleClass="derecha" sortBy="#{observacion.lH}">
+	            <h:outputText value="#{observacion.lH}" />
+	        </p:column>
+	 
+	        <p:column headerText="LV" styleClass="derecha" sortBy="#{observacion.lV}">
+	            <h:outputText value="#{observacion.lV}" />
+	        </p:column>
+	        
+	        <p:column headerText="Distancia" styleClass="derecha" sortBy="#{observacion.distancia}">
+	            <h:outputText value="#{observacion.distancia}" />
+	        </p:column>
+	        
+	        <p:column headerText="Código" styleClass="central" sortBy="#{observacion.codVisual}">
+	            <h:outputText value="#{observacion.codVisual}" />
+	        </p:column>
+	        <f:facet name="footer">
+	        	El fichero contiene un total de #{fn:length(principalController.estadilloObsIntersDirecta.listObsIntersDirecta)} observaciones
+	    		</f:facet>
+				</p:dataTable>
+				</p:panel>
+			</p:fragment>
+			<!-- FIN FRAGMENT TABLA OBSERVACIONES INTERSECCION DIRECTA -->
+			
+			<!-- INICIO FRAGMENT TABLA COORDENADAS INTERSECCION DIRECTA -->
+			<p:fragment id="fragmentDataTablePtosIntersecDirecta">
+			<p:panel id="panelToolbarPtosIntersecDirecta" styleClass="panel" 
+				rendered="#{empty principalController.nubePuntos.listPuntos}">
+				<p:dataTable id="dataTablePtosIntersecDirecta" styleClass="centerInFragment" var="punto"
+					value="#{principalController.nubePuntos.listPuntos}">
+					<f:facet name="header">
+	            Puntos Coordenadas Aprox. Intersección Directa
+	        </f:facet>
+	        <p:column headerText="Punto" styleClass="central" sortBy="#{punto.id}">
+	            <h:outputText value="#{punto.id}" />
+	        </p:column>
+	 
+	        <p:column headerText="Coord.X" styleClass="derecha" sortBy="#{punto.coordX}">
+	            <h:outputText value="#{punto.coordX}" />
+	        </p:column>
+	 
+	        <p:column headerText="Coord.Y" styleClass="derecha" sortBy="#{punto.coordY}">
+	            <h:outputText value="#{punto.coordY}" />
+	        </p:column>
+	 
+	        <p:column headerText="Coord.Z" styleClass="derecha" sortBy="#{punto.coordZ}">
+	            <h:outputText value="#{punto.coordZ}" />
+	        </p:column>
+	        
+	        <p:column headerText="Código" styleClass="central" sortBy="#{punto.codigo}">
+	            <h:outputText value="#{punto.codigo}" />
+	        </p:column>
+	        <f:facet name="footer">
+	        	El fichero contiene un total de #{fn:length(principalController.nubePuntos.listPuntos)} puntos
+	    		</f:facet>
+				</p:dataTable>
+				</p:panel>
+			</p:fragment>
+			<!-- FIN FRAGMENT TABLA COORDENADAS INTERSECCION DIRECTA -->
+			
+			<!-- INICIO FRAGMENT TABLA OBSERVACIONES INTERSECCION INVERSA -->
+			<p:fragment id="fragmentDataTableObsIntersecInversa">
+			<p:panel id="panelToolbarObsIntersecInversa" styleClass="panel" 
+				rendered="#{not empty principalController.estadilloObsIntersInversa.listObsIntersInversa}">
+				<p:dataTable id="dataTableObsIntersecInversa" styleClass="centerInFragment" var="observacion"
+					value="#{principalController.estadilloObsIntersInversa.listObsIntersInversa}">
+					<f:facet name="header">
+	            Observaciones Intersección Inversa
+	        </f:facet>
+	        <p:column headerText="Estacion" styleClass="central" sortBy="#{observacion.idEstacion}">
+	            <h:outputText value="#{observacion.idEstacion}" />
+	        </p:column>
+	 
+	        <p:column headerText="Visado" styleClass="central" sortBy="#{observacion.idVisado}">
+	            <h:outputText value="#{observacion.idVisado}" />
+	        </p:column>
+	 
+	        <p:column headerText="LH" styleClass="derecha" sortBy="#{observacion.lH}">
+	            <h:outputText value="#{observacion.lH}" />
+	        </p:column>
+	 
+	        <p:column headerText="LV" styleClass="derecha" sortBy="#{observacion.lV}">
+	            <h:outputText value="#{observacion.lV}" />
+	        </p:column>
+	        
+	        <!-- <p:column headerText="Distancia" styleClass="derecha" sortBy="#{observacion.distancia}">
+	            <h:outputText value="#{observacion.distancia}" />
+	        </p:column> -->
+	        
+	        <p:column headerText="Código" styleClass="central" sortBy="#{observacion.codVisual}">
+	            <h:outputText value="#{observacion.codVisual}" />
+	        </p:column>
+	        <f:facet name="footer">
+	        	El fichero contiene un total de #{fn:length(principalController.estadilloObsIntersInversa.listObsIntersInversa)} observaciones
+	    		</f:facet>
+				</p:dataTable>
+				</p:panel>
+			</p:fragment>
+			<!-- FIN FRAGMENT TABLA OBSERVACIONES INTERSECCION INVERSA -->
+			
+			<!-- INICIO FRAGMENT GOOGLE MAPS -->
+			<p:fragment id="fragmentGoogle">
+				<p:fieldset id="fieldSetGoogleMaps" styleClass="fieldset" legend="Google Maps" 
+					toggleable="true" toggleSpeed="500" collapsed="false" 
+					rendered="#{principalController.renderedGoogleMaps}">
+					<div id="divGmap">
+						<p:gmap id="gmap" styleClass="gmap" center="40.602057,-3.707517" 
+							zoom="10" type="TERRAIN">
+						</p:gmap>
+					</div>
+    		</p:fieldset>
+			</p:fragment>
+			<!-- FIN FRAGMENT GOOGLE MAPS -->
+		
+			<ui:include src="/pages/templates/footer.xhtml"/>
+			
+		</h:form>
+	</div>
+</h:body>
+</html>

@@ -1,0 +1,70 @@
+package es.gaitan.topografia.beans;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+import org.apache.log4j.Logger;
+
+import es.gaitan.topografia.constants.Constantes;
+import es.gaitan.topografia.interfaces.Estadillo;
+
+public class EstadilloObsIntersDirecta implements Serializable, Estadillo{
+	
+	private static final long serialVersionUID = -8997122079393118600L;
+	
+	private static final Logger LOG = Logger.getLogger(EstadilloObsIntersDirecta.class);
+	
+	private List<ObsIntersDirecta> listObsIntersDirecta;
+	
+	public EstadilloObsIntersDirecta(){
+		listObsIntersDirecta = new ArrayList<ObsIntersDirecta>();
+	}
+	
+	public boolean anadirObservacion(String tipoObs, String linea){
+		boolean blReturn = true;
+        String separador = "\t";
+        String[] parametros;
+        
+        try {
+	        parametros = linea.split(separador, 6);
+	
+	        ObsIntersDirecta obs = new ObsIntersDirecta();
+	        obs.setIdEstacion(parametros[0]);
+	        obs.setIdVisado(parametros[1]);
+	        obs.setlH(new BigDecimal(parametros[2]));
+	        obs.setlV(new BigDecimal(parametros[3]));
+	        obs.setDistancia(new BigDecimal(parametros[4]));
+	        obs.setCodVisual(parametros[5]);
+	        
+	        this.listObsIntersDirecta.add(obs);
+        }catch(Exception exc) {
+        	blReturn = false;
+        	LOG.error("Error al agregar una linea del fichero a la lista de observaciones");
+        	exc.printStackTrace();
+        	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+				Constantes.ATENCION, Constantes.FORMATO_INCORRECTO));
+        }
+        return blReturn;
+	}
+	
+	
+	/*******************************************/
+	/**          GETTER AND SETTER            **/
+	/*******************************************/
+	
+	public List<ObsIntersDirecta> getListObsIntersDirecta() {
+		return listObsIntersDirecta;
+	}
+
+	public void setListObsIntersDirecta(List<ObsIntersDirecta> listObsIntersDirecta) {
+		this.listObsIntersDirecta = listObsIntersDirecta;
+	}
+	
+	
+	
+}
