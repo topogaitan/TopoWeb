@@ -9,7 +9,7 @@ public class ObsIntersDirecta extends ObsGenerales {
 	private BigDecimal distancia;
 	
 	public ObsIntersDirecta() {
-		
+		super();
 	}
 
 
@@ -21,10 +21,8 @@ public class ObsIntersDirecta extends ObsGenerales {
 	public BigDecimal getDistancia() {
 		return distancia;
 	}
-
 	public void setDistancia(BigDecimal distancia) {
 		this.distancia = distancia;
 	}
-
 	
 }

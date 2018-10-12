@@ -9,7 +9,7 @@ public class Punto3D extends Punto2D {
 	private BigDecimal coordZ;
 
 	public Punto3D() {
-		
+		super();
 	}
 
 	
@@ -21,11 +21,8 @@ public class Punto3D extends Punto2D {
 	public BigDecimal getCoordZ() {
 		return coordZ;
 	}
-
 	public void setCoordZ(BigDecimal coordZ) {
 		this.coordZ = coordZ;
 	}
-	
-	
 
 }

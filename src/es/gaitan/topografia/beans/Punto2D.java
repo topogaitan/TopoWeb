@@ -8,15 +8,12 @@ public class Punto2D implements Serializable {
 	private static final long serialVersionUID = 400873602651185848L;
 	
 	private String id;
-	
 	private BigDecimal coordX;
-	
 	private BigDecimal coordY;
-	
 	private String codigo;
-
+	
 	public Punto2D() {
-		
+		super();
 	}
 	
 	
@@ -28,35 +25,28 @@ public class Punto2D implements Serializable {
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
 	public BigDecimal getCoordX() {
 		return coordX;
 	}
-
 	public void setCoordX(BigDecimal coordX) {
 		this.coordX = coordX;
 	}
-
 	public BigDecimal getCoordY() {
 		return coordY;
 	}
-
 	public void setCoordY(BigDecimal coordY) {
 		this.coordY = coordY;
 	}
-
 	public String getCodigo() {
 		return codigo;
 	}
-
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
-
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

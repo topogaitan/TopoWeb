@@ -13,11 +13,11 @@ import org.apache.log4j.Logger;
 import es.gaitan.topografia.constants.Constantes;
 import es.gaitan.topografia.interfaces.Estadillo;
 
-public class EstadilloObsIntersDirecta implements Serializable, Estadillo{
+public class EstadilloObsIntersDirecta implements Estadillo, Serializable {
 	
 	private static final long serialVersionUID = -8997122079393118600L;
 	
-	private static final Logger LOG = Logger.getLogger(EstadilloObsIntersDirecta.class);
+	private static final Logger logger = Logger.getLogger(EstadilloObsIntersDirecta.class);
 	
 	private List<ObsIntersDirecta> listObsIntersDirecta;
 	
@@ -25,6 +25,7 @@ public class EstadilloObsIntersDirecta implements Serializable, Estadillo{
 		listObsIntersDirecta = new ArrayList<ObsIntersDirecta>();
 	}
 	
+	@Override
 	public boolean anadirObservacion(String tipoObs, String linea){
 		boolean blReturn = true;
         String separador = "\t";
@@ -42,10 +43,9 @@ public class EstadilloObsIntersDirecta implements Serializable, Estadillo{
 	        obs.setCodVisual(parametros[5]);
 	        
 	        this.listObsIntersDirecta.add(obs);
-        }catch(Exception exc) {
+        } catch(Exception exc) {
         	blReturn = false;
-        	LOG.error("Error al agregar una linea del fichero a la lista de observaciones");
-        	exc.printStackTrace();
+        	logger.error("Error al agregar una linea del fichero a la lista de observaciones", exc);
         	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
 				Constantes.ATENCION, Constantes.FORMATO_INCORRECTO));
         }
@@ -60,11 +60,8 @@ public class EstadilloObsIntersDirecta implements Serializable, Estadillo{
 	public List<ObsIntersDirecta> getListObsIntersDirecta() {
 		return listObsIntersDirecta;
 	}
-
 	public void setListObsIntersDirecta(List<ObsIntersDirecta> listObsIntersDirecta) {
 		this.listObsIntersDirecta = listObsIntersDirecta;
 	}
-	
-	
-	
+
 }

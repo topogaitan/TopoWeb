@@ -8,6 +8,7 @@ public class NubePuntos {
 	List<Punto3D> listPuntos;
 
 	public NubePuntos() {
+		super();
 		listPuntos = new ArrayList<Punto3D>();
 	}
 
@@ -20,11 +21,8 @@ public class NubePuntos {
 	public List<Punto3D> getListPuntos() {
 		return listPuntos;
 	}
-
 	public void setListPuntos(List<Punto3D> listPuntos) {
 		this.listPuntos = listPuntos;
 	}
 	
-	
-
 }

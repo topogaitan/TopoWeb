@@ -31,7 +31,7 @@ import es.gaitan.topografia.constants.Constantes;
 public class PrincipalController implements Serializable{
 
 	private static final long serialVersionUID = 5215987609794388569L;
-	private static final Logger LOG = Logger.getLogger(PrincipalController.class);
+	private static final Logger logger = Logger.getLogger(PrincipalController.class);
 	
 	/** LISTAS DE PUNTOS Y OBSERVACIONES **/
 	private NubePuntos nubePuntos;
@@ -47,7 +47,7 @@ public class PrincipalController implements Serializable{
 
 	@PostConstruct
 	public void reset(){
-		LOG.debug(Constantes.INI_METODO);
+		logger.debug(Constantes.INI_METODO);
 		
 		nubePuntos = new NubePuntos();
 		estadilloObsIntersDirecta = new EstadilloObsIntersDirecta();
@@ -61,7 +61,7 @@ public class PrincipalController implements Serializable{
 	}
 	
 	public void activarIntersecDirecta(){
-		LOG.info(Constantes.INI_METODO);
+		logger.info(Constantes.INI_METODO);
 		this.reset();
 		esIntersecDirecta = true;
 		disabledButtonsToolbar = false;
@@ -69,7 +69,7 @@ public class PrincipalController implements Serializable{
 	}
 	
 	public void activarIntersecInversa(){
-		LOG.info(Constantes.INI_METODO);
+		logger.info(Constantes.INI_METODO);
 		this.reset();
 		esIntersecInversa = true;
 		disabledButtonsToolbar = false;
@@ -77,7 +77,7 @@ public class PrincipalController implements Serializable{
 	}
 	
 	public String accionBotonNuevo(){
-		LOG.info(Constantes.INI_METODO);
+		logger.info(Constantes.INI_METODO);
 		this.reset();
 		disabledButtonsToolbar = true;
 		renderedGoogleMaps = false;
@@ -85,14 +85,14 @@ public class PrincipalController implements Serializable{
 	}
 	
 	public void cargaFicheroObservaciones(FileUploadEvent event) {
-		LOG.info(Constantes.INI_METODO);
+		logger.info(Constantes.INI_METODO);
 		
 		if(esIntersecDirecta) {
 	        UploadedFile uploadFile = event.getFile();
 	        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 	        String realPath = ec.getRealPath("fich/in/");
 	        String pathDefinition = realPath + uploadFile.getFileName();
-	        LOG.info(pathDefinition);
+	        logger.info(pathDefinition);
 	        try {
 	            FileInputStream in = (FileInputStream) uploadFile.getInputstream();
 	            
@@ -116,10 +116,10 @@ public class PrincipalController implements Serializable{
 	            out.close();
 	            br.close();
 	        } catch (FileNotFoundException fnfExc) {
-	        	LOG.error("Fichero no encontrado");
+	        	logger.error("Fichero no encontrado");
 	        	fnfExc.printStackTrace();
 	        } catch (IOException ioEcx) {
-	        	LOG.error("El fichero no se ha cargado correctamente");
+	        	logger.error("El fichero no se ha cargado correctamente");
 	        	ioEcx.printStackTrace();
 	        }
         }
@@ -128,7 +128,7 @@ public class PrincipalController implements Serializable{
 	        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 	        String realPath = ec.getRealPath("fich/in/");
 	        String pathDefinition = realPath + uploadFile.getFileName();
-	        LOG.info(pathDefinition);
+	        logger.info(pathDefinition);
 	        try {
 	            FileInputStream in = (FileInputStream) uploadFile.getInputstream();
 	            
@@ -152,10 +152,10 @@ public class PrincipalController implements Serializable{
 	            out.close();
 	            br.close();
 	        } catch (FileNotFoundException fnfExc) {
-	        	LOG.error("Fichero no encontrado");
+	        	logger.error("Fichero no encontrado");
 	        	fnfExc.printStackTrace();
 	        } catch (IOException ioEcx) {
-	        	LOG.error("El fichero no se ha cargado correctamente");
+	        	logger.error("El fichero no se ha cargado correctamente");
 	        	ioEcx.printStackTrace();
 	        }
         }
