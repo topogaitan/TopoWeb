@@ -26,7 +26,9 @@ public class EstadilloObsIntersDirecta implements Estadillo, Serializable {
 	}
 	
 	@Override
-	public boolean anadirObservacion(String tipoObs, String linea){
+	public boolean anadirObservacion(String linea) {
+		logger.debug(linea);
+		
 		boolean blReturn = true;
         String separador = "\t";
         String[] parametros;

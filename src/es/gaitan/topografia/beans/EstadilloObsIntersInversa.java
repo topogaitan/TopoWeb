@@ -26,7 +26,9 @@ public class EstadilloObsIntersInversa implements Estadillo, Serializable {
 	}
 	
 	@Override
-	public boolean anadirObservacion(String tipoObs, String linea){
+	public boolean anadirObservacion(String linea) {
+		logger.debug(linea);
+		
 		boolean blReturn = true;
         String separador = "\t";
         String[] parametros;
@@ -45,8 +47,7 @@ public class EstadilloObsIntersInversa implements Estadillo, Serializable {
 	        this.listObsIntersInversa.add(obs);
         }catch(Exception exc) {
         	blReturn = false;
-        	logger.error("Error al agregar una linea del fichero a la lista de observaciones");
-        	exc.printStackTrace();
+        	logger.error("Error al agregar una linea del fichero a la lista de observaciones" ,exc);
         	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
 				Constantes.ATENCION, Constantes.FORMATO_INCORRECTO));
         }

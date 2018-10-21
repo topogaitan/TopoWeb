@@ -12,8 +12,11 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
+
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -84,84 +87,77 @@ public class PrincipalController implements Serializable{
 		return "";
 	}
 	
-	public void cargaFicheroObservaciones(FileUploadEvent event) {
+	public void cargarFichero(FileUploadEvent event) {
 		logger.info(Constantes.INI_METODO);
 		
-		if(esIntersecDirecta) {
-	        UploadedFile uploadFile = event.getFile();
-	        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-	        String realPath = ec.getRealPath("fich/in/");
-	        String pathDefinition = realPath + uploadFile.getFileName();
-	        logger.info(pathDefinition);
-	        try {
-	            FileInputStream in = (FileInputStream) uploadFile.getInputstream();
-	            
-	            // Se almacena el fichero con la informacion en la ruta indicada
-	            FileOutputStream out = new FileOutputStream(pathDefinition);
-	            byte[] buffer = new byte[(int) uploadFile.getSize()];
-	            int contador = 0;
-	            while ((contador = in.read(buffer)) != -1) {
-	                out.write(buffer, 0, contador);
-	            }
+		UploadedFile uploadFile = event.getFile();
+		String extensionFich = FilenameUtils.getExtension(uploadFile.getFileName());
+		boolean esFicheroObservaciones = extensionFich.equalsIgnoreCase("obs") ? true : false;
+		boolean esFicheroCoordenadas = extensionFich.equalsIgnoreCase("pto") ? true : false;
+		
+		logger.info("esFicheroObservaciones --> " + esFicheroObservaciones + ", esFicheroCoordenadas --> " + esFicheroCoordenadas);
+		if (esFicheroObservaciones) {
+			cargaFicheroObservaciones(uploadFile);
+		} else if (esFicheroCoordenadas) {
+			// TODO Metodo para cargar las coordenadas aproximadas desde el fichero de coordenadas
+//			cargaFicheroCoordenadas(uploadFile);
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+					Constantes.ATENCION, Constantes.EXTENSION_FICHERO_INCORRECTA));
+		}
+	}
 	
-	            // Se lee el fichero y se almacena en un objeto para su tratado
-	            BufferedReader br = new BufferedReader(new FileReader(pathDefinition));
-	            String linea;
-	            boolean estaAgregada = true;
+	private void cargaFicheroObservaciones(UploadedFile uploadFile) {
+		logger.info(Constantes.INI_METODO);
+		
+		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        String realPath = ec.getRealPath("fich/in/");
+        String pathDefinition = realPath + uploadFile.getFileName();
+        logger.info(pathDefinition);
+        try {
+            FileInputStream in = (FileInputStream) uploadFile.getInputstream();
+            
+            // Se almacena el fichero con la informacion en la ruta indicada
+            FileOutputStream out = new FileOutputStream(pathDefinition);
+            byte[] buffer = new byte[(int) uploadFile.getSize()];
+            int contador = 0;
+            while ((contador = in.read(buffer)) != -1) {
+                out.write(buffer, 0, contador);
+            }
+
+            // Se lee el fichero y se almacena en un objeto para su tratado
+            BufferedReader br = new BufferedReader(new FileReader(pathDefinition));
+            String linea;
+            boolean estaAgregada = true;
+            
+            if (esIntersecDirecta) {
 	            while ((linea = br.readLine()) != null && estaAgregada) {
- 	            	estaAgregada = estadilloObsIntersDirecta.anadirObservacion("INTERSEC_DIRECTA", linea);
+		            	estaAgregada = estadilloObsIntersDirecta.anadirObservacion(linea);
 	            }
-	
-	            in.close();
-	            out.close();
-	            br.close();
-	        } catch (FileNotFoundException fnfExc) {
-	        	logger.error("Fichero no encontrado");
-	        	fnfExc.printStackTrace();
-	        } catch (IOException ioEcx) {
-	        	logger.error("El fichero no se ha cargado correctamente");
-	        	ioEcx.printStackTrace();
-	        }
+            } else {
+            	if (esIntersecInversa) {
+            		while ((linea = br.readLine()) != null && estaAgregada) {
+		            	estaAgregada = estadilloObsIntersInversa.anadirObservacion(linea);
+            		}
+            	}
+            }
+            
+            // Se cierran las conexiones de I/O de los ficheros
+            in.close();
+            out.close();
+            br.close();
+            
+        } catch (FileNotFoundException fnfExc) {
+        	logger.error("Fichero no encontrado", fnfExc);
+        } catch (IOException ioEcx) {
+        	logger.error("El fichero no se ha cargado correctamente", ioEcx);
         }
-		if(esIntersecInversa) {
-	        UploadedFile uploadFile = event.getFile();
-	        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-	        String realPath = ec.getRealPath("fich/in/");
-	        String pathDefinition = realPath + uploadFile.getFileName();
-	        logger.info(pathDefinition);
-	        try {
-	            FileInputStream in = (FileInputStream) uploadFile.getInputstream();
-	            
-	            // Se almacena el fichero con la informacion en la ruta indicada
-	            FileOutputStream out = new FileOutputStream(pathDefinition);
-	            byte[] buffer = new byte[(int) uploadFile.getSize()];
-	            int contador = 0;
-	            while ((contador = in.read(buffer)) != -1) {
-	                out.write(buffer, 0, contador);
-	            }
-	
-	            // Se lee el fichero y se almacena en un objeto para su tratado
-	            BufferedReader br = new BufferedReader(new FileReader(pathDefinition));
-	            String linea;
-	            boolean estaAgregada = true;
-	            while ((linea = br.readLine()) != null && estaAgregada) {
-	            	estaAgregada = estadilloObsIntersInversa.anadirObservacion("INTERSEC_INVERSA", linea);
-	            }
-	
-	            in.close();
-	            out.close();
-	            br.close();
-	        } catch (FileNotFoundException fnfExc) {
-	        	logger.error("Fichero no encontrado");
-	        	fnfExc.printStackTrace();
-	        } catch (IOException ioEcx) {
-	        	logger.error("El fichero no se ha cargado correctamente");
-	        	ioEcx.printStackTrace();
-	        }
-        }
+		
     }
 	
-	
+	private void cargaFicheroCoordenadas(UploadedFile uploadFile) {
+		
+	}
 
 	/*******************************************/
 	/**          GETTER AND SETTER            **/

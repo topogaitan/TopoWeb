@@ -7,6 +7,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>topoGaitan</title>
@@ -75,8 +76,7 @@
 			<p:fragment id="fragmentCargaFichero">
 				<p:panel id="panelToolbarFichero" styleClass="panel" rendered="#{principalController.renderedGoogleMaps}">
 					<p:fileUpload id="cargaFichero" styleClass="centerInFragment" mode="advanced" dragDropSupport="true" skinSimple="true"
-						fileUploadListener="#{principalController.cargaFicheroObservaciones}"
-						allowTypes="/(\.|\/)(gif|jpe?g|png|txt|rgf|pto|obs)$/" 
+						fileUploadListener="#{principalController.cargarFichero}"
 						uploadLabel="Cargar" cancelLabel="Cancelar" label="Buscar fichero" 
 						update="fragmentCargaFichero fragmentDataTableObsIntersecDirecta fragmentDataTableObsIntersecInversa messagesGrowl" />
 					<h:panelGrid id="pgCheckCargaFicheros" styleClass="centerInFragment" columns="4">
@@ -96,7 +96,8 @@
 			<p:fragment id="fragmentDataTableObsIntersecDirecta">
 			<p:panel id="panelToolbarObsIntersecDirecta" styleClass="panel" 
 				rendered="#{not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta}">
-				<p:dataTable id="dataTableObsIntersecDirecta" styleClass="centerInFragment" var="observacion"
+				<p:dataTable id="dataTableObsIntersecDirecta" styleClass="centerInFragment" 
+					var="observacion"
 					value="#{principalController.estadilloObsIntersDirecta.listObsIntersDirecta}">
 					<f:facet name="header">
 	            Observaciones Intersección Directa
@@ -136,7 +137,8 @@
 			<p:fragment id="fragmentDataTablePtosIntersecDirecta">
 			<p:panel id="panelToolbarPtosIntersecDirecta" styleClass="panel" 
 				rendered="#{empty principalController.nubePuntos.listPuntos}">
-				<p:dataTable id="dataTablePtosIntersecDirecta" styleClass="centerInFragment" var="punto"
+				<p:dataTable id="dataTablePtosIntersecDirecta" styleClass="centerInFragment" 
+					var="punto"
 					value="#{principalController.nubePuntos.listPuntos}">
 					<f:facet name="header">
 	            Puntos Coordenadas Aprox. Intersección Directa
@@ -172,7 +174,8 @@
 			<p:fragment id="fragmentDataTableObsIntersecInversa">
 			<p:panel id="panelToolbarObsIntersecInversa" styleClass="panel" 
 				rendered="#{not empty principalController.estadilloObsIntersInversa.listObsIntersInversa}">
-				<p:dataTable id="dataTableObsIntersecInversa" styleClass="centerInFragment" var="observacion"
+				<p:dataTable id="dataTableObsIntersecInversa" styleClass="centerInFragment" 
+					var="observacion"
 					value="#{principalController.estadilloObsIntersInversa.listObsIntersInversa}">
 					<f:facet name="header">
 	            Observaciones Intersección Inversa

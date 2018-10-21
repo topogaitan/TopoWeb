@@ -73,9 +73,9 @@ body {
 .ui-growl-error, .ui-growl-fatal, .ui-messages .ui-messages-error, 
 .ui-message.ui-message-error, .ui-messages .ui-messages-fatal, 
 .ui-message.ui-message-fatal{
-	color: #fff;
-	background-color: #ff0000;
-	border-color: #ff0000;
+	color: #fff !important;
+	background-color: #ff0000 !important;
+	border-color: #ff0000 !important;
 }
 
 .outputLabelMargin{
