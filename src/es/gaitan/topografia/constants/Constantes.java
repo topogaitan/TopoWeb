@@ -13,6 +13,6 @@ public class Constantes {
 	
 	public static final String ATENCION = "Atención!";
 	public static final String FORMATO_INCORRECTO = "El fichero contiene datos con formato incorrecto";
-	public static final String EXTENSION_FICHERO_INCORRECTA = "La extensión del fichero es incorrecta. Extensiones soportadas (*.pto - *.obs)";
+	public static final String EXTENSION_FICHERO_INCORRECTA = "La extensión del fichero es incorrecta. Extensiones soportadas (*.pto || *.obs)";
 
 }

@@ -49,8 +49,8 @@ public class PrincipalController implements Serializable{
 	private boolean renderedGoogleMaps;
 
 	@PostConstruct
-	public void reset(){
-		logger.debug(Constantes.INI_METODO);
+	public void reset() {
+		logger.info(Constantes.INI_METODO);
 		
 		nubePuntos = new NubePuntos();
 		estadilloObsIntersDirecta = new EstadilloObsIntersDirecta();
@@ -61,29 +61,40 @@ public class PrincipalController implements Serializable{
 		
 		disabledButtonsToolbar = true;
 		renderedGoogleMaps = false;
+		
+		logger.info(Constantes.FIN_METODO);
 	}
 	
-	public void activarIntersecDirecta(){
+	public void activarIntersecDirecta() {
 		logger.info(Constantes.INI_METODO);
+		
 		this.reset();
 		esIntersecDirecta = true;
 		disabledButtonsToolbar = false;
 		renderedGoogleMaps = true;
+		
+		logger.info(Constantes.FIN_METODO);
 	}
 	
-	public void activarIntersecInversa(){
+	public void activarIntersecInversa() {
 		logger.info(Constantes.INI_METODO);
+		
 		this.reset();
 		esIntersecInversa = true;
 		disabledButtonsToolbar = false;
 		renderedGoogleMaps = true;
+		
+		logger.info(Constantes.FIN_METODO);
 	}
 	
-	public String accionBotonNuevo(){
+	public String accionBotonNuevo() {
 		logger.info(Constantes.INI_METODO);
+		
 		this.reset();
 		disabledButtonsToolbar = true;
 		renderedGoogleMaps = false;
+		
+		logger.info(Constantes.FIN_METODO);
 		return "";
 	}
 	
@@ -99,65 +110,136 @@ public class PrincipalController implements Serializable{
 		if (esFicheroObservaciones) {
 			cargaFicheroObservaciones(uploadFile);
 		} else if (esFicheroCoordenadas) {
-			// TODO Metodo para cargar las coordenadas aproximadas desde el fichero de coordenadas
-//			cargaFicheroCoordenadas(uploadFile);
+			cargaFicheroCoordenadas(uploadFile);
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
 					Constantes.ATENCION, Constantes.EXTENSION_FICHERO_INCORRECTA));
 		}
+		
+		logger.info(Constantes.FIN_METODO);
 	}
+	
+	
+	/*******************************************/
+	/**          METODOS PRIVADOS             **/
+	/*******************************************/
 	
 	private void cargaFicheroObservaciones(UploadedFile uploadFile) {
 		logger.info(Constantes.INI_METODO);
 		
-		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        String realPath = ec.getRealPath("fich/in/");
-        String pathDefinition = realPath + uploadFile.getFileName();
-        logger.info(pathDefinition);
-        try {
-            FileInputStream in = (FileInputStream) uploadFile.getInputstream();
+		try {
+			String rutaCompleta = obtenerRutaFicheroCompleta(uploadFile);
+        
+            BufferedReader br = obtenerBufferedReader(uploadFile, rutaCompleta);
             
-            // Se almacena el fichero con la informacion en la ruta indicada
-            FileOutputStream out = new FileOutputStream(pathDefinition);
-            byte[] buffer = new byte[(int) uploadFile.getSize()];
-            int contador = 0;
-            while ((contador = in.read(buffer)) != -1) {
-                out.write(buffer, 0, contador);
-            }
-
-            // Se lee el fichero y se almacena en un objeto para su tratado
-            BufferedReader br = new BufferedReader(new FileReader(pathDefinition));
             String linea;
             boolean estaAgregada = true;
             
             if (esIntersecDirecta) {
+            	// TODO Se limpia estadilloObsIntersDirecta para que no se añadan observaciones de distintos ficheros
+            	
 	            while ((linea = br.readLine()) != null && estaAgregada) {
 		            	estaAgregada = estadilloObsIntersDirecta.anadirObservacion(linea);
 	            }
-            } else {
-            	if (esIntersecInversa) {
-            		while ((linea = br.readLine()) != null && estaAgregada) {
-		            	estaAgregada = estadilloObsIntersInversa.anadirObservacion(linea);
-            		}
-            	}
+            } else if (esIntersecInversa) {
+            	// TODO Se limpia estadilloObsIntersInversa para que no se añadan observaciones de distintos ficheros
+            	
+        		while ((linea = br.readLine()) != null && estaAgregada) {
+	            	estaAgregada = estadilloObsIntersInversa.anadirObservacion(linea);
+        		}
             }
             
-            // Se cierran las conexiones de I/O de los ficheros
-            in.close();
-            out.close();
+            // Se cierra la conexion del tunel de datos
             br.close();
+            logger.info(Constantes.FIN_METODO);
             
-        } catch (FileNotFoundException fnfExc) {
-        	logger.error("Fichero no encontrado", fnfExc);
-        } catch (IOException ioEcx) {
-        	logger.error("El fichero no se ha cargado correctamente", ioEcx);
+        } catch (Exception exc) {
+        	logger.error("Error tipo Exception", exc);
         }
-		
     }
 	
 	private void cargaFicheroCoordenadas(UploadedFile uploadFile) {
+		logger.info(Constantes.INI_METODO);
 		
+		// TODO Se limpia nubePuntos para que no se añadan las coordenadas de distintos ficheros
+		// TODO ¿Es necesario discrimir la nubePuntos dependiendo del tipo de interseccion?
+		
+		try {
+			String rutaCompleta = obtenerRutaFicheroCompleta(uploadFile);
+        
+            BufferedReader br = obtenerBufferedReader(uploadFile, rutaCompleta);
+            
+            String linea;
+            boolean estaAgregado = true;
+            
+            if (esIntersecDirecta) {
+	            while ((linea = br.readLine()) != null && estaAgregado) {
+	            	estaAgregado = nubePuntos.anadirPunto(linea);
+	            }
+            } else if (esIntersecInversa) {
+        		while ((linea = br.readLine()) != null && estaAgregado) {
+        			estaAgregado = nubePuntos.anadirPunto(linea);
+        		}
+            }
+            
+            // Se cierra la conexion del tunel de datos
+            br.close();
+            logger.info(Constantes.FIN_METODO);
+            
+        } catch (Exception exc) {
+        	logger.error("Error tipo Exception", exc);
+        }
 	}
+	
+	private String obtenerRutaFicheroCompleta(UploadedFile uploadFile) throws Exception {
+		logger.info(Constantes.INI_METODO);
+		String rutaCompleta = Constantes.CADENA_VACIA;
+		
+		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        String realPath = ec.getRealPath("fich/in/");
+        rutaCompleta = realPath + uploadFile.getFileName();
+        
+        logger.info(rutaCompleta);
+        logger.info(Constantes.FIN_METODO);
+        
+		return rutaCompleta;
+	}
+	
+	private BufferedReader obtenerBufferedReader(UploadedFile uploadFile, String rutaCompleta) {
+		logger.info(Constantes.INI_METODO);
+		BufferedReader br = null;
+		
+		try {
+			// Se transforma el objeto UploadedFile en un FileInputStream para poder ser tratado
+			FileInputStream in = (FileInputStream) uploadFile.getInputstream();
+	        FileOutputStream out = new FileOutputStream(rutaCompleta);
+	        byte[] buffer = new byte[(int) uploadFile.getSize()];
+	        int contador = 0;
+	        
+	        // Se almacena el fichero con la informacion en la ruta indicada
+	        while ((contador = in.read(buffer)) != -1) {
+	            out.write(buffer, 0, contador);
+	        }
+	        
+	        // Se lee el fichero y se almacena en un objeto para su tratado
+	        br = new BufferedReader(new FileReader(rutaCompleta));
+	        
+	        // Se cierran las conexiones de I/O de los ficheros
+            in.close();
+            out.close();
+            logger.info(Constantes.FIN_METODO);
+            
+		} catch (FileNotFoundException fnfExc) {
+			logger.error("Error tipo FileNotFoundException --> Fichero no encontrado", fnfExc);
+		} catch (IOException ioEcx) {
+			logger.error("Error tipo IOException --> El fichero no se ha cargado correctamente", ioEcx);
+		}  catch (Exception exc) {
+        	logger.error("Error tipo Exception", exc);
+        }
+
+       return br;
+	}
+	
 
 	/*******************************************/
 	/**          GETTER AND SETTER            **/
@@ -166,59 +248,44 @@ public class PrincipalController implements Serializable{
 	public NubePuntos getNubePuntos() {
 		return nubePuntos;
 	}
-
 	public void setNubePuntos(NubePuntos nubePuntos) {
 		this.nubePuntos = nubePuntos;
 	}
-	
 	public EstadilloObsIntersDirecta getEstadilloObsIntersDirecta() {
 		return estadilloObsIntersDirecta;
 	}
-
 	public void setEstadilloObsIntersDirecta(EstadilloObsIntersDirecta estadilloObsIntersDirecta) {
 		this.estadilloObsIntersDirecta = estadilloObsIntersDirecta;
 	}
-	
 	public EstadilloObsIntersInversa getEstadilloObsIntersInversa() {
 		return estadilloObsIntersInversa;
 	}
-
 	public void setEstadilloObsIntersInversa(EstadilloObsIntersInversa estadilloObsIntersInversa) {
 		this.estadilloObsIntersInversa = estadilloObsIntersInversa;
 	}
-
 	public boolean isDisabledButtonsToolbar() {
 		return disabledButtonsToolbar;
 	}
-
 	public void setDisabledButtonsToolbar(boolean disabledButtonsToolbar) {
 		this.disabledButtonsToolbar = disabledButtonsToolbar;
 	}
-
 	public boolean isRenderedGoogleMaps() {
 		return renderedGoogleMaps;
 	}
-
 	public void setRenderedGoogleMaps(boolean renderedGoogleMaps) {
 		this.renderedGoogleMaps = renderedGoogleMaps;
 	}
-
 	public boolean isEsIntersecDirecta() {
 		return esIntersecDirecta;
 	}
-
 	public void setEsIntersecDirecta(boolean esIntersecDirecta) {
 		this.esIntersecDirecta = esIntersecDirecta;
 	}
-
 	public boolean isEsIntersecInversa() {
 		return esIntersecInversa;
 	}
-
 	public void setEsIntersecInversa(boolean esIntersecInversa) {
 		this.esIntersecInversa = esIntersecInversa;
 	}
-	
-	
 
 }

@@ -2,7 +2,7 @@ package es.gaitan.topografia.beans;
 
 import java.math.BigDecimal;
 
-public class ObsIntersDirecta extends ObsGenerales {
+public class ObsIntersDirecta extends ObsGeneral {
 
 	private static final long serialVersionUID = -6037032831412479606L;
 	

@@ -3,7 +3,7 @@ package es.gaitan.topografia.beans;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ObsGenerales implements Serializable{
+public class ObsGeneral implements Serializable{
 	
 	private static final long serialVersionUID = 5144653986606702307L;
 
@@ -14,7 +14,7 @@ public class ObsGenerales implements Serializable{
 	private String nombreEstacion;
 	private String codVisual;
 
-	public ObsGenerales(){
+	public ObsGeneral(){
 		super();
 	}
 

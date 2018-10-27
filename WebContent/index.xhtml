@@ -33,7 +33,7 @@
 	<div id="container">
 		<h:form id="formCalculos">
 			
-			<p:growl id="messagesGrowl" sticky="true" showSummary="true" showDetail="true" autoUpdate="false"/>
+			<p:growl id="messagesGrowl" sticky="true" showSummary="true" showDetail="true" autoUpdate="false" />
 		
 			<p:outputLabel styleClass="titleOne">Cálculos topográficos</p:outputLabel>
 			<p:separator styleClass="separatorTop"></p:separator>
@@ -78,7 +78,8 @@
 					<p:fileUpload id="cargaFichero" styleClass="centerInFragment" mode="advanced" dragDropSupport="true" skinSimple="true"
 						fileUploadListener="#{principalController.cargarFichero}"
 						uploadLabel="Cargar" cancelLabel="Cancelar" label="Buscar fichero" 
-						update="fragmentCargaFichero fragmentDataTableObsIntersecDirecta fragmentDataTableObsIntersecInversa messagesGrowl" />
+						update="fragmentCargaFichero fragmentDataTableObsIntersecDirecta fragmentDataTableObsIntersecInversa 
+								fragmentDataTablePtosIntersecDirecta messagesGrowl" />
 					<h:panelGrid id="pgCheckCargaFicheros" styleClass="centerInFragment" columns="4">
 						<p:outputLabel styleClass="outputLabelMargin" value="Cargado fichero de coordenadas " />
 						<p:selectBooleanCheckbox disabled="true" 
@@ -94,119 +95,116 @@
 			
 			<!-- INICIO FRAGMENT TABLA OBSERVACIONES INTERSECCION DIRECTA -->
 			<p:fragment id="fragmentDataTableObsIntersecDirecta">
-			<p:panel id="panelToolbarObsIntersecDirecta" styleClass="panel" 
-				rendered="#{not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta}">
-				<p:dataTable id="dataTableObsIntersecDirecta" styleClass="centerInFragment" 
-					var="observacion"
-					value="#{principalController.estadilloObsIntersDirecta.listObsIntersDirecta}">
-					<f:facet name="header">
-	            Observaciones Intersección Directa
-	        </f:facet>
-	        <p:column headerText="Estacion" styleClass="central" sortBy="#{observacion.idEstacion}">
-	            <h:outputText value="#{observacion.idEstacion}" />
-	        </p:column>
-	 
-	        <p:column headerText="Visado" styleClass="central" sortBy="#{observacion.idVisado}">
-	            <h:outputText value="#{observacion.idVisado}" />
-	        </p:column>
-	 
-	        <p:column headerText="LH" styleClass="derecha" sortBy="#{observacion.lH}">
-	            <h:outputText value="#{observacion.lH}" />
-	        </p:column>
-	 
-	        <p:column headerText="LV" styleClass="derecha" sortBy="#{observacion.lV}">
-	            <h:outputText value="#{observacion.lV}" />
-	        </p:column>
-	        
-	        <p:column headerText="Distancia" styleClass="derecha" sortBy="#{observacion.distancia}">
-	            <h:outputText value="#{observacion.distancia}" />
-	        </p:column>
-	        
-	        <p:column headerText="Código" styleClass="central" sortBy="#{observacion.codVisual}">
-	            <h:outputText value="#{observacion.codVisual}" />
-	        </p:column>
-	        <f:facet name="footer">
-	        	El fichero contiene un total de #{fn:length(principalController.estadilloObsIntersDirecta.listObsIntersDirecta)} observaciones
-	    		</f:facet>
-				</p:dataTable>
+				<p:panel id="panelToolbarObsIntersecDirecta" styleClass="panel" 
+					rendered="#{not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta}">
+					<p:dataTable id="dataTableObsIntersecDirecta" styleClass="centerInFragment" 
+						var="observacion" value="#{principalController.estadilloObsIntersDirecta.listObsIntersDirecta}">
+						
+						<f:facet name="header">Observaciones Intersección Directa</f:facet>
+				        <p:column headerText="Estacion" styleClass="central" sortBy="#{observacion.idEstacion}">
+				            <h:outputText value="#{observacion.idEstacion}" />
+				        </p:column>
+				 
+				        <p:column headerText="Visado" styleClass="central" sortBy="#{observacion.idVisado}">
+				            <h:outputText value="#{observacion.idVisado}" />
+				        </p:column>
+				 
+				        <p:column headerText="LH" styleClass="derecha" sortBy="#{observacion.lH}">
+				            <h:outputText value="#{observacion.lH}" />
+				        </p:column>
+				 
+				        <p:column headerText="LV" styleClass="derecha" sortBy="#{observacion.lV}">
+				            <h:outputText value="#{observacion.lV}" />
+				        </p:column>
+				        
+				        <p:column headerText="Distancia" styleClass="derecha" sortBy="#{observacion.distancia}">
+				            <h:outputText value="#{observacion.distancia}" />
+				        </p:column>
+				        
+				        <p:column headerText="Código" styleClass="central" sortBy="#{observacion.codVisual}">
+				            <h:outputText value="#{observacion.codVisual}" />
+				        </p:column>
+				        <f:facet name="footer">
+				        	El fichero contiene un total de #{fn:length(principalController.estadilloObsIntersDirecta.listObsIntersDirecta)} observaciones
+				    	</f:facet>
+				    	
+					</p:dataTable>
 				</p:panel>
 			</p:fragment>
 			<!-- FIN FRAGMENT TABLA OBSERVACIONES INTERSECCION DIRECTA -->
 			
 			<!-- INICIO FRAGMENT TABLA COORDENADAS INTERSECCION DIRECTA -->
 			<p:fragment id="fragmentDataTablePtosIntersecDirecta">
-			<p:panel id="panelToolbarPtosIntersecDirecta" styleClass="panel" 
-				rendered="#{empty principalController.nubePuntos.listPuntos}">
-				<p:dataTable id="dataTablePtosIntersecDirecta" styleClass="centerInFragment" 
-					var="punto"
-					value="#{principalController.nubePuntos.listPuntos}">
-					<f:facet name="header">
-	            Puntos Coordenadas Aprox. Intersección Directa
-	        </f:facet>
-	        <p:column headerText="Punto" styleClass="central" sortBy="#{punto.id}">
-	            <h:outputText value="#{punto.id}" />
-	        </p:column>
-	 
-	        <p:column headerText="Coord.X" styleClass="derecha" sortBy="#{punto.coordX}">
-	            <h:outputText value="#{punto.coordX}" />
-	        </p:column>
-	 
-	        <p:column headerText="Coord.Y" styleClass="derecha" sortBy="#{punto.coordY}">
-	            <h:outputText value="#{punto.coordY}" />
-	        </p:column>
-	 
-	        <p:column headerText="Coord.Z" styleClass="derecha" sortBy="#{punto.coordZ}">
-	            <h:outputText value="#{punto.coordZ}" />
-	        </p:column>
-	        
-	        <p:column headerText="Código" styleClass="central" sortBy="#{punto.codigo}">
-	            <h:outputText value="#{punto.codigo}" />
-	        </p:column>
-	        <f:facet name="footer">
-	        	El fichero contiene un total de #{fn:length(principalController.nubePuntos.listPuntos)} puntos
-	    		</f:facet>
-				</p:dataTable>
+				<p:panel id="panelToolbarPtosIntersecDirecta" styleClass="panel" 
+					rendered="#{not empty principalController.nubePuntos.listPuntos}">
+					<p:dataTable id="dataTablePtosIntersecDirecta" styleClass="centerInFragment" 
+						var="punto" value="#{principalController.nubePuntos.listPuntos}">
+						
+						<f:facet name="header">Puntos Coordenadas Aprox. Intersección Directa</f:facet>
+				        <p:column headerText="Punto" styleClass="central" sortBy="#{punto.id}">
+				            <h:outputText value="#{punto.id}" />
+				        </p:column>
+				 
+				        <p:column headerText="Coord.X" styleClass="derecha" sortBy="#{punto.coordX}">
+				            <h:outputText value="#{punto.coordX}" />
+				        </p:column>
+				 
+				        <p:column headerText="Coord.Y" styleClass="derecha" sortBy="#{punto.coordY}">
+				            <h:outputText value="#{punto.coordY}" />
+				        </p:column>
+				 
+				        <p:column headerText="Coord.Z" styleClass="derecha" sortBy="#{punto.coordZ}">
+				            <h:outputText value="#{punto.coordZ}" />
+				        </p:column>
+				        
+				        <p:column headerText="Código" styleClass="central" sortBy="#{punto.codigo}">
+				            <h:outputText value="#{punto.codigo}" />
+				        </p:column>
+				        <f:facet name="footer">
+				        	El fichero contiene un total de #{fn:length(principalController.nubePuntos.listPuntos)} puntos
+				    	</f:facet>
+				    	
+					</p:dataTable>
 				</p:panel>
 			</p:fragment>
 			<!-- FIN FRAGMENT TABLA COORDENADAS INTERSECCION DIRECTA -->
 			
 			<!-- INICIO FRAGMENT TABLA OBSERVACIONES INTERSECCION INVERSA -->
 			<p:fragment id="fragmentDataTableObsIntersecInversa">
-			<p:panel id="panelToolbarObsIntersecInversa" styleClass="panel" 
-				rendered="#{not empty principalController.estadilloObsIntersInversa.listObsIntersInversa}">
-				<p:dataTable id="dataTableObsIntersecInversa" styleClass="centerInFragment" 
-					var="observacion"
-					value="#{principalController.estadilloObsIntersInversa.listObsIntersInversa}">
-					<f:facet name="header">
-	            Observaciones Intersección Inversa
-	        </f:facet>
-	        <p:column headerText="Estacion" styleClass="central" sortBy="#{observacion.idEstacion}">
-	            <h:outputText value="#{observacion.idEstacion}" />
-	        </p:column>
-	 
-	        <p:column headerText="Visado" styleClass="central" sortBy="#{observacion.idVisado}">
-	            <h:outputText value="#{observacion.idVisado}" />
-	        </p:column>
-	 
-	        <p:column headerText="LH" styleClass="derecha" sortBy="#{observacion.lH}">
-	            <h:outputText value="#{observacion.lH}" />
-	        </p:column>
-	 
-	        <p:column headerText="LV" styleClass="derecha" sortBy="#{observacion.lV}">
-	            <h:outputText value="#{observacion.lV}" />
-	        </p:column>
-	        
-	        <!-- <p:column headerText="Distancia" styleClass="derecha" sortBy="#{observacion.distancia}">
-	            <h:outputText value="#{observacion.distancia}" />
-	        </p:column> -->
-	        
-	        <p:column headerText="Código" styleClass="central" sortBy="#{observacion.codVisual}">
-	            <h:outputText value="#{observacion.codVisual}" />
-	        </p:column>
-	        <f:facet name="footer">
-	        	El fichero contiene un total de #{fn:length(principalController.estadilloObsIntersInversa.listObsIntersInversa)} observaciones
-	    		</f:facet>
-				</p:dataTable>
+				<p:panel id="panelToolbarObsIntersecInversa" styleClass="panel" 
+					rendered="#{not empty principalController.estadilloObsIntersInversa.listObsIntersInversa}">
+					<p:dataTable id="dataTableObsIntersecInversa" styleClass="centerInFragment" 
+						var="observacion" value="#{principalController.estadilloObsIntersInversa.listObsIntersInversa}">
+						
+						<f:facet name="header">Observaciones Intersección Inversa</f:facet>
+				        <p:column headerText="Estacion" styleClass="central" sortBy="#{observacion.idEstacion}">
+				            <h:outputText value="#{observacion.idEstacion}" />
+				        </p:column>
+				 
+				        <p:column headerText="Visado" styleClass="central" sortBy="#{observacion.idVisado}">
+				            <h:outputText value="#{observacion.idVisado}" />
+				        </p:column>
+				 
+				        <p:column headerText="LH" styleClass="derecha" sortBy="#{observacion.lH}">
+				            <h:outputText value="#{observacion.lH}" />
+				        </p:column>
+				 
+				        <p:column headerText="LV" styleClass="derecha" sortBy="#{observacion.lV}">
+				            <h:outputText value="#{observacion.lV}" />
+				        </p:column>
+				        
+				        <!-- <p:column headerText="Distancia" styleClass="derecha" sortBy="#{observacion.distancia}">
+				            <h:outputText value="#{observacion.distancia}" />
+				        </p:column> -->
+				        
+				        <p:column headerText="Código" styleClass="central" sortBy="#{observacion.codVisual}">
+				            <h:outputText value="#{observacion.codVisual}" />
+				        </p:column>
+				        <f:facet name="footer">
+				        	El fichero contiene un total de #{fn:length(principalController.estadilloObsIntersInversa.listObsIntersInversa)} observaciones
+				    	</f:facet>
+				    	
+					</p:dataTable>
 				</p:panel>
 			</p:fragment>
 			<!-- FIN FRAGMENT TABLA OBSERVACIONES INTERSECCION INVERSA -->
