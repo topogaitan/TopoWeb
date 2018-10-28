@@ -87,7 +87,7 @@ public class PrincipalController implements Serializable{
 		logger.info(Constantes.FIN_METODO);
 	}
 	
-	public String accionBotonNuevo() {
+	public String doAccionBotonNuevo() {
 		logger.info(Constantes.INI_METODO);
 		
 		this.reset();
@@ -119,6 +119,16 @@ public class PrincipalController implements Serializable{
 		logger.info(Constantes.FIN_METODO);
 	}
 	
+	public String doObtenerCalculos() {
+		logger.info(Constantes.INI_METODO);
+		
+		// TODO Realizar toda la logica para obtener los calculos que se piden
+		
+		
+		logger.info(Constantes.FIN_METODO);
+		return "";
+	}
+	
 	
 	/*******************************************/
 	/**          METODOS PRIVADOS             **/
@@ -136,14 +146,12 @@ public class PrincipalController implements Serializable{
             boolean estaAgregada = true;
             
             if (esIntersecDirecta) {
-            	// TODO Se limpia estadilloObsIntersDirecta para que no se añadan observaciones de distintos ficheros
-            	
+            	estadilloObsIntersDirecta.limpiarEstadillo();
 	            while ((linea = br.readLine()) != null && estaAgregada) {
 		            	estaAgregada = estadilloObsIntersDirecta.anadirObservacion(linea);
 	            }
             } else if (esIntersecInversa) {
-            	// TODO Se limpia estadilloObsIntersInversa para que no se añadan observaciones de distintos ficheros
-            	
+            	estadilloObsIntersInversa.limpiarEstadillo();
         		while ((linea = br.readLine()) != null && estaAgregada) {
 	            	estaAgregada = estadilloObsIntersInversa.anadirObservacion(linea);
         		}
@@ -161,7 +169,9 @@ public class PrincipalController implements Serializable{
 	private void cargaFicheroCoordenadas(UploadedFile uploadFile) {
 		logger.info(Constantes.INI_METODO);
 		
-		// TODO Se limpia nubePuntos para que no se añadan las coordenadas de distintos ficheros
+		// Se limpia nubePuntos para que no se añadan las coordenadas de distintos ficheros
+		nubePuntos.limpiarNubePuntos();
+		
 		// TODO ¿Es necesario discrimir la nubePuntos dependiendo del tipo de interseccion?
 		
 		try {

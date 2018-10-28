@@ -18,7 +18,8 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
 	</f:facet>
 
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPOB13MjdXCihUK6kdL59Tk-7cPiUOJTQ"></script>
+	<!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPOB13MjdXCihUK6kdL59Tk-7cPiUOJTQ"></script> -->
+	
 	<!-- <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
 	<!-- <script type="text/javascript" charset="UTF-8" src="http://maps.google.com/maps-api-v3/api/js/26/7/intl/es_ALL/common.js"></script>
 	<script type="text/javascript" charset="UTF-8" src="http://maps.google.com/maps-api-v3/api/js/26/7/intl/es_ALL/util.js"></script>
@@ -45,7 +46,7 @@
 						<f:facet name="right">
 							<p:commandButton id="btNuevo" value="Nuevo" icon="ui-icon-document" 
 								disabled="#{principalController.disabledButtonsToolbar}"
-								action="#{principalController.accionBotonNuevo}" 
+								action="#{principalController.doAccionBotonNuevo}" 
 								update="formCalculos">
 							</p:commandButton>
 							<p:commandButton type="button" title="Guardar" icon="ui-icon-disk" 
@@ -58,19 +59,33 @@
 								disabled="true">
 							</p:commandButton>
 						</f:facet>
-	
+						
 						<f:facet name="left">
-							<p:menuButton id="mButtonCalculos" value="Cálculos" disabled="#{!principalController.disabledButtonsToolbar}">
+							<p:menuButton id="mButtonCalculos" value="Cálculo" disabled="#{!principalController.disabledButtonsToolbar}">
 								<p:menuitem value="Intersección Directa" actionListener="#{principalController.activarIntersecDirecta}" 
-									update="fragmentToolbarCalculos fragmentGoogle fragmentCargaFichero" />
+									update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
 								<p:menuitem value="Intersección Inversa" actionListener="#{principalController.activarIntersecInversa}" 
-									update="fragmentToolbarCalculos fragmentGoogle fragmentCargaFichero" />
+									update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
 							</p:menuButton>
 						</f:facet>
 					</p:toolbar>
 				</p:panel>
 			</p:fragment>
 			<!-- FIN FRAGMENT CALCULOS -->
+			
+			<!-- INICIO FRAGMENT TITULO TIPO DE CALCULO -->
+			<p:fragment id="fragmentTitleTwo-fragment">
+				<p:fragment rendered="#{principalController.esIntersecDirecta}">
+					<p:outputLabel styleClass="titleTwo">Intersección Directa</p:outputLabel>
+					<p:separator styleClass="separatorGeneral"></p:separator>
+				</p:fragment>
+				
+				<p:fragment rendered="#{principalController.esIntersecInversa}">
+					<p:outputLabel styleClass="titleTwo">Intersección Inversa</p:outputLabel>
+					<p:separator styleClass="separatorGeneral"></p:separator>
+				</p:fragment>
+			</p:fragment>
+			<!-- FIN FRAGMENT TITULO TIPO DE CALCULO -->
 			
 			<!-- INICIO FRAGMENT CARGA FICHERO -->
 			<p:fragment id="fragmentCargaFichero">
@@ -86,9 +101,9 @@
 							value="#{not empty principalController.nubePuntos.listPuntos}" />
 						<p:outputLabel styleClass="outputLabelMargin" value="Cargado fichero de observaciones " />
 						<p:selectBooleanCheckbox disabled="true" 
-							value="#{not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta or 
-											not empty principalController.estadilloObsIntersInversa.listObsIntersInversa}" />
-    			</h:panelGrid>
+							value="#{not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta 
+									or not empty principalController.estadilloObsIntersInversa.listObsIntersInversa}" />
+    				</h:panelGrid>
 				</p:panel>
 			</p:fragment>
 			<!-- FIN FRAGMENT CARGA FICHERO -->
@@ -100,7 +115,7 @@
 					<p:dataTable id="dataTableObsIntersecDirecta" styleClass="centerInFragment" 
 						var="observacion" value="#{principalController.estadilloObsIntersDirecta.listObsIntersDirecta}">
 						
-						<f:facet name="header">Observaciones Intersección Directa</f:facet>
+						<f:facet name="header">Observaciones</f:facet>
 				        <p:column headerText="Estacion" styleClass="central" sortBy="#{observacion.idEstacion}">
 				            <h:outputText value="#{observacion.idEstacion}" />
 				        </p:column>
@@ -133,42 +148,6 @@
 			</p:fragment>
 			<!-- FIN FRAGMENT TABLA OBSERVACIONES INTERSECCION DIRECTA -->
 			
-			<!-- INICIO FRAGMENT TABLA COORDENADAS INTERSECCION DIRECTA -->
-			<p:fragment id="fragmentDataTablePtosIntersecDirecta">
-				<p:panel id="panelToolbarPtosIntersecDirecta" styleClass="panel" 
-					rendered="#{not empty principalController.nubePuntos.listPuntos}">
-					<p:dataTable id="dataTablePtosIntersecDirecta" styleClass="centerInFragment" 
-						var="punto" value="#{principalController.nubePuntos.listPuntos}">
-						
-						<f:facet name="header">Puntos Coordenadas Aprox. Intersección Directa</f:facet>
-				        <p:column headerText="Punto" styleClass="central" sortBy="#{punto.id}">
-				            <h:outputText value="#{punto.id}" />
-				        </p:column>
-				 
-				        <p:column headerText="Coord.X" styleClass="derecha" sortBy="#{punto.coordX}">
-				            <h:outputText value="#{punto.coordX}" />
-				        </p:column>
-				 
-				        <p:column headerText="Coord.Y" styleClass="derecha" sortBy="#{punto.coordY}">
-				            <h:outputText value="#{punto.coordY}" />
-				        </p:column>
-				 
-				        <p:column headerText="Coord.Z" styleClass="derecha" sortBy="#{punto.coordZ}">
-				            <h:outputText value="#{punto.coordZ}" />
-				        </p:column>
-				        
-				        <p:column headerText="Código" styleClass="central" sortBy="#{punto.codigo}">
-				            <h:outputText value="#{punto.codigo}" />
-				        </p:column>
-				        <f:facet name="footer">
-				        	El fichero contiene un total de #{fn:length(principalController.nubePuntos.listPuntos)} puntos
-				    	</f:facet>
-				    	
-					</p:dataTable>
-				</p:panel>
-			</p:fragment>
-			<!-- FIN FRAGMENT TABLA COORDENADAS INTERSECCION DIRECTA -->
-			
 			<!-- INICIO FRAGMENT TABLA OBSERVACIONES INTERSECCION INVERSA -->
 			<p:fragment id="fragmentDataTableObsIntersecInversa">
 				<p:panel id="panelToolbarObsIntersecInversa" styleClass="panel" 
@@ -176,7 +155,7 @@
 					<p:dataTable id="dataTableObsIntersecInversa" styleClass="centerInFragment" 
 						var="observacion" value="#{principalController.estadilloObsIntersInversa.listObsIntersInversa}">
 						
-						<f:facet name="header">Observaciones Intersección Inversa</f:facet>
+						<f:facet name="header">Observaciones</f:facet>
 				        <p:column headerText="Estacion" styleClass="central" sortBy="#{observacion.idEstacion}">
 				            <h:outputText value="#{observacion.idEstacion}" />
 				        </p:column>
@@ -201,7 +180,7 @@
 				            <h:outputText value="#{observacion.codVisual}" />
 				        </p:column>
 				        <f:facet name="footer">
-				        	El fichero contiene un total de #{fn:length(principalController.estadilloObsIntersInversa.listObsIntersInversa)} observaciones
+				        	El fichero contiene #{fn:length(principalController.estadilloObsIntersInversa.listObsIntersInversa)} observaciones
 				    	</f:facet>
 				    	
 					</p:dataTable>
@@ -209,8 +188,52 @@
 			</p:fragment>
 			<!-- FIN FRAGMENT TABLA OBSERVACIONES INTERSECCION INVERSA -->
 			
+			<!-- INICIO FRAGMENT TABLA COORDENADAS INTERSECCION DIRECTA -->
+			<p:fragment id="fragmentDataTablePtosIntersecDirecta">
+				<p:panel id="panelToolbarPtosIntersecDirecta" styleClass="panel" 
+					rendered="#{not empty principalController.nubePuntos.listPuntos}">
+					<p:dataTable id="dataTablePtosIntersecDirecta" styleClass="centerInFragment" 
+						var="punto" value="#{principalController.nubePuntos.listPuntos}">
+						
+						<f:facet name="header">Puntos coordenadas aproximadas</f:facet>
+				        <p:column headerText="Punto" styleClass="central" sortBy="#{punto.id}">
+				            <h:outputText value="#{punto.id}" />
+				        </p:column>
+				 
+				        <p:column headerText="Coord.X" styleClass="derecha" sortBy="#{punto.coordX}">
+				            <h:outputText value="#{punto.coordX}" />
+				        </p:column>
+				 
+				        <p:column headerText="Coord.Y" styleClass="derecha" sortBy="#{punto.coordY}">
+				            <h:outputText value="#{punto.coordY}" />
+				        </p:column>
+				 
+				        <p:column headerText="Coord.Z" styleClass="derecha" sortBy="#{punto.coordZ}">
+				            <h:outputText value="#{punto.coordZ}" />
+				        </p:column>
+				        
+				        <p:column headerText="Código" styleClass="central" sortBy="#{punto.codigo}">
+				            <h:outputText value="#{punto.codigo}" />
+				        </p:column>
+				        <f:facet name="footer">
+				        	El fichero contiene #{fn:length(principalController.nubePuntos.listPuntos)} puntos
+				    	</f:facet>
+				    	
+					</p:dataTable>
+				</p:panel>
+			</p:fragment>
+			<!-- FIN FRAGMENT TABLA COORDENADAS INTERSECCION DIRECTA -->
+			
+			<!-- INICIO FRAGMENT BOTONERA -->
+			<p:fragment id="fragmentButtons">
+				<p:commandButton id="btCalcular" value="Calcular" icon="ui-icon-calculator" disabled="#{principalController.disabledButtonsToolbar}" 
+					action="#{principalController.doObtenerCalculos}" update="formCalculos">
+				</p:commandButton>
+			</p:fragment>
+			<!-- FIN FRAGMENT BOTONERA -->
+			
 			<!-- INICIO FRAGMENT GOOGLE MAPS -->
-			<p:fragment id="fragmentGoogle">
+			<!-- <p:fragment id="fragmentGoogle">
 				<p:fieldset id="fieldSetGoogleMaps" styleClass="fieldset" legend="Google Maps" 
 					toggleable="true" toggleSpeed="500" collapsed="false" 
 					rendered="#{principalController.renderedGoogleMaps}">
@@ -219,12 +242,12 @@
 							zoom="10" type="TERRAIN">
 						</p:gmap>
 					</div>
-    		</p:fieldset>
-			</p:fragment>
+    			</p:fieldset>
+			</p:fragment> -->
 			<!-- FIN FRAGMENT GOOGLE MAPS -->
-		
-			<ui:include src="/pages/templates/footer.xhtml"/>
-			
+			<p:fragment id="fragmentFooter">
+				<ui:include src="/pages/templates/footer.xhtml"/>
+			</p:fragment>
 		</h:form>
 	</div>
 </h:body>

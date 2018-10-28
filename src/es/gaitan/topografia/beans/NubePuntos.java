@@ -55,6 +55,10 @@ public class NubePuntos implements Serializable {
         return blReturn;
 	}
 	
+	public void limpiarNubePuntos() {
+		this.listPuntos.clear();
+	}
+	
 	
 	
 	/*******************************************/

@@ -47,11 +47,17 @@ public class EstadilloObsIntersDirecta implements Estadillo, Serializable {
 	        this.listObsIntersDirecta.add(obs);
         } catch(Exception exc) {
         	blReturn = false;
-        	logger.error("Error al agregar una linea del fichero a la lista de observaciones", exc);
+        	logger.error("Error al insertar linea del fichero a la lista de observaciones", exc);
         	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
 				Constantes.ATENCION, Constantes.FORMATO_INCORRECTO));
         }
         return blReturn;
+	}
+	
+	
+	@Override
+	public void limpiarEstadillo() throws Exception {
+		this.listObsIntersDirecta.clear();
 	}
 	
 	

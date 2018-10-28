@@ -27,7 +27,16 @@ body {
 }
 
 .titleOne {
-	font-size: 1.6em !important;
+	font-size: 1.8em !important;
+}
+
+.titleTwo {
+	font-size: 1.4em !important;
+	margin-left: 1.4em;
+}
+
+div[id$="-fragment"] {
+	margin-top: 2em;
 }
 
 .panel, .fieldset {
@@ -55,12 +64,21 @@ body {
 	background-color: rgb(210, 180, 140);
 }
 
+.separatorGeneral {
+	margin-left: 1.4em;
+}
+
 .separatorBottom {
 	margin-top: 2em !important;
 	margin-bottom: 1em !important;
 	height: 0.2em;
 	background-color: rgb(210, 180, 140);
 }
+
+    /* ESTE CSS ES PARA EL BOTON DE CALCULAR
+    text-align: right;
+    margin: 2em; 
+    */
 
 .ui-datatable tbody td.derecha{
 	text-align:right;
