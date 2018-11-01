@@ -34,7 +34,7 @@
 	<div id="container">
 		<h:form id="formCalculos">
 			
-			<p:growl id="messagesGrowl" sticky="true" showSummary="true" showDetail="true" autoUpdate="false" />
+			<p:growl id="messagesGrowl" sticky="false" showSummary="true" showDetail="true" autoUpdate="false" />
 		
 			<p:outputLabel styleClass="titleOne">Cálculos topográficos</p:outputLabel>
 			<p:separator styleClass="separatorTop"></p:separator>
@@ -94,7 +94,7 @@
 						fileUploadListener="#{principalController.cargarFichero}"
 						uploadLabel="Cargar" cancelLabel="Cancelar" label="Buscar fichero" 
 						update="fragmentCargaFichero fragmentDataTableObsIntersecDirecta fragmentDataTableObsIntersecInversa 
-								fragmentDataTablePtosIntersecDirecta messagesGrowl" />
+								fragmentDataTablePtosIntersecDirecta fragmentButtonCalcular messagesGrowl" />
 					<h:panelGrid id="pgCheckCargaFicheros" styleClass="centerInFragment" columns="4">
 						<p:outputLabel styleClass="outputLabelMargin" value="Cargado fichero de coordenadas " />
 						<p:selectBooleanCheckbox disabled="true" 
@@ -200,15 +200,15 @@
 				            <h:outputText value="#{punto.id}" />
 				        </p:column>
 				 
-				        <p:column headerText="Coord.X" styleClass="derecha" sortBy="#{punto.coordX}">
+				        <p:column headerText="X" styleClass="derecha" sortBy="#{punto.coordX}">
 				            <h:outputText value="#{punto.coordX}" />
 				        </p:column>
 				 
-				        <p:column headerText="Coord.Y" styleClass="derecha" sortBy="#{punto.coordY}">
+				        <p:column headerText="Y" styleClass="derecha" sortBy="#{punto.coordY}">
 				            <h:outputText value="#{punto.coordY}" />
 				        </p:column>
 				 
-				        <p:column headerText="Coord.Z" styleClass="derecha" sortBy="#{punto.coordZ}">
+				        <p:column headerText="Z" styleClass="derecha" sortBy="#{punto.coordZ}">
 				            <h:outputText value="#{punto.coordZ}" />
 				        </p:column>
 				        
@@ -225,8 +225,11 @@
 			<!-- FIN FRAGMENT TABLA COORDENADAS INTERSECCION DIRECTA -->
 			
 			<!-- INICIO FRAGMENT BOTONERA -->
-			<p:fragment id="fragmentButtons">
-				<p:commandButton id="btCalcular" value="Calcular" icon="ui-icon-calculator" disabled="#{principalController.disabledButtonsToolbar}" 
+			<p:fragment id="fragmentButtonCalcular">
+				<p:commandButton id="btCalcular" value="Calcular" icon="ui-icon-calculator" 
+					rendered="#{not empty principalController.nubePuntos.listPuntos 
+								and (not empty principalController.estadilloObsIntersInversa.listObsIntersInversa
+									or not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta)}" 
 					action="#{principalController.doObtenerCalculos}" update="formCalculos">
 				</p:commandButton>
 			</p:fragment>

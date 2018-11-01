@@ -31,8 +31,11 @@ import es.gaitan.topografia.constants.Constantes;
  */
 @ManagedBean(name="principalController")
 @SessionScoped
-public class PrincipalController implements Serializable{
+public class PrincipalController implements Serializable {
 
+	// TODO GENERAR DOCUMENTACION A PARTIR DE LA INFORMACION DEL CODIGO
+	
+	
 	private static final long serialVersionUID = 5215987609794388569L;
 	private static final Logger logger = Logger.getLogger(PrincipalController.class);
 	
@@ -162,6 +165,11 @@ public class PrincipalController implements Serializable{
             logger.info(Constantes.FIN_METODO);
             
         } catch (Exception exc) {
+        	if (esIntersecDirecta) {
+            	estadilloObsIntersDirecta.limpiarEstadillo();
+            } else if (esIntersecInversa) {
+            	estadilloObsIntersInversa.limpiarEstadillo();
+            }
         	logger.error("Error tipo Exception", exc);
         }
     }
@@ -197,6 +205,7 @@ public class PrincipalController implements Serializable{
             logger.info(Constantes.FIN_METODO);
             
         } catch (Exception exc) {
+        	nubePuntos.limpiarNubePuntos();
         	logger.error("Error tipo Exception", exc);
         }
 	}

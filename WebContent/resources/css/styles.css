@@ -75,32 +75,33 @@ div[id$="-fragment"] {
 	background-color: rgb(210, 180, 140);
 }
 
-    /* ESTE CSS ES PARA EL BOTON DE CALCULAR
-    text-align: right;
-    margin: 2em; 
-    */
+/* CSS para el componente p:fragment ya que no tiene ninguna etiqueta de tipo styleClass para identificar el css */
+div[id$="fragmentButtonCalcular"] {
+	text-align: right;
+	margin: 2em;
+}
 
-.ui-datatable tbody td.derecha{
+.ui-datatable tbody td.derecha {
 	text-align:right;
 }
 
-.ui-datatable tbody td.central{
+.ui-datatable tbody td.central {
 	text-align:center;
 }
 
 .ui-growl-error, .ui-growl-fatal, .ui-messages .ui-messages-error, 
 .ui-message.ui-message-error, .ui-messages .ui-messages-fatal, 
-.ui-message.ui-message-fatal{
+.ui-message.ui-message-fatal {
 	color: #fff !important;
 	background-color: #ff0000 !important;
 	border-color: #ff0000 !important;
 }
 
-.outputLabelMargin{
+.outputLabelMargin {
 	margin-left: 8em;
 	margin-right: 0.5em;
 }
 
-.ui-chkbox-box.ui-state-disabled{
+.ui-chkbox-box.ui-state-disabled {
 	opacity: 0.7 !important;
 }

@@ -35,18 +35,34 @@ public class NubePuntos implements Serializable {
         try {
 	        parametros = linea.split(separador, 6);
 	
-	        // TODO Validar campos
+	        
+	        // TODO Deberían de ser los campos obligatorios sino fallará el cálculo
 	        Punto3D pto = new Punto3D();
-	        pto.setId(parametros[0]);
-	        pto.setCoordX(new BigDecimal(parametros[1]));
-	        pto.setCoordY(new BigDecimal(parametros[2]));
+	        
+	        if (!parametros[0].isEmpty()) {
+	        	pto.setId(parametros[0]);
+			}
+	        
+	        if (!parametros[1].isEmpty()) {
+	        	pto.setCoordX(new BigDecimal(parametros[1]));
+			}
+	        
+	        if (!parametros[2].isEmpty()) {
+	        	pto.setCoordY(new BigDecimal(parametros[2]));
+			}
+	        
 	        if (!parametros[3].isEmpty()) {
 	        	pto.setCoordZ(new BigDecimal(parametros[3]));
 			}
-	        pto.setCodigo(parametros[4]);
+	        
+	        if (!parametros[4].isEmpty()) {
+	        	pto.setCodigo(parametros[4]);
+			}
 	        
 	        this.listPuntos.add(pto);
+	        
         } catch(Exception exc) {
+        	this.listPuntos.clear();
         	blReturn = false;
         	logger.error("Error al agregar una linea del fichero a la lista de puntos", exc);
         	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 

@@ -4,6 +4,6 @@ public interface Estadillo {
 	
 	public abstract boolean anadirObservacion(String linea) throws Exception;
 	
-	public abstract void limpiarEstadillo() throws Exception;
+	public abstract void limpiarEstadillo();
 		
 }

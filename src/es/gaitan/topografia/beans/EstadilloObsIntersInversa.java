@@ -46,6 +46,7 @@ public class EstadilloObsIntersInversa implements Estadillo, Serializable {
 	        
 	        this.listObsIntersInversa.add(obs);
         }catch(Exception exc) {
+        	this.limpiarEstadillo();
         	blReturn = false;
         	logger.error("Error al insertar linea del fichero a la lista de observaciones", exc);
         	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
@@ -55,7 +56,7 @@ public class EstadilloObsIntersInversa implements Estadillo, Serializable {
 	}
 	
 	@Override
-	public void limpiarEstadillo() throws Exception {
+	public void limpiarEstadillo() {
 		this.listObsIntersInversa.clear();
 	}
 	
