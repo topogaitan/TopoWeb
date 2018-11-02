@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -20,10 +23,15 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
+import org.primefaces.model.map.DefaultMapModel;
+import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Polygon;
 
 import es.gaitan.topografia.beans.EstadilloObsIntersDirecta;
 import es.gaitan.topografia.beans.EstadilloObsIntersInversa;
 import es.gaitan.topografia.beans.NubePuntos;
+import es.gaitan.topografia.beans.Punto2D;
 import es.gaitan.topografia.constants.Constantes;
 
 /**
@@ -44,6 +52,9 @@ public class PrincipalController implements Serializable {
 	private EstadilloObsIntersDirecta estadilloObsIntersDirecta;
 	private EstadilloObsIntersInversa estadilloObsIntersInversa;
 	
+	private MapModel polygonModel;
+	private Punto2D polygonCentroide;
+	
 	
 	/** BOOLEANOS PARA CONTROL DE LA VISTA **/
 	private boolean esIntersecDirecta;
@@ -58,6 +69,8 @@ public class PrincipalController implements Serializable {
 		nubePuntos = new NubePuntos();
 		estadilloObsIntersDirecta = new EstadilloObsIntersDirecta();
 		estadilloObsIntersInversa = new EstadilloObsIntersInversa();
+		polygonModel = new DefaultMapModel();
+		polygonCentroide = new Punto2D();
 		
 		esIntersecDirecta = false;
 		esIntersecInversa = false;
@@ -127,6 +140,31 @@ public class PrincipalController implements Serializable {
 		
 		// TODO Realizar toda la logica para obtener los calculos que se piden
 		
+		List<LatLng> listPuntosLatLng = new ArrayList<LatLng>();
+		
+		//Shared coordinates
+		LatLng coord1 = new LatLng(40.602057, -3.707517);
+		LatLng coord2 = new LatLng(40.609630, -3.725441);
+		LatLng coord3 = new LatLng(40.616663, -3.684893);
+		
+		listPuntosLatLng.add(coord1);
+		listPuntosLatLng.add(coord2);
+		listPuntosLatLng.add(coord3);
+		
+		//Polygon
+		Polygon polygon = new Polygon();
+		polygon.getPaths().add(coord1);
+		polygon.getPaths().add(coord2);
+		polygon.getPaths().add(coord3);
+		
+		polygon.setStrokeColor("#FF9900");
+		polygon.setFillColor("#FF9900");
+		polygon.setStrokeOpacity(0.7);
+		polygon.setFillOpacity(0.7);
+		
+		polygonModel.addOverlay(polygon);
+		
+		obtenerCoordCentroidePoligono(listPuntosLatLng);
 		
 		logger.info(Constantes.FIN_METODO);
 		return "";
@@ -259,6 +297,31 @@ public class PrincipalController implements Serializable {
        return br;
 	}
 	
+	private void obtenerCoordCentroidePoligono(List<LatLng> listPuntosLatLng) {
+		logger.info(Constantes.INI_METODO);
+		int numPuntos = listPuntosLatLng.size();
+		double sumatorioLat = 0;
+		double sumatorioLng = 0;
+		double centroideLat = 0;
+		double centroideLng = 0;
+		
+		for (LatLng latLng : listPuntosLatLng) {
+			sumatorioLat += latLng.getLat();
+			sumatorioLng += latLng.getLng();
+		}
+		
+		centroideLat = sumatorioLat / numPuntos;
+		centroideLng = sumatorioLng / numPuntos;
+		
+		// Centrar el mapa en funcion del centroide del poligono
+		polygonCentroide.setCoordX(new BigDecimal(centroideLat));
+		polygonCentroide.setCoordY(new BigDecimal(centroideLng));
+		
+		logger.info("Centroide latitud --> " + centroideLat);
+		logger.info("Centroide longitud --> " + centroideLng);
+		logger.info(Constantes.FIN_METODO);
+	}
+	
 
 	/*******************************************/
 	/**          GETTER AND SETTER            **/
@@ -305,6 +368,18 @@ public class PrincipalController implements Serializable {
 	}
 	public void setEsIntersecInversa(boolean esIntersecInversa) {
 		this.esIntersecInversa = esIntersecInversa;
+	}
+	public MapModel getPolygonModel() {
+		return polygonModel;
+	}
+	public void setPolygonModel(MapModel polygonModel) {
+		this.polygonModel = polygonModel;
+	}
+	public Punto2D getPolygonCentroide() {
+		return polygonCentroide;
+	}
+	public void setPolygonCentroide(Punto2D polygonCentroide) {
+		this.polygonCentroide = polygonCentroide;
 	}
 
 }
