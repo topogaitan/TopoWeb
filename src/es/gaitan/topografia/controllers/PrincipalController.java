@@ -158,9 +158,10 @@ public class PrincipalController implements Serializable {
 		polygon.getPaths().add(coord3);
 		
 		polygon.setStrokeColor("#FF9900");
-		polygon.setFillColor("#FF9900");
-		polygon.setStrokeOpacity(0.7);
-		polygon.setFillOpacity(0.7);
+		polygon.setFillColor("#FFECC1");
+		polygon.setStrokeOpacity(1);
+		polygon.setFillOpacity(0.6);
+		polygon.setStrokeWeight(2);
 		
 		polygonModel.addOverlay(polygon);
 		
