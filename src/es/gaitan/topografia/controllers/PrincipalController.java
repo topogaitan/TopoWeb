@@ -60,6 +60,7 @@ public class PrincipalController implements Serializable {
 	private boolean esIntersecDirecta;
 	private boolean esIntersecInversa;
 	private boolean disabledButtonsToolbar;
+	private boolean renderedCargaFichero;
 	private boolean renderedGoogleMaps;
 
 	@PostConstruct
@@ -76,6 +77,7 @@ public class PrincipalController implements Serializable {
 		esIntersecInversa = false;
 		
 		disabledButtonsToolbar = true;
+		renderedCargaFichero = false;
 		renderedGoogleMaps = false;
 		
 		logger.info(Constantes.FIN_METODO);
@@ -87,7 +89,7 @@ public class PrincipalController implements Serializable {
 		this.reset();
 		esIntersecDirecta = true;
 		disabledButtonsToolbar = false;
-		renderedGoogleMaps = true;
+		renderedCargaFichero = true;
 		
 		logger.info(Constantes.FIN_METODO);
 	}
@@ -98,7 +100,7 @@ public class PrincipalController implements Serializable {
 		this.reset();
 		esIntersecInversa = true;
 		disabledButtonsToolbar = false;
-		renderedGoogleMaps = true;
+		renderedCargaFichero = true;
 		
 		logger.info(Constantes.FIN_METODO);
 	}
@@ -108,7 +110,6 @@ public class PrincipalController implements Serializable {
 		
 		this.reset();
 		disabledButtonsToolbar = true;
-		renderedGoogleMaps = false;
 		
 		logger.info(Constantes.FIN_METODO);
 		return "";
@@ -166,6 +167,7 @@ public class PrincipalController implements Serializable {
 		polygonModel.addOverlay(polygon);
 		
 		obtenerCoordCentroidePoligono(listPuntosLatLng);
+		renderedGoogleMaps = true;
 		
 		logger.info(Constantes.FIN_METODO);
 		return "";
@@ -351,6 +353,12 @@ public class PrincipalController implements Serializable {
 	}
 	public void setDisabledButtonsToolbar(boolean disabledButtonsToolbar) {
 		this.disabledButtonsToolbar = disabledButtonsToolbar;
+	}
+	public boolean isRenderedCargaFichero() {
+		return renderedCargaFichero;
+	}
+	public void setRenderedCargaFichero(boolean renderedCargaFichero) {
+		this.renderedCargaFichero = renderedCargaFichero;
 	}
 	public boolean isRenderedGoogleMaps() {
 		return renderedGoogleMaps;

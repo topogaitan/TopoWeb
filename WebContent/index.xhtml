@@ -89,7 +89,7 @@
 			
 			<!-- INICIO FRAGMENT CARGA FICHERO -->
 			<p:fragment id="fragmentCargaFichero">
-				<p:panel id="panelToolbarFichero" styleClass="panel" rendered="#{principalController.renderedGoogleMaps}">
+				<p:panel id="panelToolbarFichero" styleClass="panel" rendered="#{principalController.renderedCargaFichero}">
 					<p:fileUpload id="cargaFichero" styleClass="centerInFragment" mode="advanced" dragDropSupport="true" skinSimple="true"
 						fileUploadListener="#{principalController.cargarFichero}"
 						uploadLabel="Cargar" cancelLabel="Cancelar" label="Buscar fichero" 
@@ -234,6 +234,43 @@
 				</p:commandButton>
 			</p:fragment>
 			<!-- FIN FRAGMENT BOTONERA -->
+			
+			<!-- INICIO FRAGMENT TABLA COORDENADAS CALCULADAS -->
+			<p:fragment id="fragmentDataTablePtosCalculados">
+				<p:separator styleClass="separatorTop"></p:separator>
+				<p:panel id="panelToolbarPtosCalculados" styleClass="panel" 
+					rendered="#{not empty principalController.nubePuntos.listPuntos}">
+					<p:dataTable id="dataTablePtosCalculados" styleClass="centerInFragment" 
+						var="punto" value="#{principalController.nubePuntos.listPuntos}">
+						
+						<f:facet name="header">Coordenadas calculadas</f:facet>
+				        <!-- <p:column headerText="Punto" styleClass="central" sortBy="#{punto.id}">
+				            <h:outputText value="#{punto.id}" />
+				        </p:column> -->
+				 
+				        <p:column headerText="X" styleClass="derecha" sortBy="#{punto.coordX}">
+				            <h:outputText value="#{punto.coordX}" />
+				        </p:column>
+				 
+				        <p:column headerText="Y" styleClass="derecha" sortBy="#{punto.coordY}">
+				            <h:outputText value="#{punto.coordY}" />
+				        </p:column>
+				 
+				        <p:column headerText="Z" styleClass="derecha" sortBy="#{punto.coordZ}">
+				            <h:outputText value="#{punto.coordZ}" />
+				        </p:column>
+				        
+				        <p:column headerText="Desviación" styleClass="central" sortBy="#{punto.codigo}">
+				            <h:outputText value="#{punto.codigo}" />
+				        </p:column>
+				        <!-- <f:facet name="footer">
+				        	El fichero contiene #{fn:length(principalController.nubePuntos.listPuntos)} puntos
+				    	</f:facet> -->
+				    	
+					</p:dataTable>
+				</p:panel>
+			</p:fragment>
+			<!-- FIN FRAGMENT TABLA COORDENADAS CALCULADAS -->
 			
 			<!-- INICIO FRAGMENT GOOGLE MAPS -->
 			<p:fragment id="fragmentGoogle">
