@@ -140,53 +140,32 @@
 				        <p:column headerText="Código" styleClass="central" sortBy="#{observacion.codVisual}">
 				            <h:outputText value="#{observacion.codVisual}" />
 				        </p:column>
+				        
 				        <f:facet name="footer">
 				        	El fichero contiene un total de #{fn:length(principalController.estadilloObsIntersDirecta.listObsIntersDirecta)} observaciones
-				    	<div style="float:right;padding-top: 1px;">
-				    	<h:commandLink>
-								<p:graphicImage name="/img/excel.png" title="Exportar a xls" width="15"/>
-								<p:dataExporter type="xls" target="dataTableObsIntersecDirecta" fileName="observaciones" />
-							</h:commandLink>
-							
+				    		<div style="float:right;margin:0.1em">
+				    			<h:commandLink id="clExportarXLS">
+									<p:graphicImage styleClass="imagenExportar" name="/img/excel.png" title="Exportar a xls" />
+									<p:dataExporter type="xls" target="dataTableObsIntersecDirecta" fileName="observaciones" />
+								</h:commandLink>
+								
+								<h:commandLink id="clExportarPDF">
+									<p:graphicImage styleClass="imagenExportar" name="/img/pdf.png" title="Exportar a pdf" />
+									<p:dataExporter type="pdf" target="dataTableObsIntersecDirecta" fileName="observaciones" />
+								</h:commandLink>
+						
+								<h:commandLink id="clExportarCSV">
+									<p:graphicImage styleClass="imagenExportar" name="/img/csv.png" title="Exportar a csv" />
+									<p:dataExporter type="csv" target="dataTableObsIntersecDirecta" fileName="observaciones" />
+								</h:commandLink>
+						
+								<h:commandLink id="clExportarXML">
+									<p:graphicImage styleClass="imagenExportar" name="/img/xml.png" title="Exportar a xml" />
+									<p:dataExporter type="xml" target="dataTableObsIntersecDirecta" fileName="observaciones" />
+								</h:commandLink>
 							</div>
-							
 				    	</f:facet>
-				    	
-				    	
-				    	
 					</p:dataTable>
-					
-					
-					<!-- <p:toolbar id="toolbar2" styleClass="centerInFragment"> -->
-						<f:facet name="left">
-						</f:facet>
-						
-						<f:facet name="right">
-							<h:commandLink>
-								<p:graphicImage name="/img/excel.png" width="24"/>
-								<p:dataExporter type="xls" target="dataTableObsIntersecDirecta" fileName="observaciones" />
-							</h:commandLink>
-						
-							<h:commandLink>
-								<p:graphicImage name="/img/pdf.png" width="24"/>
-								<p:dataExporter type="pdf" target="dataTableObsIntersecDirecta" fileName="observaciones" />
-							</h:commandLink>
-						
-							<h:commandLink>
-								<p:graphicImage name="/img/csv.png" width="24"/>
-								<p:dataExporter type="csv" target="dataTableObsIntersecDirecta" fileName="observaciones" />
-							</h:commandLink>
-						
-							<h:commandLink>
-								<p:graphicImage name="/img/xml.png" width="24"/>
-								<p:dataExporter type="xml" target="dataTableObsIntersecDirecta" fileName="observaciones" />
-							</h:commandLink>
-						</f:facet>
-					<!-- </p:toolbar> -->
-					
-					
-					
-					
 				</p:panel>
 			</p:fragment>
 			<!-- FIN FRAGMENT TABLA OBSERVACIONES INTERSECCION DIRECTA -->
@@ -279,7 +258,7 @@
 			<!-- FIN FRAGMENT BOTONERA -->
 			
 			<!-- INICIO FRAGMENT TABLA COORDENADAS CALCULADAS -->
-			<p:fragment id="fragmentDataTablePtosCalculados">
+			<p:fragment id="fragmentDataTablePtosCalculados" rendered="#{not empty principalController.nubePuntos.listPuntos}">
 				<p:separator styleClass="separatorTop"></p:separator>
 				<p:panel id="panelToolbarPtosCalculados" styleClass="panel" 
 					rendered="#{not empty principalController.nubePuntos.listPuntos}">

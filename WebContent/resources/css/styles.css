@@ -109,3 +109,12 @@ div[id$="fragmentButtonCalcular"] {
 .ui-chkbox-box.ui-state-disabled {
 	opacity: 0.7 !important;
 }
+
+.ui-datatable-footer {
+	padding: 0.8em !important;
+}
+
+.imagenExportar {
+	width: 1.5em;
+	margin-right: 0.5em;
+}
