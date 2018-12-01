@@ -7,7 +7,7 @@
     
 	<application>
 		<resource-bundle>
-			<base-name>resources.properties.index</base-name>
+			<base-name>properties.index</base-name>
 			<var>prop</var>
 		</resource-bundle>
 	</application>
