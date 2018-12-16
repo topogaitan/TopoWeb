@@ -12,8 +12,10 @@
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<!-- <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> -->
-	<title>topoGaitan</title>
-
+	
+	<link rel="icon" href="resources/img/topogaitan.ico" ></link>
+	<title>TopoGaitan</title>
+	
 	<h:outputStylesheet name="css/styles.css" />
 
 	<f:facet name="first">
@@ -65,12 +67,27 @@
 						</f:facet>
 						
 						<f:facet name="left">
-							<p:menuButton id="mButtonCalculos" value="Cálculo" disabled="#{!principalController.disabledButtonsToolbar}">
-								<p:menuitem value="Intersección Directa" actionListener="#{principalController.activarIntersecDirecta}" 
-									update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
-								<p:menuitem value="Intersección Inversa" actionListener="#{principalController.activarIntersecInversa}" 
-									update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
-							</p:menuButton>
+							<!-- <p:menuButton id="mButtonCalculos" value="Cálculo" disabled="#{!principalController.disabledButtonsToolbar}"> -->
+							<p:tieredMenu rendered="#{principalController.disabledButtonsToolbar}">
+								<p:submenu label="Cálculos">
+									<p:submenu label="Intersección Directa">
+										<p:menuitem value="Angular" actionListener="#{principalController.activarIntersecDirecta}" 
+											update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
+										<p:menuitem value="Distancias" actionListener="#{principalController.activarIntersecDirecta}" 
+											update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
+									</p:submenu>
+									<p:submenu label="Intersección Inversa">
+										<p:menuitem value="Pothenot" actionListener="#{principalController.activarIntersecInversa}" 
+											update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
+										<p:menuitem value="Tienstra" actionListener="#{principalController.activarIntersecInversa}" 
+											update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
+									</p:submenu>
+								</p:submenu>
+							</p:tieredMenu>
+								
+							<!-- </p:menuButton> -->
+							
+							
 						</f:facet>
 					</p:toolbar>
 				</p:panel>

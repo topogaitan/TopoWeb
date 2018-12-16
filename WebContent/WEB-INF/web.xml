@@ -39,8 +39,25 @@
     <param-value>Development</param-value>
   </context-param>
   
+  <context-param>
+    <param-name>primefaces.THEME</param-name>
+    <!-- <param-value>le-frog</param-value> -->
+    <!-- <param-value>glass-x</param-value> -->
+    
+    <param-value>pepper-grinder</param-value>
+    <!-- <param-value>afterdark</param-value> -->
+    <!-- <param-value>afternoon</param-value> -->
+    <!-- <param-value>sunny</param-value> -->
+    <!-- <param-value>mint-choc</param-value> -->
+    <!-- <param-value>flick</param-value> -->
+    
+    
+  </context-param>
+  
   <listener>
     <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
   </listener>
+  
+
   
 </web-app>

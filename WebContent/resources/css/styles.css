@@ -58,7 +58,7 @@ div[id$="-fragment"] {
 }
 
 .ui-menuitem-text {
-	font-size: 0.8em !important;
+	font-size: 0.9em !important;
 }
 
 .separatorTop {
@@ -96,9 +96,10 @@ div[id$="fragmentButtonCalcular"] {
 .ui-growl-error, .ui-growl-fatal, .ui-messages .ui-messages-error, 
 .ui-message.ui-message-error, .ui-messages .ui-messages-fatal, 
 .ui-message.ui-message-fatal {
-	color: #fff !important;
+	color: #806837 !important;
 	background-color: #ff0000 !important;
 	border-color: #ff0000 !important;
+	border-width: 0.4em !important;
 }
 
 .outputLabelMargin {
