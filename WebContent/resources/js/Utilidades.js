@@ -1,3 +1,6 @@
+
+//<![CDATA[
+
 /* Expando Image Script 2008 John Davenport Scheuer
 as first seen in http://www.dynamicdrive.com/forums/
 username: jscheuer1 - This Notice Must Remain for Legal Use
