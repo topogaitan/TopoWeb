@@ -41,6 +41,7 @@ body {
 
 div[id$="-fragment"] {
 	margin-top: 2em;
+	margin-bottom: 2em;
 }
 
 .panel, .fieldset {
@@ -118,4 +119,9 @@ div[id$="fragmentButtonCalcular"] {
 .imagenExportar {
 	width: 1.5em;
 	margin-right: 0.5em;
+}
+
+img.expando{
+	margin:10px;
+	vertical-align: top; 
 }

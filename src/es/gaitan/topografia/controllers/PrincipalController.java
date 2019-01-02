@@ -57,7 +57,8 @@ public class PrincipalController implements Serializable {
 	
 	
 	/** BOOLEANOS PARA CONTROL DE LA VISTA **/
-	private boolean esIntersecDirecta;
+	private boolean esIntersecDirectaAngular;
+	private boolean esIntersecDirectaDistancias;
 	private boolean esIntersecInversa;
 	private boolean disabledButtonsToolbar;
 	private boolean renderedCargaFichero;
@@ -73,7 +74,8 @@ public class PrincipalController implements Serializable {
 		polygonModel = new DefaultMapModel();
 		polygonCentroide = new Punto2D();
 		
-		esIntersecDirecta = false;
+		esIntersecDirectaAngular = false;
+		esIntersecDirectaDistancias = false;
 		esIntersecInversa = false;
 		
 		disabledButtonsToolbar = true;
@@ -83,11 +85,22 @@ public class PrincipalController implements Serializable {
 		logger.info(Constantes.FIN_METODO);
 	}
 	
-	public void activarIntersecDirecta() {
+	public void activarIntersecDirectaAngular() {
 		logger.info(Constantes.INI_METODO);
 		
 		this.reset();
-		esIntersecDirecta = true;
+		esIntersecDirectaAngular = true;
+		disabledButtonsToolbar = false;
+		renderedCargaFichero = true;
+		
+		logger.info(Constantes.FIN_METODO);
+	}
+	
+	public void activarIntersecDirectaDistancias() {
+		logger.info(Constantes.INI_METODO);
+		
+		this.reset();
+		esIntersecDirectaDistancias = true;
 		disabledButtonsToolbar = false;
 		renderedCargaFichero = true;
 		
@@ -189,7 +202,7 @@ public class PrincipalController implements Serializable {
             String linea;
             boolean estaAgregada = true;
             
-            if (esIntersecDirecta) {
+            if (esIntersecDirectaAngular || esIntersecDirectaDistancias) {
             	estadilloObsIntersDirecta.limpiarEstadillo();
 	            while ((linea = br.readLine()) != null && estaAgregada) {
 		            	estaAgregada = estadilloObsIntersDirecta.anadirObservacion(linea);
@@ -206,7 +219,7 @@ public class PrincipalController implements Serializable {
             logger.info(Constantes.FIN_METODO);
             
         } catch (Exception exc) {
-        	if (esIntersecDirecta) {
+        	if (esIntersecDirectaAngular || esIntersecDirectaDistancias) {
             	estadilloObsIntersDirecta.limpiarEstadillo();
             } else if (esIntersecInversa) {
             	estadilloObsIntersInversa.limpiarEstadillo();
@@ -231,7 +244,7 @@ public class PrincipalController implements Serializable {
             String linea;
             boolean estaAgregado = true;
             
-            if (esIntersecDirecta) {
+            if (esIntersecDirectaAngular || esIntersecDirectaDistancias) {
 	            while ((linea = br.readLine()) != null && estaAgregado) {
 	            	estaAgregado = nubePuntos.anadirPunto(linea);
 	            }
@@ -366,11 +379,17 @@ public class PrincipalController implements Serializable {
 	public void setRenderedGoogleMaps(boolean renderedGoogleMaps) {
 		this.renderedGoogleMaps = renderedGoogleMaps;
 	}
-	public boolean isEsIntersecDirecta() {
-		return esIntersecDirecta;
+	public boolean isEsIntersecDirectaAngular() {
+		return esIntersecDirectaAngular;
 	}
-	public void setEsIntersecDirecta(boolean esIntersecDirecta) {
-		this.esIntersecDirecta = esIntersecDirecta;
+	public void setEsIntersecDirectaAngular(boolean esIntersecDirectaAngular) {
+		this.esIntersecDirectaAngular = esIntersecDirectaAngular;
+	}
+	public boolean isEsIntersecDirectaDistancias() {
+		return esIntersecDirectaDistancias;
+	}
+	public void setEsIntersecDirectaDistancias(boolean esIntersecDirectaDistancias) {
+		this.esIntersecDirectaDistancias = esIntersecDirectaDistancias;
 	}
 	public boolean isEsIntersecInversa() {
 		return esIntersecInversa;
