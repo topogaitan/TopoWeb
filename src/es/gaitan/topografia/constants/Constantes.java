@@ -1,10 +1,22 @@
 package es.gaitan.topografia.constants;
 
+import java.math.BigDecimal;
+
 public class Constantes {
 	
 	public static final String INI_METODO = "Inicio del metodo ";
 	public static final String FIN_METODO = "Fin del metodo ";
 	public static final String CADENA_VACIA = "";
+	
+	public static final BigDecimal BIGDEC_2 = new BigDecimal(2);
+	public static final BigDecimal BIGDEC_200 = new BigDecimal(200);
+	public static final BigDecimal BIGDEC_400 = new BigDecimal(400);
+	
+	public static final int int_0 = 0;
+	public static final int int_1 = 1;
+	public static final int int_200 = 200;
+	
+	
 	
 	
 	/*******************************************/

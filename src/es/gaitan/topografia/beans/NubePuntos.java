@@ -18,7 +18,7 @@ public class NubePuntos implements Serializable {
 	
 	private static final Logger logger = Logger.getLogger(NubePuntos.class);
 	
-	List<Punto3D> listPuntos;
+	private List<Punto3D> listPuntos;
 
 	public NubePuntos() {
 		super();
@@ -75,6 +75,13 @@ public class NubePuntos implements Serializable {
 		this.listPuntos.clear();
 	}
 	
+	public int tamanioNubePuntos() {
+		return this.listPuntos.size();
+	}
+	
+	public Punto3D getPunto(int index) {
+		return listPuntos.get(index);
+	}
 	
 	
 	/*******************************************/

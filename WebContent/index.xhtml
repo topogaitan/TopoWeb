@@ -118,9 +118,6 @@
 					<p:separator styleClass="separatorGeneral"></p:separator>
 				</p:fragment>
 			</p:fragment>
-			
-			
-			
 			<!-- FIN FRAGMENT TITULO TIPO DE CALCULO -->
 			
 			<!-- INICIO FRAGMENT CARGA FICHERO -->
@@ -333,14 +330,59 @@
 									or not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta)}" 
 					action="#{principalController.doObtenerCalculos}" update="formCalculos">
 				</p:commandButton>
+				
+				<!-- <p:separator styleClass="separatorTop" rendered="#{not empty principalController.nubePuntos.listPuntos 
+								and (not empty principalController.estadilloObsIntersInversa.listObsIntersInversa
+									or not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta)}">
+				</p:separator> -->
 			</p:fragment>
 			<!-- FIN FRAGMENT BOTONERA -->
 			
+			<!-- INICIO FRAGMENT TITULO TIPO DE CALCULO -->
+			<p:fragment id="fragmentTitleThree-fragment">
+				<p:fragment rendered="#{principalController.mostrarResultados}">
+					<p:graphicImage styleClass="expando floatRight" name="/img/directaAng_mini.jpg" width="40" />
+					
+					<p:outputLabel styleClass="titleTwo">Resultados</p:outputLabel>
+					<p:separator styleClass="separatorGeneral"></p:separator>
+				</p:fragment>
+				
+				<!-- <p:fragment rendered="#{principalController.esIntersecDirectaDistancias}">
+					<p:graphicImage styleClass="expando floatRight" name="/img/directaDist_mini.jpg" width="40" />
+					
+					<p:outputLabel styleClass="titleTwo">Intersección Directa Distancias</p:outputLabel>
+					<p:separator styleClass="separatorGeneral"></p:separator>
+				</p:fragment>
+				
+				<p:fragment rendered="#{principalController.esIntersecInversa}">
+					<p:outputLabel styleClass="titleTwo">Intersección Inversa</p:outputLabel>
+					<p:separator styleClass="separatorGeneral"></p:separator>
+				</p:fragment> -->
+			</p:fragment>
+			<!-- FIN FRAGMENT TITULO TIPO DE CALCULO -->
+			
+			
+			
+			
+			
+			
+			
 			<!-- INICIO FRAGMENT TABLA COORDENADAS CALCULADAS -->
-			<p:fragment id="fragmentDataTablePtosCalculados" rendered="#{not empty principalController.nubePuntos.listPuntos}">
-				<p:separator styleClass="separatorTop"></p:separator>
+			<p:fragment id="fragmentDataTablePtosCalculados" rendered="#{principalController.mostrarResultados}">
+				<p:fragment id="fragmentAcimutes">
+					<p:outputLabel styleClass="" value="Acimut-DI (g): " />
+					<p:inputText value="#{principalController.acimutDI}" styleClass="inputAcimutes-5" readonly="true"/>
+					<p:outputLabel styleClass="" value="Acimut-ID (g): " />
+					<p:inputText value="#{principalController.acimutID}" styleClass="inputAcimutes-5" readonly="true"/>
+					<p:outputLabel styleClass="" value="Acimut-DV (g): " />
+					<p:inputText value="000.0000" styleClass="inputAcimutes-5" readonly="true"/>
+					<p:outputLabel styleClass="" value="Acimut-IV (g): " />
+					<p:inputText value="000.0000" styleClass="inputAcimutes-5" readonly="true"/>
+				</p:fragment>
+				
 				<p:panel id="panelToolbarPtosCalculados" styleClass="panel" 
 					rendered="#{not empty principalController.nubePuntos.listPuntos}">
+					
 					<p:dataTable id="dataTablePtosCalculados" styleClass="centerInFragment" 
 						var="punto" value="#{principalController.nubePuntos.listPuntos}">
 						

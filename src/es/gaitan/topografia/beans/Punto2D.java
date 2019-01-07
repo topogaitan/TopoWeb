@@ -16,6 +16,27 @@ public class Punto2D implements Serializable {
 		super();
 	}
 	
+	public BigDecimal acimut(BigDecimal lH, BigDecimal desorienta) {
+		BigDecimal acimut;
+        acimut = desorienta.add(lH);
+        
+        if (acimut.doubleValue() > 400) {
+        	acimut.subtract(new BigDecimal(400));
+        }
+        
+        return acimut;
+    }
+	
+    public BigDecimal desorientacion(BigDecimal lH, BigDecimal acimut) {
+    	BigDecimal desorientacion = acimut.subtract(lH);
+    	
+        if (desorientacion.doubleValue() < 0) {
+        	desorientacion = desorientacion.add(new BigDecimal(400));
+        }
+
+        return desorientacion;
+    }
+	
 	
 	
 	/*******************************************/

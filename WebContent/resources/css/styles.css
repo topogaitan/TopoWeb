@@ -71,6 +71,7 @@ div[id$="-fragment"] {
 
 .separatorGeneral {
 	margin-left: 1.4em;
+	margin-bottom: 3em !important;
 }
 
 .separatorBottom {
@@ -86,7 +87,7 @@ div[id$="fragmentButtonCalcular"] {
 	margin: 2em;
 }
 
-.ui-datatable tbody td.derecha {
+.ui-datatable tbody td.derecha, .derecha {
 	text-align:right;
 }
 
@@ -121,7 +122,14 @@ div[id$="fragmentButtonCalcular"] {
 	margin-right: 0.5em;
 }
 
-img.expando{
+img.expando {
 	margin:10px;
 	vertical-align: top; 
+}
+
+.inputAcimutes-5 {
+	width: 5em;
+	text-align: right;
+	margin-right: 2em !important;
+	font-weight: normal !important;
 }

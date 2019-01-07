@@ -62,6 +62,14 @@ public class EstadilloObsIntersDirecta implements Estadillo, Serializable {
 		this.listObsIntersDirecta.clear();
 	}
 	
+	@Override
+	public int tamanioNubePuntos() {
+		return this.listObsIntersDirecta.size();
+	}
+	
+	public ObsIntersDirecta getPunto(int index) {
+		return listObsIntersDirecta.get(index);
+	}
 	
 	/*******************************************/
 	/**          GETTER AND SETTER            **/

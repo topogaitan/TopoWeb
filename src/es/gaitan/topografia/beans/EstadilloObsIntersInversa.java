@@ -60,6 +60,15 @@ public class EstadilloObsIntersInversa implements Estadillo, Serializable {
 		this.listObsIntersInversa.clear();
 	}
 	
+	@Override
+	public int tamanioNubePuntos() {
+		return this.listObsIntersInversa.size();
+	}
+	
+	public ObsIntersInversa getPunto(int index) {
+		return listObsIntersInversa.get(index);
+	}
+	
 	
 	/*******************************************/
 	/**          GETTER AND SETTER            **/

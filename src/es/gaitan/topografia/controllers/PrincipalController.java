@@ -12,11 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
-
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.io.FilenameUtils;
@@ -31,8 +30,11 @@ import org.primefaces.model.map.Polygon;
 import es.gaitan.topografia.beans.EstadilloObsIntersDirecta;
 import es.gaitan.topografia.beans.EstadilloObsIntersInversa;
 import es.gaitan.topografia.beans.NubePuntos;
+import es.gaitan.topografia.beans.ObsIntersDirecta;
 import es.gaitan.topografia.beans.Punto2D;
+import es.gaitan.topografia.beans.Punto3D;
 import es.gaitan.topografia.constants.Constantes;
+import es.gaitan.topografia.utilities.Utilidades;
 
 /**
  * @author RGAITAN
@@ -51,6 +53,19 @@ public class PrincipalController implements Serializable {
 	private NubePuntos nubePuntos;
 	private EstadilloObsIntersDirecta estadilloObsIntersDirecta;
 	private EstadilloObsIntersInversa estadilloObsIntersInversa;
+	private NubePuntos nubePuntosCalculados;
+	
+	/** Inicio Atributos Interseccion Directa **/
+	private BigDecimal acimutDI;
+	private BigDecimal acimutID;
+	private BigDecimal acimutDV;
+	private BigDecimal acimutIV;
+	private Punto3D pEstD;
+	private Punto3D pEstI;
+	private Punto3D pCalDesdeD;
+	private Punto3D pCalDesdeI;
+	/** Fin Atributos Interseccion Directa **/
+	
 	
 	private MapModel polygonModel;
 	private Punto2D polygonCentroide;
@@ -63,6 +78,7 @@ public class PrincipalController implements Serializable {
 	private boolean disabledButtonsToolbar;
 	private boolean renderedCargaFichero;
 	private boolean renderedGoogleMaps;
+	private boolean mostrarResultados;
 
 	@PostConstruct
 	public void reset() {
@@ -71,6 +87,7 @@ public class PrincipalController implements Serializable {
 		nubePuntos = new NubePuntos();
 		estadilloObsIntersDirecta = new EstadilloObsIntersDirecta();
 		estadilloObsIntersInversa = new EstadilloObsIntersInversa();
+		nubePuntosCalculados = new NubePuntos();
 		polygonModel = new DefaultMapModel();
 		polygonCentroide = new Punto2D();
 		
@@ -81,6 +98,7 @@ public class PrincipalController implements Serializable {
 		disabledButtonsToolbar = true;
 		renderedCargaFichero = false;
 		renderedGoogleMaps = false;
+		mostrarResultados = false;
 		
 		logger.info(Constantes.FIN_METODO);
 	}
@@ -152,7 +170,132 @@ public class PrincipalController implements Serializable {
 	public String doObtenerCalculos() {
 		logger.info(Constantes.INI_METODO);
 		
-		// TODO Realizar toda la logica para obtener los calculos que se piden
+		// TODO El codigo de cada punto y observacion debe llegar informado
+		
+		// Se calcula el ACIMUT
+		// Se localizan las estaciones D e I mediante el codigo del punto
+		for (int i = 0; i < nubePuntos.tamanioNubePuntos(); i++) {
+            if ("D".equals(nubePuntos.getPunto(i).getCodigo())) {
+                pEstD = nubePuntos.getPunto(i);
+            } else {
+                pEstI = nubePuntos.getPunto(i);
+            }
+		}
+
+		acimutDI = pEstD.acimut(pEstI);
+		acimutID = Utilidades.acimutReciproco(acimutDI);
+		
+		// Se calcula la DESORIENTACION con las observaciones
+		BigDecimal desorEstD = BigDecimal.ZERO;
+		BigDecimal desorEstI = BigDecimal.ZERO;
+		
+		int numeroObservaciones = estadilloObsIntersDirecta.tamanioNubePuntos();
+		for (int i = 0; i < numeroObservaciones; i++) {
+			ObsIntersDirecta observacion = estadilloObsIntersDirecta.getPunto(i);
+		    if (observacion.getIdVisado().equals(pEstI.getId())) {
+		        desorEstD = pEstD.desorientacion(observacion.getlH(), acimutDI);
+		    }
+		    if (observacion.getIdVisado().equals(pEstD.getId())) {
+		        desorEstI = pEstI.desorientacion(observacion.getlH(), acimutID);
+		    }
+		}
+		
+		
+//		BigDecimal base_EstDEstI = pEstD.distancia(pEstI);
+		
+		
+		BigDecimal anguloD;
+		BigDecimal anguloI;
+		BigDecimal alpha;
+
+		ObsIntersDirecta obsDI = new ObsIntersDirecta();
+		ObsIntersDirecta obsDV = new ObsIntersDirecta();
+		ObsIntersDirecta obsID = new ObsIntersDirecta();
+		ObsIntersDirecta obsIV = new ObsIntersDirecta();
+		
+		for (int i = 0; i < numeroObservaciones; i++) {
+			ObsIntersDirecta observacion = estadilloObsIntersDirecta.getPunto(i);
+			
+			if ("DI".equals(observacion.getCodVisual())) {
+				obsDI.setIdEstacion(observacion.getIdEstacion());
+				obsDI.setIdVisado(observacion.getIdVisado());
+				obsDI.setlH(observacion.getlH());
+				obsDI.setlV(observacion.getlV());
+				obsDI.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("DV".equals(observacion.getCodVisual())) {
+				obsDV.setIdEstacion(observacion.getIdEstacion());
+				obsDV.setIdVisado(observacion.getIdVisado());
+				obsDV.setlH(observacion.getlH());
+				obsDV.setlV(observacion.getlV());
+				obsDV.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("ID".equals(observacion.getCodVisual())) {
+				obsID.setIdEstacion(observacion.getIdEstacion());
+				obsID.setIdVisado(observacion.getIdVisado());
+				obsID.setlH(observacion.getlH());
+				obsID.setlV(observacion.getlV());
+				obsID.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("IV".equals(observacion.getCodVisual())) {
+				obsIV.setIdEstacion(observacion.getIdEstacion());
+				obsIV.setIdVisado(observacion.getIdVisado());
+				obsIV.setlH(observacion.getlH());
+				obsIV.setlV(observacion.getlV());
+				obsIV.setCodVisual(observacion.getCodVisual());
+			}
+		}
+
+		if (obsDI.getlH().compareTo(obsDV.getlH()) > 0) {
+		    anguloD = obsDI.getlH().subtract(obsDV.getlH());
+		} else {
+		    anguloD = obsDV.getlH().subtract(obsDI.getlH());
+		}
+		
+		if (obsIV.getlH().compareTo(obsID.getlH()) > 0) {
+		    anguloI = obsIV.getlH().subtract(obsID.getlH());
+		} else {
+		    anguloI = obsID.getlH().subtract(obsIV.getlH());
+		}
+		
+		alpha = Constantes.BIGDEC_200.subtract(anguloD).subtract(anguloI);
+		
+		BigDecimal comprobacion = alpha.add(anguloD).add(anguloI);
+		
+//		// Calcular los lados del triangulo
+//		double ladoDV = (Math.Sin(Utiles.convertRadian(anguloI)) * baseEst) / (Math.Sin(Utiles.convertRadian(alpha)));
+//		double ladoIV = (Math.Sin(Utiles.convertRadian(anguloD)) * baseEst) / (Math.Sin(Utiles.convertRadian(alpha)));
+//		
+//		double acimutDV = desorEst1 + obsDV.LH;
+//		double acimutIV = desorEst2 + obsIV.LH;
+//		
+//		// Calcular los incrementos de coordenadas
+//		double axD = ladoDV * Math.Sin(Utiles.convertRadian(acimutDV));
+//		double ayD = ladoDV * Math.Cos(Utiles.convertRadian(acimutDV));
+//		
+//		double axI = ladoIV * Math.Sin(Utiles.convertRadian(acimutIV));
+//		double ayI = ladoIV * Math.Cos(Utiles.convertRadian(acimutIV));
+//		
+//		// Calcular coordenadas de los puntos radiados
+//		pVisD.X = Math.Round((pEst1.X + axD), 3);
+//		pVisD.Y = Math.Round((pEst1.Y + ayD), 3);
+//		
+//		pVisI.X = Math.Round((pEst2.X + axI), 3);
+//		pVisI.Y = Math.Round((pEst2.Y + ayI), 3);
+//		
+//		// Promedio del punto calculado
+//		cPunto3D pVisProm = new cPunto3D();
+//		pVisProm.ID = obsDV.vis;
+//		pVisProm.X = Math.Round((pVisD.X + pVisI.X) / cConstantes.DOS, 3);
+//		pVisProm.Y = Math.Round((pVisD.Y + pVisI.Y) / cConstantes.DOS, 3);
+//		pVisProm.Z = 0;
+//		
+//		puntosCalculados.Añadir(pVisProm);
+//		dgvCalCoordInters.Rows.Add(pVisProm.ID, pVisProm.X, pVisProm.Y, pVisProm.Z);
+		
+		
+		
+		
 		
 		List<LatLng> listPuntosLatLng = new ArrayList<LatLng>();
 		
@@ -181,6 +324,7 @@ public class PrincipalController implements Serializable {
 		
 		obtenerCoordCentroidePoligono(listPuntosLatLng);
 		renderedGoogleMaps = true;
+		mostrarResultados = true;
 		
 		logger.info(Constantes.FIN_METODO);
 		return "";
@@ -361,6 +505,60 @@ public class PrincipalController implements Serializable {
 	public void setEstadilloObsIntersInversa(EstadilloObsIntersInversa estadilloObsIntersInversa) {
 		this.estadilloObsIntersInversa = estadilloObsIntersInversa;
 	}
+	public NubePuntos getNubePuntosCalculados() {
+		return nubePuntosCalculados;
+	}
+	public void setNubePuntosCalculados(NubePuntos nubePuntosCalculados) {
+		this.nubePuntosCalculados = nubePuntosCalculados;
+	}
+	public BigDecimal getAcimutDI() {
+		return acimutDI;
+	}
+	public void setAcimutDI(BigDecimal acimutDI) {
+		this.acimutDI = acimutDI;
+	}
+	public BigDecimal getAcimutID() {
+		return acimutID;
+	}
+	public void setAcimutID(BigDecimal acimutID) {
+		this.acimutID = acimutID;
+	}
+	public BigDecimal getAcimutDV() {
+		return acimutDV;
+	}
+	public void setAcimutDV(BigDecimal acimutDV) {
+		this.acimutDV = acimutDV;
+	}
+	public BigDecimal getAcimutIV() {
+		return acimutIV;
+	}
+	public void setAcimutIV(BigDecimal acimutIV) {
+		this.acimutIV = acimutIV;
+	}
+	public Punto3D getpEstD() {
+		return pEstD;
+	}
+	public void setpEstD(Punto3D pEstD) {
+		this.pEstD = pEstD;
+	}
+	public Punto3D getpEstI() {
+		return pEstI;
+	}
+	public void setpEstI(Punto3D pEstI) {
+		this.pEstI = pEstI;
+	}
+	public Punto3D getpCalDesdeD() {
+		return pCalDesdeD;
+	}
+	public void setpCalDesdeD(Punto3D pCalDesdeD) {
+		this.pCalDesdeD = pCalDesdeD;
+	}
+	public Punto3D getpCalDesdeI() {
+		return pCalDesdeI;
+	}
+	public void setpCalDesdeI(Punto3D pCalDesdeI) {
+		this.pCalDesdeI = pCalDesdeI;
+	}
 	public boolean isDisabledButtonsToolbar() {
 		return disabledButtonsToolbar;
 	}
@@ -378,6 +576,12 @@ public class PrincipalController implements Serializable {
 	}
 	public void setRenderedGoogleMaps(boolean renderedGoogleMaps) {
 		this.renderedGoogleMaps = renderedGoogleMaps;
+	}
+	public boolean isMostrarResultados() {
+		return mostrarResultados;
+	}
+	public void setMostrarResultados(boolean mostrarResultados) {
+		this.mostrarResultados = mostrarResultados;
 	}
 	public boolean isEsIntersecDirectaAngular() {
 		return esIntersecDirectaAngular;

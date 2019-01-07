@@ -1,6 +1,7 @@
 package es.gaitan.topografia.beans;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Punto3D extends Punto2D {
 
@@ -14,34 +15,44 @@ public class Punto3D extends Punto2D {
 
 	
 	public BigDecimal distancia(Punto3D p2) {
-        BigDecimal Ax = p2.getCoordX().subtract(this.getCoordX());
-        BigDecimal Ay = p2.getCoordY().subtract(this.getCoordY());
-        BigDecimal Az = p2.getCoordZ().subtract(this.getCoordZ());
-        BigDecimal dist = BigDecimal.valueOf(Math.sqrt(Ax.pow(2).add(Ay.pow(2)).add(Az.pow(2)).doubleValue()));
+        BigDecimal incX = p2.getCoordX().subtract(this.getCoordX());
+        BigDecimal incY = p2.getCoordY().subtract(this.getCoordY());
+        BigDecimal incZ = p2.getCoordZ().subtract(this.getCoordZ());
+        
+        BigDecimal dist = BigDecimal.valueOf(Math.sqrt(incX.pow(2).add(incY.pow(2)).add(incZ.pow(2)).doubleValue()));
         
         return dist;
 
     }
 	
-//	public double Acimut(Punto3D p2) {
-//        double Ax;
-//        double Ay;
-//        double acimut;
-//        Ax = p2.X - this.X; //con this llamamos a métodos, objetos y todo
-//        Ay = p2.Y - this.Y;
-//
-//        if (Ax == 0 && Ay == 0) 
-//            return(-1); //solución provisional: que devuelva -1
-//        acimut = Math.Round(Math.Atan2(Ax, Ay) * 200 / Math.PI, 4); //con esto lo dejamos en cente
-//        if (Ax < 0) 
-//            return (acimut + 400); // si Ax es menor que cero sumamos 400 al acimut
-//        
-//        return (acimut); //para que devuelva el resto de valores de los acimutes
-//    }
-//
-//    public static double Acimut(Punto3D p1, Punto3D p2) {
-//        return p1.Acimut(p2);
-//    }
+	public BigDecimal acimut(Punto3D p2) {
+		BigDecimal incX;
+		BigDecimal incY;
+		BigDecimal acimut;
+		
+		incX = p2.getCoordX().subtract(this.getCoordX());
+		incY = p2.getCoordY().subtract(this.getCoordY());
+
+        if (incX.equals(0) && incY.equals(0)) {
+        	//solución provisional: que devuelva -1
+        	return new BigDecimal(-1);
+        }
+        // Con este calculo se obtienen grados centesimales
+        acimut = BigDecimal.valueOf(Math.atan2(incX.doubleValue(), incY.doubleValue()) * 200 / Math.PI);
+        
+        if (incX.doubleValue() < 0) {
+        	// si incX es menor que cero se suma 400 al acimut
+        	acimut = acimut.add(new BigDecimal(400));
+        }
+        
+        acimut = acimut.setScale(4, RoundingMode.HALF_DOWN);
+        
+        return acimut;
+    }
+
+    public static BigDecimal acimut(Punto3D p1, Punto3D p2) {
+        return p1.acimut(p2);
+    }
 	
 	
 	/*******************************************/
