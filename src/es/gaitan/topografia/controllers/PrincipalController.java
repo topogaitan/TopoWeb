@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -201,7 +202,7 @@ public class PrincipalController implements Serializable {
 		}
 		
 		
-//		BigDecimal base_EstDEstI = pEstD.distancia(pEstI);
+		BigDecimal base_EstDEstI = pEstD.distancia(pEstI);
 		
 		
 		BigDecimal anguloD;
@@ -262,37 +263,38 @@ public class PrincipalController implements Serializable {
 		
 		BigDecimal comprobacion = alpha.add(anguloD).add(anguloI);
 		
-//		// Calcular los lados del triangulo
-//		double ladoDV = (Math.Sin(Utiles.convertRadian(anguloI)) * baseEst) / (Math.Sin(Utiles.convertRadian(alpha)));
-//		double ladoIV = (Math.Sin(Utiles.convertRadian(anguloD)) * baseEst) / (Math.Sin(Utiles.convertRadian(alpha)));
-//		
-//		double acimutDV = desorEst1 + obsDV.LH;
-//		double acimutIV = desorEst2 + obsIV.LH;
-//		
-//		// Calcular los incrementos de coordenadas
-//		double axD = ladoDV * Math.Sin(Utiles.convertRadian(acimutDV));
-//		double ayD = ladoDV * Math.Cos(Utiles.convertRadian(acimutDV));
-//		
-//		double axI = ladoIV * Math.Sin(Utiles.convertRadian(acimutIV));
-//		double ayI = ladoIV * Math.Cos(Utiles.convertRadian(acimutIV));
-//		
-//		// Calcular coordenadas de los puntos radiados
-//		pVisD.X = Math.Round((pEst1.X + axD), 3);
-//		pVisD.Y = Math.Round((pEst1.Y + ayD), 3);
-//		
-//		pVisI.X = Math.Round((pEst2.X + axI), 3);
-//		pVisI.Y = Math.Round((pEst2.Y + ayI), 3);
-//		
-//		// Promedio del punto calculado
-//		cPunto3D pVisProm = new cPunto3D();
-//		pVisProm.ID = obsDV.vis;
-//		pVisProm.X = Math.Round((pVisD.X + pVisI.X) / cConstantes.DOS, 3);
-//		pVisProm.Y = Math.Round((pVisD.Y + pVisI.Y) / cConstantes.DOS, 3);
-//		pVisProm.Z = 0;
-//		
-//		puntosCalculados.Añadir(pVisProm);
-//		dgvCalCoordInters.Rows.Add(pVisProm.ID, pVisProm.X, pVisProm.Y, pVisProm.Z);
+		// Calcular los lados del triangulo
+		BigDecimal ladoDV = new BigDecimal((Math.sin(Utilidades.convertToRadian(anguloI).doubleValue()) * base_EstDEstI.doubleValue()) / (Math.sin(Utilidades.convertToRadian(alpha).doubleValue())));
+		BigDecimal ladoIV = new BigDecimal((Math.sin(Utilidades.convertToRadian(anguloD).doubleValue()) * base_EstDEstI.doubleValue()) / (Math.sin(Utilidades.convertToRadian(alpha).doubleValue())));
 		
+		acimutDV = desorEstD.add(obsDV.getlH());
+		acimutIV = desorEstI.add(obsIV.getlH());
+		
+		// Calcular los incrementos de coordenadas
+		BigDecimal axD = new BigDecimal(ladoDV.doubleValue() * Math.sin(Utilidades.convertToRadian(acimutDV).doubleValue()));
+		BigDecimal ayD = new BigDecimal(ladoDV.doubleValue() * Math.cos(Utilidades.convertToRadian(acimutDV).doubleValue()));
+		
+		BigDecimal axI = new BigDecimal(ladoIV.doubleValue() * Math.sin(Utilidades.convertToRadian(acimutIV).doubleValue()));
+		BigDecimal ayI = new BigDecimal(ladoIV.doubleValue() * Math.cos(Utilidades.convertToRadian(acimutIV).doubleValue()));
+		
+		// Calcular coordenadas
+		pCalDesdeD = new Punto3D();
+		pCalDesdeI = new Punto3D();
+		
+		pCalDesdeD.setCoordX(pEstD.getCoordX().add(axD));
+		pCalDesdeD.setCoordY(pEstD.getCoordY().add(ayD));
+		
+		pCalDesdeI.setCoordX(pEstI.getCoordX().add(axI));
+		pCalDesdeI.setCoordY(pEstI.getCoordY().add(ayI));
+		
+		// Promedio del punto calculado
+		Punto3D pVisProm = new Punto3D();
+		pVisProm.setId(obsDV.getIdVisado());
+		pVisProm.setCoordX(pCalDesdeD.getCoordX().add(pCalDesdeI.getCoordX()).divide(Constantes.BIGDEC_2).setScale(3, RoundingMode.HALF_DOWN));
+		pVisProm.setCoordY(pCalDesdeD.getCoordY().add(pCalDesdeI.getCoordY()).divide(Constantes.BIGDEC_2).setScale(3, RoundingMode.HALF_DOWN));
+		pVisProm.setCoordZ(BigDecimal.ZERO);
+		
+		nubePuntosCalculados.anadirPunto(pVisProm);
 		
 		
 		

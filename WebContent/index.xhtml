@@ -375,16 +375,16 @@
 					<p:outputLabel styleClass="" value="Acimut-ID (g): " />
 					<p:inputText value="#{principalController.acimutID}" styleClass="inputAcimutes-5" readonly="true"/>
 					<p:outputLabel styleClass="" value="Acimut-DV (g): " />
-					<p:inputText value="000.0000" styleClass="inputAcimutes-5" readonly="true"/>
+					<p:inputText value="#{principalController.acimutDV}" styleClass="inputAcimutes-5" readonly="true"/>
 					<p:outputLabel styleClass="" value="Acimut-IV (g): " />
-					<p:inputText value="000.0000" styleClass="inputAcimutes-5" readonly="true"/>
+					<p:inputText value="#{principalController.acimutIV}" styleClass="inputAcimutes-5" readonly="true"/>
 				</p:fragment>
 				
 				<p:panel id="panelToolbarPtosCalculados" styleClass="panel" 
 					rendered="#{not empty principalController.nubePuntos.listPuntos}">
 					
 					<p:dataTable id="dataTablePtosCalculados" styleClass="centerInFragment" 
-						var="punto" value="#{principalController.nubePuntos.listPuntos}">
+						var="punto" value="#{principalController.nubePuntosCalculados.listPuntos}">
 						
 						<f:facet name="header">
 							Coordenadas calculadas

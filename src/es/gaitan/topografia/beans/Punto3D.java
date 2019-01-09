@@ -3,6 +3,8 @@ package es.gaitan.topografia.beans;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import es.gaitan.topografia.utilities.Utilidades;
+
 public class Punto3D extends Punto2D {
 
 	private static final long serialVersionUID = 4193150332407928359L;
@@ -17,7 +19,10 @@ public class Punto3D extends Punto2D {
 	public BigDecimal distancia(Punto3D p2) {
         BigDecimal incX = p2.getCoordX().subtract(this.getCoordX());
         BigDecimal incY = p2.getCoordY().subtract(this.getCoordY());
-        BigDecimal incZ = p2.getCoordZ().subtract(this.getCoordZ());
+        BigDecimal incZ = BigDecimal.ZERO;
+        if (!Utilidades.isNullOrEmpty(this.getCoordZ()) && !Utilidades.isNullOrEmpty(p2.getCoordZ())) {
+        	incZ = p2.getCoordZ().subtract(this.getCoordZ());
+		}
         
         BigDecimal dist = BigDecimal.valueOf(Math.sqrt(incX.pow(2).add(incY.pow(2)).add(incZ.pow(2)).doubleValue()));
         

@@ -71,6 +71,10 @@ public class NubePuntos implements Serializable {
         return blReturn;
 	}
 	
+	public void anadirPunto(Punto3D punto) {
+		listPuntos.add(punto);
+	}
+	
 	public void limpiarNubePuntos() {
 		this.listPuntos.clear();
 	}
