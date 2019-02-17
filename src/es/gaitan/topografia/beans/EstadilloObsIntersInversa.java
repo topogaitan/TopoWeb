@@ -37,14 +37,28 @@ public class EstadilloObsIntersInversa implements Estadillo, Serializable {
 	        parametros = linea.split(separador, 6);
 	
 	        ObsIntersInversa obs = new ObsIntersInversa();
-	        obs.setIdEstacion(parametros[0]);
-	        obs.setIdVisado(parametros[1]);
-	        obs.setlH(new BigDecimal(parametros[2]));
-	        obs.setlV(new BigDecimal(parametros[3]));
-//	        obs.setDistancia(new BigDecimal(parametros[4]));
-	        obs.setCodVisual(parametros[5]);
+	        
+	        if (!parametros[0].isEmpty()) {
+	        	obs.setIdEstacion(parametros[0]);
+			}
+	        if (!parametros[1].isEmpty()) {
+	        	obs.setIdVisado(parametros[1]);
+			}
+	        if (!parametros[2].isEmpty()) {
+	        	obs.setlH(new BigDecimal(parametros[2]));
+			}
+	        if (!parametros[3].isEmpty()) {
+	        	obs.setlV(new BigDecimal(parametros[3]));
+			}
+//	        if (!parametros[4].isEmpty()) {
+//	        	obs.setDistancia(new BigDecimal(parametros[4]));
+//			}
+	        if (!parametros[5].isEmpty()) {
+	        	obs.setCodVisual(parametros[5]);
+			}
 	        
 	        this.listObsIntersInversa.add(obs);
+	        
         }catch(Exception exc) {
         	this.limpiarEstadillo();
         	blReturn = false;
