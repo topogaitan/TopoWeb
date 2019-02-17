@@ -110,119 +110,10 @@ public class PrincipalController implements Serializable {
 		logger.info(Constantes.FIN_METODO);
 	}
 	
-	public void activarIntersecDirectaAngular() throws IOException {
+	public void activarIntersecDirectaAngular() {
 		logger.info(Constantes.INI_METODO);
 		
-		
-		File file = new File("E:\\GAITAN\\TFG\\Geodesia_Problema_Directo_Inverso.xlsx");
-		
-		FileInputStream fileInput = null;
-		try {
-			fileInput = new FileInputStream(file);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		XSSFWorkbook libro = null;
-		try {
-			libro = new XSSFWorkbook(fileInput);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		XSSFSheet hoja = libro.getSheetAt(0);
-		
-		XSSFRow filaLongIni = hoja.getRow(18);
-		XSSFCell celdaLongIni = filaLongIni.getCell(7);
-		
-		logger.info(celdaLongIni.getNumericCellValue());
-		
-		XSSFRow filaLatiIni = hoja.getRow(19);
-		XSSFCell celdaLatiIni = filaLatiIni.getCell(7);
-		
-		logger.info(celdaLatiIni.getNumericCellValue());
-		
-		XSSFRow fila = hoja.getRow(13);
-		XSSFCell celda = fila.getCell(2);
-		
-		logger.info(celda.getNumericCellValue());
-		
-		celda.setCellValue(400000);
-		
-		logger.info(celda.getNumericCellValue());
-		
-		XSSFFormulaEvaluator.evaluateAllFormulaCells(libro);
-		libro.setForceFormulaRecalculation(true);
-		libro.getCreationHelper().createFormulaEvaluator().evaluateAll();
-		
-		
-//		FormulaEvaluator evaluator = libro.getCreationHelper ().createFormulaEvaluator();
-//
-//		// coge tu celular
-//		Célula celular = wb.getSheet (0) .getRow (0) .getCell (0); // solo un ejemplo ficticio
-//
-//		// realizar la salida de depuración solo para la siguiente llamada de evaluación
-//	    evaluator.setDebugEvaluationOutputForNextEval (true);
-//		evaluator.evaluateFormulaCell (cell);
-		
-		
-		
-		FileOutputStream fileOutput = null;
-		try {
-			fileInput.close();
-			
-			fileOutput = new FileOutputStream(file);
-			libro.setForceFormulaRecalculation(true);
-			libro.write(fileOutput);
-			fileOutput.flush();
-			fileOutput.close();
-			
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-
-		
-		
-		FileInputStream fileInput2 = null;
-		try {
-			
-			fileInput2 = new FileInputStream(file);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		XSSFWorkbook libro2 = null;
-		try {
-			libro2 = new XSSFWorkbook(fileInput2);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		
-		
-		libro2.setForceFormulaRecalculation(true);
-		XSSFSheet hoja2 = libro2.getSheetAt(0);
-		
-		
-		XSSFRow filaLongIni2 = hoja2.getRow(18);
-		XSSFCell celdaLongIni2 = filaLongIni2.getCell(11);
-		
-		logger.info(celdaLongIni2.getNumericCellValue());
-		
-		XSSFRow filaLatiIni2 = hoja2.getRow(19);
-		XSSFCell celdaLatiIni2 = filaLatiIni2.getCell(11);
-		
-		logger.info(celdaLatiIni2.getNumericCellValue());
-		
 		this.reset();
-		
 		acimutDI = new BigDecimal(Constantes.int_0);
 		acimutID = new BigDecimal(Constantes.int_0);
 		acimutDV = new BigDecimal(Constantes.int_0);
@@ -302,23 +193,6 @@ public class PrincipalController implements Serializable {
 		}
 		
 		List<LatLng> listPuntosLatLng = new ArrayList<LatLng>();
-		
-		
-		
-		FileInputStream fileInput = new FileInputStream(new File("E:\\GAITAN\\TFG\\Geodesia_Problema_Directo_Inverso.xlsx"));
-		
-		XSSFWorkbook libro = new XSSFWorkbook(fileInput);
-		XSSFSheet hoja = libro.getSheetAt(0);
-		
-		XSSFRow fila = hoja.getRow(14);
-		XSSFCell celda = fila.getCell(3);
-		
-		logger.info(celda.getNumericCellValue());
-		
-		celda.setCellValue("123123");
-		
-		logger.info(celda.getNumericCellValue());
-		
 		
 		//Shared coordinates
 		LatLng coord1 = new LatLng(40.602057, -3.707517);
@@ -627,6 +501,61 @@ public class PrincipalController implements Serializable {
 		logger.info("Centroide latitud --> " + centroideLat);
 		logger.info("Centroide longitud --> " + centroideLng);
 		logger.info(Constantes.FIN_METODO);
+	}
+	
+	private void transformarUTMaGeodesicas(BigDecimal coord_X, BigDecimal coord_Y) {
+		try {
+			File file = new File("E:\\GAITAN\\TFG\\Geodesia_Problema_Directo_Inverso.xlsx");
+			FileInputStream fileInput = new FileInputStream(file);
+			XSSFWorkbook libro = new XSSFWorkbook(fileInput);
+			XSSFSheet hoja = libro.getSheetAt(0);
+			
+			// Se comprueba los valores anteriores de las coordenadas geodésicas
+			XSSFRow filaLongIniOld = hoja.getRow(18);
+			XSSFCell celdaLongIniOld = filaLongIniOld.getCell(7);
+			logger.info("Longitud OLD --> " + celdaLongIniOld.getNumericCellValue());
+			
+			XSSFRow filaLatiIniOld = hoja.getRow(19);
+			XSSFCell celdaLatiIniOld = filaLatiIniOld.getCell(7);
+			logger.info("Latitud OLD --> " + celdaLatiIniOld.getNumericCellValue());
+			
+			XSSFRow filaXUtm = hoja.getRow(13);
+			XSSFCell celdaXUtm = filaXUtm.getCell(2);
+			logger.info("X_UTM OLD --> " + celdaXUtm.getNumericCellValue());
+			
+			// Coordenada X a calcular
+			celdaXUtm.setCellValue(coord_X.doubleValue());
+			logger.info("X_UTM --> " + celdaXUtm.getNumericCellValue());
+			
+			XSSFRow filaYUtm = hoja.getRow(14);
+			XSSFCell celdaYUtm = filaYUtm.getCell(2);
+			logger.info("Y_UTM OLD --> " + celdaYUtm.getNumericCellValue());
+			
+			// Coordenada Y a calcular
+			celdaYUtm.setCellValue(coord_Y.doubleValue());
+			logger.info("Y_UTM --> " + celdaYUtm.getNumericCellValue());
+			
+			// Se evaluan todas las formulas del libro para actualizar resultados
+			XSSFFormulaEvaluator.evaluateAllFormulaCells(libro);
+			
+			XSSFRow filaLong = hoja.getRow(18);
+			XSSFCell celdaLong = filaLong.getCell(7);
+			logger.info("Longitud --> " + celdaLong.getNumericCellValue());
+			
+			XSSFRow filaLati = hoja.getRow(19);
+			XSSFCell celdaLati = filaLati.getCell(7);
+			logger.info("Latitud --> " + celdaLati.getNumericCellValue());
+			
+			fileInput.close();
+			libro.close();
+			
+		} catch (FileNotFoundException fnfExc) {
+			logger.error("Error tipo FileNotFoundException --> Fichero no encontrado", fnfExc);
+		} catch (IOException ioEcx) {
+			logger.error("Error tipo IOException --> El fichero no se ha cargado correctamente", ioEcx);
+		}  catch (Exception exc) {
+        	logger.error("Error tipo Exception", exc);
+        }
 	}
 	
 
