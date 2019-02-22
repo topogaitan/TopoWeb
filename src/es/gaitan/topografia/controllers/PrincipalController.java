@@ -1,7 +1,6 @@
 package es.gaitan.topografia.controllers;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,6 +11,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -22,11 +22,6 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import org.primefaces.model.map.DefaultMapModel;
@@ -193,6 +188,12 @@ public class PrincipalController implements Serializable {
 		}
 		
 		List<LatLng> listPuntosLatLng = new ArrayList<LatLng>();
+		
+		
+		// TODO Llamar metodo transformarUTMaGeodesicas
+//		transformarUTMaGeodesicas();
+		
+		
 		
 		//Shared coordinates
 		LatLng coord1 = new LatLng(40.602057, -3.707517);
@@ -503,60 +504,113 @@ public class PrincipalController implements Serializable {
 		logger.info(Constantes.FIN_METODO);
 	}
 	
-	private void transformarUTMaGeodesicas(BigDecimal coord_X, BigDecimal coord_Y) {
+	private LatLng transformarUTMaGeodesicas(BigDecimal coord_X, BigDecimal coord_Y) {
+		LatLng coordGeograficas = null;
 		try {
-			File file = new File("E:\\GAITAN\\TFG\\Geodesia_Problema_Directo_Inverso.xlsx");
-			FileInputStream fileInput = new FileInputStream(file);
-			XSSFWorkbook libro = new XSSFWorkbook(fileInput);
-			XSSFSheet hoja = libro.getSheetAt(0);
-			
-			// Se comprueba los valores anteriores de las coordenadas geodésicas
-			XSSFRow filaLongIniOld = hoja.getRow(18);
-			XSSFCell celdaLongIniOld = filaLongIniOld.getCell(7);
-			logger.info("Longitud OLD --> " + celdaLongIniOld.getNumericCellValue());
-			
-			XSSFRow filaLatiIniOld = hoja.getRow(19);
-			XSSFCell celdaLatiIniOld = filaLatiIniOld.getCell(7);
-			logger.info("Latitud OLD --> " + celdaLatiIniOld.getNumericCellValue());
-			
-			XSSFRow filaXUtm = hoja.getRow(13);
-			XSSFCell celdaXUtm = filaXUtm.getCell(2);
-			logger.info("X_UTM OLD --> " + celdaXUtm.getNumericCellValue());
-			
-			// Coordenada X a calcular
-			celdaXUtm.setCellValue(coord_X.doubleValue());
-			logger.info("X_UTM --> " + celdaXUtm.getNumericCellValue());
-			
-			XSSFRow filaYUtm = hoja.getRow(14);
-			XSSFCell celdaYUtm = filaYUtm.getCell(2);
-			logger.info("Y_UTM OLD --> " + celdaYUtm.getNumericCellValue());
-			
-			// Coordenada Y a calcular
-			celdaYUtm.setCellValue(coord_Y.doubleValue());
-			logger.info("Y_UTM --> " + celdaYUtm.getNumericCellValue());
-			
-			// Se evaluan todas las formulas del libro para actualizar resultados
-			XSSFFormulaEvaluator.evaluateAllFormulaCells(libro);
-			
-			XSSFRow filaLong = hoja.getRow(18);
-			XSSFCell celdaLong = filaLong.getCell(7);
-			logger.info("Longitud --> " + celdaLong.getNumericCellValue());
-			
-			XSSFRow filaLati = hoja.getRow(19);
-			XSSFCell celdaLati = filaLati.getCell(7);
-			logger.info("Latitud --> " + celdaLati.getNumericCellValue());
-			
-			fileInput.close();
-			libro.close();
-			
-		} catch (FileNotFoundException fnfExc) {
-			logger.error("Error tipo FileNotFoundException --> Fichero no encontrado", fnfExc);
-		} catch (IOException ioEcx) {
-			logger.error("Error tipo IOException --> El fichero no se ha cargado correctamente", ioEcx);
+		    double latitud;
+		    double longitud;
+//		    String UTM = "30 S 425197.86 4496306.77";
+//	        String[] parts=UTM.split(" ");
+//	        int Zone=Integer.parseInt(parts[0]);
+//	        char Letter=parts[1].toUpperCase(Locale.ENGLISH).charAt(0);
+//	        double Easting=Double.parseDouble(parts[2]);
+//	        double Northing=Double.parseDouble(parts[3]);
+		    
+		    String UTM = "  425197.86 4496306.77";
+	        String[] parts=UTM.split(" ");
+	        int Zone = 30;
+	        char Letter = "S".toUpperCase(Locale.ENGLISH).charAt(0);
+	        double Easting = Double.parseDouble(coord_X.toString());
+	        double Northing = Double.parseDouble(coord_Y.toString());
+		    
+	        double Hem;
+	        if (Letter > 'M') {
+	        	Hem='N';
+	        } else {
+	        	Hem='S';
+	        }
+	        
+	        double north;
+	        if (Hem == 'S') {
+	        	north = Northing - 10000000;
+	        } else {
+	        	north = Northing;
+	        }
+	        
+	        latitud = (north/6366197.724/0.9996+(1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)-0.006739496742*Math.sin(north/6366197.724/0.9996)*Math.cos(north/6366197.724/0.9996)*(Math.atan(Math.cos(Math.atan(( Math.exp((Easting - 500000) / (0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-0.006739496742*Math.pow((Easting - 500000) / (0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3))-Math.exp(-(Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*( 1 -  0.006739496742*Math.pow((Easting - 500000) / (0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3)))/2/Math.cos((north-0.9996*6399593.625*(north/6366197.724/0.9996-0.006739496742*3/4*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.pow(0.006739496742*3/4,2)*5/3*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996 )/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4-Math.pow(0.006739496742*3/4,3)*35/27*(5*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/3))/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-0.006739496742*Math.pow((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2))+north/6366197.724/0.9996)))*Math.tan((north-0.9996*6399593.625*(north/6366197.724/0.9996 - 0.006739496742*3/4*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.pow(0.006739496742*3/4,2)*5/3*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996 )*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4-Math.pow(0.006739496742*3/4,3)*35/27*(5*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/3))/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-0.006739496742*Math.pow((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2))+north/6366197.724/0.9996))-north/6366197.724/0.9996)*3/2)*(Math.atan(Math.cos(Math.atan((Math.exp((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-0.006739496742*Math.pow((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3))-Math.exp(-(Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-0.006739496742*Math.pow((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3)))/2/Math.cos((north-0.9996*6399593.625*(north/6366197.724/0.9996-0.006739496742*3/4*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.pow(0.006739496742*3/4,2)*5/3*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4-Math.pow(0.006739496742*3/4,3)*35/27*(5*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/3))/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-0.006739496742*Math.pow((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2))+north/6366197.724/0.9996)))*Math.tan((north-0.9996*6399593.625*(north/6366197.724/0.9996-0.006739496742*3/4*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.pow(0.006739496742*3/4,2)*5/3*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4-Math.pow(0.006739496742*3/4,3)*35/27*(5*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/3))/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-0.006739496742*Math.pow((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2))+north/6366197.724/0.9996))-north/6366197.724/0.9996))*180/Math.PI;
+	        latitud = Math.round(latitud*10000000);
+	        latitud = latitud/10000000;
+	        
+	        longitud = Math.atan((Math.exp((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-0.006739496742*Math.pow((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3))-Math.exp(-(Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-0.006739496742*Math.pow((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3)))/2/Math.cos((north-0.9996*6399593.625*( north/6366197.724/0.9996-0.006739496742*3/4*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.pow(0.006739496742*3/4,2)*5/3*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2* north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4-Math.pow(0.006739496742*3/4,3)*35/27*(5*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/3)) / (0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-0.006739496742*Math.pow((Easting-500000)/(0.9996*6399593.625/Math.sqrt((1+0.006739496742*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2))+north/6366197.724/0.9996))*180/Math.PI+Zone*6-183;
+	        longitud = Math.round(longitud*10000000);
+	        longitud = longitud/10000000;
+	        
+	        coordGeograficas = new LatLng(latitud, longitud);
+	        
+	        logger.info("latitud --> " + latitud);
+			logger.info("longitud --> " + longitud);
+     
 		}  catch (Exception exc) {
-        	logger.error("Error tipo Exception", exc);
-        }
+			logger.error("Error tipo Exception", exc);
+		}
+		
+		return coordGeograficas;
 	}
+	
+//	private void transformarUTMaGeodesicas(BigDecimal coord_X, BigDecimal coord_Y) {
+//		try {
+//			File file = new File("E:\\GAITAN\\TFG\\Geodesia_Problema_Directo_Inverso.xlsx");
+//			FileInputStream fileInput = new FileInputStream(file);
+//			XSSFWorkbook libro = new XSSFWorkbook(fileInput);
+//			XSSFSheet hoja = libro.getSheetAt(0);
+//			
+//			// Se comprueba los valores anteriores de las coordenadas geodésicas
+//			XSSFRow filaLongIniOld = hoja.getRow(18);
+//			XSSFCell celdaLongIniOld = filaLongIniOld.getCell(7);
+//			logger.info("Longitud OLD --> " + celdaLongIniOld.getNumericCellValue());
+//			
+//			XSSFRow filaLatiIniOld = hoja.getRow(19);
+//			XSSFCell celdaLatiIniOld = filaLatiIniOld.getCell(7);
+//			logger.info("Latitud OLD --> " + celdaLatiIniOld.getNumericCellValue());
+//			
+//			XSSFRow filaXUtm = hoja.getRow(13);
+//			XSSFCell celdaXUtm = filaXUtm.getCell(2);
+//			logger.info("X_UTM OLD --> " + celdaXUtm.getNumericCellValue());
+//			
+//			// Coordenada X a calcular
+//			celdaXUtm.setCellValue(coord_X.doubleValue());
+//			logger.info("X_UTM --> " + celdaXUtm.getNumericCellValue());
+//			
+//			XSSFRow filaYUtm = hoja.getRow(14);
+//			XSSFCell celdaYUtm = filaYUtm.getCell(2);
+//			logger.info("Y_UTM OLD --> " + celdaYUtm.getNumericCellValue());
+//			
+//			// Coordenada Y a calcular
+//			celdaYUtm.setCellValue(coord_Y.doubleValue());
+//			logger.info("Y_UTM --> " + celdaYUtm.getNumericCellValue());
+//			
+//			// Se evaluan todas las formulas del libro para actualizar resultados
+//			XSSFFormulaEvaluator.evaluateAllFormulaCells(libro);
+//			
+//			XSSFRow filaLong = hoja.getRow(18);
+//			XSSFCell celdaLong = filaLong.getCell(7);
+//			logger.info("Longitud --> " + celdaLong.getNumericCellValue());
+//			
+//			XSSFRow filaLati = hoja.getRow(19);
+//			XSSFCell celdaLati = filaLati.getCell(7);
+//			logger.info("Latitud --> " + celdaLati.getNumericCellValue());
+//			
+//			fileInput.close();
+//			libro.close();
+//			
+//		} catch (FileNotFoundException fnfExc) {
+//			logger.error("Error tipo FileNotFoundException --> Fichero no encontrado", fnfExc);
+//		} catch (IOException ioEcx) {
+//			logger.error("Error tipo IOException --> El fichero no se ha cargado correctamente", ioEcx);
+//		}  catch (Exception exc) {
+//        	logger.error("Error tipo Exception", exc);
+//        }
+//	}
 	
 
 	/*******************************************/
