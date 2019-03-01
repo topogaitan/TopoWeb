@@ -185,6 +185,8 @@ public class PrincipalController implements Serializable {
 		
 		if (esIntersecDirectaAngular) {
 			calcularIntersecDirectaAngular();
+		} else if (esIntersecDirectaDistancias) {
+			calcularIntersecDirectaDistancias();
 		}
 		
 		List<LatLng> listPuntosLatLng = new ArrayList<LatLng>();
@@ -451,6 +453,113 @@ public class PrincipalController implements Serializable {
 		
 		BigDecimal axI = new BigDecimal(ladoIV.doubleValue() * Math.sin(Utilidades.convertToRadian(acimutIV).doubleValue()));
 		BigDecimal ayI = new BigDecimal(ladoIV.doubleValue() * Math.cos(Utilidades.convertToRadian(acimutIV).doubleValue()));
+		
+		// Calcular coordenadas
+		pCalDesdeD = new Punto3D();
+		pCalDesdeI = new Punto3D();
+		
+		pCalDesdeD.setCoordX(pEstD.getCoordX().add(axD));
+		pCalDesdeD.setCoordY(pEstD.getCoordY().add(ayD));
+		
+		pCalDesdeI.setCoordX(pEstI.getCoordX().add(axI));
+		pCalDesdeI.setCoordY(pEstI.getCoordY().add(ayI));
+		
+		// Promedio del punto calculado
+		Punto3D pVisProm = new Punto3D();
+		pVisProm.setId(obsDV.getIdVisado());
+		pVisProm.setCoordX(pCalDesdeD.getCoordX().add(pCalDesdeI.getCoordX()).divide(Constantes.BIGDEC_2).setScale(3, RoundingMode.HALF_DOWN));
+		pVisProm.setCoordY(pCalDesdeD.getCoordY().add(pCalDesdeI.getCoordY()).divide(Constantes.BIGDEC_2).setScale(3, RoundingMode.HALF_DOWN));
+		pVisProm.setCoordZ(BigDecimal.ZERO);
+		
+		nubePuntosCalculados.anadirPunto(pVisProm);
+	}
+	
+	private void calcularIntersecDirectaDistancias() {
+		// Se calcula el ACIMUT
+		// Se localizan las estaciones D e I mediante el codigo del punto
+		for (int i = 0; i < nubePuntos.tamanioNubePuntos(); i++) {
+            if ("D".equals(nubePuntos.getPunto(i).getCodigo())) {
+                pEstD = nubePuntos.getPunto(i);
+            } else {
+                pEstI = nubePuntos.getPunto(i);
+            }
+		}
+
+		acimutDI = pEstD.acimut(pEstI);
+		acimutID = Utilidades.acimutReciproco(acimutDI);
+		
+		ObsIntersDirecta obsDI = new ObsIntersDirecta();
+		ObsIntersDirecta obsDV = new ObsIntersDirecta();
+		ObsIntersDirecta obsID = new ObsIntersDirecta();
+		ObsIntersDirecta obsIV = new ObsIntersDirecta();
+		
+		int numeroObservaciones = estadilloObsIntersDirecta.tamanioNubePuntos();
+		for (int i = 0; i < numeroObservaciones; i++) {
+			ObsIntersDirecta observacion = estadilloObsIntersDirecta.getPunto(i);
+			
+			if ("DI".equals(observacion.getCodVisual())) {
+				obsDI.setIdEstacion(observacion.getIdEstacion());
+				obsDI.setIdVisado(observacion.getIdVisado());
+				obsDI.setlH(observacion.getlH());
+				obsDI.setlV(observacion.getlV());
+				obsDI.setDistancia(observacion.getDistancia());
+				obsDI.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("DV".equals(observacion.getCodVisual())) {
+				obsDV.setIdEstacion(observacion.getIdEstacion());
+				obsDV.setIdVisado(observacion.getIdVisado());
+				obsDV.setlH(observacion.getlH());
+				obsDV.setlV(observacion.getlV());
+				obsDV.setDistancia(observacion.getDistancia());
+				obsDV.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("ID".equals(observacion.getCodVisual())) {
+				obsID.setIdEstacion(observacion.getIdEstacion());
+				obsID.setIdVisado(observacion.getIdVisado());
+				obsID.setlH(observacion.getlH());
+				obsID.setlV(observacion.getlV());
+				obsID.setDistancia(observacion.getDistancia());
+				obsID.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("IV".equals(observacion.getCodVisual())) {
+				obsIV.setIdEstacion(observacion.getIdEstacion());
+				obsIV.setIdVisado(observacion.getIdVisado());
+				obsIV.setlH(observacion.getlH());
+				obsIV.setlV(observacion.getlV());
+				obsIV.setDistancia(observacion.getDistancia());
+				obsIV.setCodVisual(observacion.getCodVisual());
+			}
+		}
+		
+        // Calcular los lados del triangulo
+		BigDecimal base_EstDEstI = pEstD.distancia(pEstI);
+		BigDecimal ladoDV = new BigDecimal(obsDV.getDistancia().doubleValue() * Math.sin(Utilidades.convertToRadian(obsDV.getlV()).doubleValue()));
+		BigDecimal ladoIV = new BigDecimal(obsIV.getDistancia().doubleValue() * Math.sin(Utilidades.convertToRadian(obsIV.getlV()).doubleValue()));
+
+        // Por el teorema del coseno se calculan los angulos del triangulo
+		BigDecimal anguloD = Utilidades.convertToGradian(new BigDecimal(
+				Math.acos((Math.pow(ladoDV.doubleValue(), 2) + Math.pow(base_EstDEstI.doubleValue(), 2) - Math.pow(ladoIV.doubleValue(), 2)) 
+						/ (2 * ladoDV.doubleValue() * base_EstDEstI.doubleValue()))));
+		
+		BigDecimal anguloI = Utilidades.convertToGradian(new BigDecimal(
+				Math.acos((Math.pow(ladoIV.doubleValue(), 2) + Math.pow(base_EstDEstI.doubleValue(), 2) - Math.pow(ladoDV.doubleValue(), 2)) 
+						/ (2 * ladoIV.doubleValue() * base_EstDEstI.doubleValue()))));
+        
+		BigDecimal alpha = Constantes.BIGDEC_200.subtract(anguloD).subtract(anguloI);
+
+		BigDecimal comprobacion = alpha.add(anguloD).add(anguloI);
+		logger.debug("Comprobación sumatorio 200g --> " + comprobacion);
+
+		BigDecimal acimutDV = acimutDI.subtract(anguloD);
+		BigDecimal acimutIV = acimutID.add(anguloI);
+
+        // Calcular los incrementos de coordenadas
+		BigDecimal axD = new BigDecimal(ladoDV.doubleValue() * Math.sin(Utilidades.convertToRadian(acimutDV).doubleValue()));
+		BigDecimal ayD = new BigDecimal(ladoDV.doubleValue() * Math.cos(Utilidades.convertToRadian(acimutDV).doubleValue()));
+
+		BigDecimal axI = new BigDecimal(ladoIV.doubleValue() * Math.sin(Utilidades.convertToRadian(acimutIV).doubleValue()));
+		BigDecimal ayI = new BigDecimal(ladoIV.doubleValue() * Math.cos(Utilidades.convertToRadian(acimutIV).doubleValue()));
+
 		
 		// Calcular coordenadas
 		pCalDesdeD = new Punto3D();
