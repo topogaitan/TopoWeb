@@ -9,6 +9,7 @@ public class Constantes {
 	public static final String CADENA_VACIA = "";
 	
 	public static final BigDecimal BIGDEC_2 = new BigDecimal(2);
+	public static final BigDecimal BIGDEC_50 = new BigDecimal(50);
 	public static final BigDecimal BIGDEC_200 = new BigDecimal(200);
 	public static final BigDecimal BIGDEC_400 = new BigDecimal(400);
 	

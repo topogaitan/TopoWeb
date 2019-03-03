@@ -374,33 +374,54 @@
 			
 			<!-- INICIO FRAGMENT TABLA COORDENADAS CALCULADAS -->
 			<p:fragment id="fragmentDataTablePtosCalculados" rendered="#{principalController.mostrarResultados}">
-				<p:fragment id="fragmentAcimutesDirecta" rendered="#{principalController.esIntersecDirectaAngular or principalController.esIntersecDirectaDistancias}">
-					<p:outputLabel styleClass="" value="Acimut-DI (g): " />
-					<p:inputText value="#{principalController.acimutDI}" styleClass="inputAcimutes-5" readonly="true"/>
+				<p:panel id="panelAcimutesDirecta" styleClass="marginBottom_05" 
+					rendered="#{principalController.esIntersecDirectaAngular or principalController.esIntersecDirectaDistancias}">
+					<p:fragment id="fragmentAcimutesDirecta">
+						<p:outputLabel styleClass="" value="Acimut-DI (g): " />
+						<p:inputText value="#{principalController.acimutDI}" styleClass="inputAcimutes-5" readonly="true"/>
+					
+						<p:outputLabel styleClass="" value="Acimut-ID (g): " />
+						<p:inputText value="#{principalController.acimutID}" styleClass="inputAcimutes-5" readonly="true"/>
+					
+						<p:outputLabel styleClass="" value="Acimut-DV (g): " rendered="#{principalController.esIntersecDirectaAngular}" />
+						<p:inputText value="#{principalController.acimutDV}" styleClass="inputAcimutes-5" 
+							rendered="#{principalController.esIntersecDirectaAngular}" readonly="true"/>
+					
+						<p:outputLabel styleClass="" value="Acimut-IV (g): " rendered="#{principalController.esIntersecDirectaAngular}" />
+						<p:inputText value="#{principalController.acimutIV}" styleClass="inputAcimutes-5" 
+							rendered="#{principalController.esIntersecDirectaAngular}" readonly="true"/>
+					</p:fragment>
+				</p:panel>
 				
-					<p:outputLabel styleClass="" value="Acimut-ID (g): " />
-					<p:inputText value="#{principalController.acimutID}" styleClass="inputAcimutes-5" readonly="true"/>
+				<p:panel id="panelAcimutesInversa" styleClass="marginBottom_05" 
+					rendered="#{principalController.esIntersecInversaPothenot or principalController.esIntersecInversaTienstra}">
+					<p:fragment id="fragmentAcimutesInversa" >
+						<p:outputLabel styleClass="" value="Acimut-AB (g): " />
+						<p:inputText value="#{principalController.acimutAB}" styleClass="inputAcimutes-5" readonly="true"/>
+					
+						<p:outputLabel styleClass="" value="Acimut-BC (g): " />
+						<p:inputText value="#{principalController.acimutBC}" styleClass="inputAcimutes-5" readonly="true"/>
+					
+						<p:outputLabel styleClass="" value="Acimut-AC (g): " rendered="#{principalController.esIntersecInversaTienstra}" />
+						<p:inputText value="#{principalController.acimutAC}" styleClass="inputAcimutes-5" 
+							rendered="#{principalController.esIntersecInversaTienstra}" readonly="true"/>
+					</p:fragment>
+				</p:panel>
 				
-					<p:outputLabel styleClass="" value="Acimut-DV (g): " rendered="#{principalController.esIntersecDirectaAngular}" />
-					<p:inputText value="#{principalController.acimutDV}" styleClass="inputAcimutes-5" 
-						rendered="#{principalController.esIntersecDirectaAngular}" readonly="true"/>
-				
-					<p:outputLabel styleClass="" value="Acimut-IV (g): " rendered="#{principalController.esIntersecDirectaAngular}" />
-					<p:inputText value="#{principalController.acimutIV}" styleClass="inputAcimutes-5" 
-						rendered="#{principalController.esIntersecDirectaAngular}" readonly="true"/>
-				</p:fragment>
-				
-				<p:fragment id="fragmentAcimutesInversa" rendered="#{principalController.esIntersecInversaPothenot or principalController.esIntersecInversaTienstra}">
-					<p:outputLabel styleClass="" value="Acimut-AB (g): " />
-					<p:inputText value="#{principalController.acimutDI}" styleClass="inputAcimutes-5" readonly="true"/>
-				
-					<p:outputLabel styleClass="" value="Acimut-BC (g): " />
-					<p:inputText value="#{principalController.acimutID}" styleClass="inputAcimutes-5" readonly="true"/>
-				
-					<p:outputLabel styleClass="" value="Acimut-AC (g): " rendered="#{principalController.esIntersecInversaTienstra}" />
-					<p:inputText value="#{principalController.acimutDV}" styleClass="inputAcimutes-5" 
-						rendered="#{principalController.esIntersecInversaTienstra}" readonly="true"/>
-				</p:fragment>
+				<p:panel id="panelAngulosInversa" styleClass="marginBottom_05" 
+					rendered="#{principalController.esIntersecInversaPothenot or principalController.esIntersecInversaTienstra}">
+					<p:fragment id="fragmentAngulosInversa">
+						<p:outputLabel styleClass="" value="Alpha (g): " />
+						<p:inputText value="#{principalController.alpha}" styleClass="inputAcimutes-5" readonly="true"/>
+					
+						<p:outputLabel styleClass="" value="Beta (g): " />
+						<p:inputText value="#{principalController.beta}" styleClass="inputAcimutes-5" readonly="true"/>
+					
+						<p:outputLabel styleClass="" value="Delta (g): " rendered="#{principalController.esIntersecInversaTienstra}" />
+						<p:inputText value="#{principalController.delta}" styleClass="inputAcimutes-5" 
+							rendered="#{principalController.esIntersecInversaTienstra}" readonly="true"/>
+					</p:fragment>
+				</p:panel>
 				
 				<p:panel id="panelToolbarPtosCalculados" styleClass="panel" 
 					rendered="#{not empty principalController.nubePuntos.listPuntos}">
