@@ -66,7 +66,7 @@ public class NubePuntos implements Serializable {
         	blReturn = false;
         	logger.error("Error al agregar una linea del fichero a la lista de puntos", exc);
         	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-				Constantes.ATENCION, Constantes.FORMATO_INCORRECTO));
+				Constantes.MSG_ATENCION, Constantes.MSG_FORMATO_INCORRECTO));
         }
         return blReturn;
 	}

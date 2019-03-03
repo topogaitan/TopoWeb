@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -71,12 +70,14 @@ public class PrincipalController implements Serializable {
 	
 	private MapModel polygonModel;
 	private Punto2D polygonCentroide;
+	private String escalaGoogle;
 	
 	
 	/** BOOLEANOS PARA CONTROL DE LA VISTA **/
 	private boolean esIntersecDirectaAngular;
 	private boolean esIntersecDirectaDistancias;
-	private boolean esIntersecInversa;
+	private boolean esIntersecInversaPothenot;
+	private boolean esIntersecInversaTienstra;
 	private boolean disabledButtonsToolbar;
 	private boolean renderedCargaFichero;
 	private boolean renderedGoogleMaps;
@@ -86,21 +87,30 @@ public class PrincipalController implements Serializable {
 	public void reset() {
 		logger.info(Constantes.INI_METODO);
 		
-		nubePuntos = new NubePuntos();
-		estadilloObsIntersDirecta = new EstadilloObsIntersDirecta();
-		estadilloObsIntersInversa = new EstadilloObsIntersInversa();
-		nubePuntosCalculados = new NubePuntos();
-		polygonModel = new DefaultMapModel();
-		polygonCentroide = new Punto2D();
-		
-		esIntersecDirectaAngular = false;
-		esIntersecDirectaDistancias = false;
-		esIntersecInversa = false;
-		
-		disabledButtonsToolbar = true;
-		renderedCargaFichero = false;
-		renderedGoogleMaps = false;
-		mostrarResultados = false;
+		try {
+			nubePuntos = new NubePuntos();
+			estadilloObsIntersDirecta = new EstadilloObsIntersDirecta();
+			estadilloObsIntersInversa = new EstadilloObsIntersInversa();
+			nubePuntosCalculados = new NubePuntos();
+			polygonModel = new DefaultMapModel();
+			polygonCentroide = new Punto2D();
+			escalaGoogle = "10";
+			
+			esIntersecDirectaAngular = false;
+			esIntersecDirectaDistancias = false;
+			esIntersecInversaPothenot = false;
+			esIntersecInversaTienstra = false;
+			
+			disabledButtonsToolbar = true;
+			renderedCargaFichero = false;
+			renderedGoogleMaps = false;
+			mostrarResultados = false;
+			
+		} catch(Exception exc) {
+        	logger.error(Constantes.ERROR_EXCEPTION, exc);
+        	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+				Constantes.MSG_ATENCION, Constantes.MSG_ERROR_GENERICO));
+        }
 		
 		logger.info(Constantes.FIN_METODO);
 	}
@@ -108,19 +118,26 @@ public class PrincipalController implements Serializable {
 	public void activarIntersecDirectaAngular() {
 		logger.info(Constantes.INI_METODO);
 		
-		this.reset();
-		acimutDI = new BigDecimal(Constantes.int_0);
-		acimutID = new BigDecimal(Constantes.int_0);
-		acimutDV = new BigDecimal(Constantes.int_0);
-		acimutIV = new BigDecimal(Constantes.int_0);
-		pEstD = new Punto3D();
-		pEstI = new Punto3D();
-		pCalDesdeD = new Punto3D();
-		pCalDesdeI = new Punto3D();
-		
-		esIntersecDirectaAngular = true;
-		disabledButtonsToolbar = false;
-		renderedCargaFichero = true;
+		try {
+			this.reset();
+			acimutDI = new BigDecimal(Constantes.int_0);
+			acimutID = new BigDecimal(Constantes.int_0);
+			acimutDV = new BigDecimal(Constantes.int_0);
+			acimutIV = new BigDecimal(Constantes.int_0);
+			pEstD = new Punto3D();
+			pEstI = new Punto3D();
+			pCalDesdeD = new Punto3D();
+			pCalDesdeI = new Punto3D();
+			
+			esIntersecDirectaAngular = true;
+			disabledButtonsToolbar = false;
+			renderedCargaFichero = true;
+			
+		} catch(Exception exc) {
+        	logger.error(Constantes.ERROR_EXCEPTION, exc);
+        	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+				Constantes.MSG_ATENCION, Constantes.MSG_ERROR_GENERICO));
+        }
 		
 		logger.info(Constantes.FIN_METODO);
 	}
@@ -128,21 +145,62 @@ public class PrincipalController implements Serializable {
 	public void activarIntersecDirectaDistancias() {
 		logger.info(Constantes.INI_METODO);
 		
-		this.reset();
-		esIntersecDirectaDistancias = true;
-		disabledButtonsToolbar = false;
-		renderedCargaFichero = true;
+		try {
+			this.reset();
+			acimutDI = new BigDecimal(Constantes.int_0);
+			acimutID = new BigDecimal(Constantes.int_0);
+			acimutDV = new BigDecimal(Constantes.int_0);
+			acimutIV = new BigDecimal(Constantes.int_0);
+			pEstD = new Punto3D();
+			pEstI = new Punto3D();
+			pCalDesdeD = new Punto3D();
+			pCalDesdeI = new Punto3D();
+			
+			esIntersecDirectaDistancias = true;
+			disabledButtonsToolbar = false;
+			renderedCargaFichero = true;
+			
+		} catch(Exception exc) {
+			logger.error(Constantes.ERROR_EXCEPTION, exc);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+				Constantes.MSG_ATENCION, Constantes.MSG_ERROR_GENERICO));
+		}
 		
 		logger.info(Constantes.FIN_METODO);
 	}
 	
-	public void activarIntersecInversa() {
+	public void activarIntersecInversaPothenot() {
 		logger.info(Constantes.INI_METODO);
 		
-		this.reset();
-		esIntersecInversa = true;
-		disabledButtonsToolbar = false;
-		renderedCargaFichero = true;
+		try {
+			this.reset();
+			esIntersecInversaPothenot = true;
+			disabledButtonsToolbar = false;
+			renderedCargaFichero = true;
+			
+		} catch(Exception exc) {
+        	logger.error(Constantes.ERROR_EXCEPTION, exc);
+        	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+				Constantes.MSG_ATENCION, Constantes.MSG_ERROR_GENERICO));
+        }
+		
+		logger.info(Constantes.FIN_METODO);
+	}
+	
+	public void activarIntersecInversaTienstra() {
+		logger.info(Constantes.INI_METODO);
+		
+		try {
+			this.reset();
+			esIntersecInversaTienstra = true;
+			disabledButtonsToolbar = false;
+			renderedCargaFichero = true;
+			
+		} catch(Exception exc) {
+        	logger.error(Constantes.ERROR_EXCEPTION, exc);
+        	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+				Constantes.MSG_ATENCION, Constantes.MSG_ERROR_GENERICO));
+        }
 		
 		logger.info(Constantes.FIN_METODO);
 	}
@@ -150,8 +208,15 @@ public class PrincipalController implements Serializable {
 	public String doAccionBotonNuevo() {
 		logger.info(Constantes.INI_METODO);
 		
-		this.reset();
-		disabledButtonsToolbar = true;
+		try {
+			this.reset();
+			disabledButtonsToolbar = true;
+			
+		} catch(Exception exc) {
+        	logger.error(Constantes.ERROR_EXCEPTION, exc);
+        	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+				Constantes.MSG_ATENCION, Constantes.MSG_ERROR_GENERICO));
+        }
 		
 		logger.info(Constantes.FIN_METODO);
 		return "";
@@ -160,62 +225,65 @@ public class PrincipalController implements Serializable {
 	public void cargarFichero(FileUploadEvent event) {
 		logger.info(Constantes.INI_METODO);
 		
-		UploadedFile uploadFile = event.getFile();
-		String extensionFich = FilenameUtils.getExtension(uploadFile.getFileName());
-		boolean esFicheroObservaciones = extensionFich.equalsIgnoreCase("obs") ? true : false;
-		boolean esFicheroCoordenadas = extensionFich.equalsIgnoreCase("pto") ? true : false;
+		try {
+			UploadedFile uploadFile = event.getFile();
+			String extensionFich = FilenameUtils.getExtension(uploadFile.getFileName());
+			boolean esFicheroObservaciones = extensionFich.equalsIgnoreCase("obs") ? true : false;
+			boolean esFicheroCoordenadas = extensionFich.equalsIgnoreCase("pto") ? true : false;
+			
+			logger.info("esFicheroObservaciones --> " + esFicheroObservaciones + ", esFicheroCoordenadas --> " + esFicheroCoordenadas);
+			if (esFicheroObservaciones) {
+				cargaFicheroObservaciones(uploadFile);
+			} else if (esFicheroCoordenadas) {
+				cargaFicheroCoordenadas(uploadFile);
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+					Constantes.MSG_ATENCION, Constantes.MSG_EXTENSION_FICHERO_INCORRECTA));
+			}
 		
-		logger.info("esFicheroObservaciones --> " + esFicheroObservaciones + ", esFicheroCoordenadas --> " + esFicheroCoordenadas);
-		if (esFicheroObservaciones) {
-			cargaFicheroObservaciones(uploadFile);
-		} else if (esFicheroCoordenadas) {
-			cargaFicheroCoordenadas(uploadFile);
-		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-					Constantes.ATENCION, Constantes.EXTENSION_FICHERO_INCORRECTA));
-		}
-		
+		} catch(Exception exc) {
+        	logger.error(Constantes.ERROR_EXCEPTION, exc);
+        	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+				Constantes.MSG_ATENCION, Constantes.MSG_ERROR_GENERICO));
+        }
+			
 		logger.info(Constantes.FIN_METODO);
 	}
 	
-	public String doObtenerCalculos() throws IOException {
+	public String doObtenerCalculos() {
 		logger.info(Constantes.INI_METODO);
 		
-		// TODO El codigo de cada punto y observacion debe llegar informado
+		try {
+			if (esIntersecDirectaAngular) {
+				calcularIntersecDirectaAngular();
+				
+			} else if (esIntersecDirectaDistancias) {
+				calcularIntersecDirectaDistancias();
+			} else if (esIntersecInversaPothenot) {
+				calcularIntersecInversaPothenot();
+			} else if (esIntersecInversaTienstra) {
+				calcularIntersecInversaTienstra();
+			}
+			
+			List<LatLng> listPuntosLatLng = new ArrayList<LatLng>();
+			for (Punto3D punto : nubePuntos.getListPuntos()) {
+				LatLng coordLatLog = Utilidades.transformarUTMaGeodesicas(punto.getCoordX(), punto.getCoordY());
+				listPuntosLatLng.add(coordLatLog);
+			}
+			for (Punto3D punto : getNubePuntosCalculados().getListPuntos()) {
+				LatLng coordLatLog = Utilidades.transformarUTMaGeodesicas(punto.getCoordX(), punto.getCoordY());
+				listPuntosLatLng.add(coordLatLog);
+			}
+			
+			obtenerPoligonoParaGoogleMaps(listPuntosLatLng);
+			
+			mostrarResultados = true;
 		
-		if (esIntersecDirectaAngular) {
-			calcularIntersecDirectaAngular();
-		} else if (esIntersecDirectaDistancias) {
-			calcularIntersecDirectaDistancias();
-		}
-		
-		List<LatLng> listPuntosLatLng = new ArrayList<LatLng>();
-		for (Punto3D punto : nubePuntos.getListPuntos()) {
-			LatLng coordLatLog = transformarUTMaGeodesicas(punto.getCoordX(), punto.getCoordY());
-			listPuntosLatLng.add(coordLatLog);
-		}
-		for (Punto3D punto : getNubePuntosCalculados().getListPuntos()) {
-			LatLng coordLatLog = transformarUTMaGeodesicas(punto.getCoordX(), punto.getCoordY());
-			listPuntosLatLng.add(coordLatLog);
-		}
-		
-		// Se obtiene el poligono a mostrar en Google Maps
-		Polygon polygon = new Polygon();
-		for (LatLng latLng : listPuntosLatLng) {
-			polygon.getPaths().add(latLng);
-		}
-		
-		polygon.setStrokeColor("#FF9900");
-		polygon.setFillColor("#FFECC1");
-		polygon.setStrokeOpacity(1);
-		polygon.setFillOpacity(0.6);
-		polygon.setStrokeWeight(2);
-		
-		polygonModel.addOverlay(polygon);
-		
-		obtenerCoordCentroidePoligono(listPuntosLatLng);
-		renderedGoogleMaps = true;
-		mostrarResultados = true;
+		} catch(Exception exc) {
+        	logger.error(Constantes.ERROR_EXCEPTION, exc);
+        	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+				Constantes.MSG_ATENCION, Constantes.MSG_ERROR_GENERICO));
+        }
 		
 		logger.info(Constantes.FIN_METODO);
 		return "";
@@ -242,7 +310,7 @@ public class PrincipalController implements Serializable {
 	            while ((linea = br.readLine()) != null && estaAgregada) {
 		            	estaAgregada = estadilloObsIntersDirecta.anadirObservacion(linea);
 	            }
-            } else if (esIntersecInversa) {
+            } else if (esIntersecInversaPothenot || esIntersecInversaTienstra) {
             	estadilloObsIntersInversa.limpiarEstadillo();
         		while ((linea = br.readLine()) != null && estaAgregada) {
 	            	estaAgregada = estadilloObsIntersInversa.anadirObservacion(linea);
@@ -256,10 +324,12 @@ public class PrincipalController implements Serializable {
         } catch (Exception exc) {
         	if (esIntersecDirectaAngular || esIntersecDirectaDistancias) {
             	estadilloObsIntersDirecta.limpiarEstadillo();
-            } else if (esIntersecInversa) {
+            } else if (esIntersecInversaPothenot || esIntersecInversaTienstra) {
             	estadilloObsIntersInversa.limpiarEstadillo();
             }
-        	logger.error("Error tipo Exception", exc);
+        	logger.error(Constantes.ERROR_EXCEPTION, exc);
+        	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+				Constantes.MSG_ATENCION, Constantes.MSG_ERROR_GENERICO));
         }
     }
 	
@@ -283,7 +353,7 @@ public class PrincipalController implements Serializable {
 	            while ((linea = br.readLine()) != null && estaAgregado) {
 	            	estaAgregado = nubePuntos.anadirPunto(linea);
 	            }
-            } else if (esIntersecInversa) {
+            } else if (esIntersecInversaPothenot || esIntersecInversaTienstra) {
         		while ((linea = br.readLine()) != null && estaAgregado) {
         			estaAgregado = nubePuntos.anadirPunto(linea);
         		}
@@ -295,7 +365,7 @@ public class PrincipalController implements Serializable {
             
         } catch (Exception exc) {
         	nubePuntos.limpiarNubePuntos();
-        	logger.error("Error tipo Exception", exc);
+        	logger.error(Constantes.ERROR_EXCEPTION, exc);
         }
 	}
 	
@@ -338,11 +408,11 @@ public class PrincipalController implements Serializable {
             logger.info(Constantes.FIN_METODO);
             
 		} catch (FileNotFoundException fnfExc) {
-			logger.error("Error tipo FileNotFoundException --> Fichero no encontrado", fnfExc);
+			logger.error("FileNotFoundException --> Fichero no encontrado", fnfExc);
 		} catch (IOException ioEcx) {
-			logger.error("Error tipo IOException --> El fichero no se ha cargado correctamente", ioEcx);
+			logger.error("IOException --> El fichero no se ha cargado correctamente", ioEcx);
 		}  catch (Exception exc) {
-        	logger.error("Error tipo Exception", exc);
+        	logger.error(Constantes.ERROR_EXCEPTION, exc);
         }
 
        return br;
@@ -472,6 +542,7 @@ public class PrincipalController implements Serializable {
 		pVisProm.setCoordZ(BigDecimal.ZERO);
 		
 		nubePuntosCalculados.anadirPunto(pVisProm);
+		escalaGoogle = "13";
 	}
 	
 	private void calcularIntersecDirectaDistancias() {
@@ -579,8 +650,250 @@ public class PrincipalController implements Serializable {
 		pVisProm.setCoordZ(BigDecimal.ZERO);
 		
 		nubePuntosCalculados.anadirPunto(pVisProm);
+		escalaGoogle = "18";
 	}
 	
+	private void calcularIntersecInversaPothenot() {
+		// Se calcula el ACIMUT
+		// Se localizan las estaciones D e I mediante el codigo del punto
+		for (int i = 0; i < nubePuntos.tamanioNubePuntos(); i++) {
+            if ("D".equals(nubePuntos.getPunto(i).getCodigo())) {
+                pEstD = nubePuntos.getPunto(i);
+            } else {
+                pEstI = nubePuntos.getPunto(i);
+            }
+		}
+
+		acimutDI = pEstD.acimut(pEstI);
+		acimutID = Utilidades.acimutReciproco(acimutDI);
+		
+		ObsIntersDirecta obsDI = new ObsIntersDirecta();
+		ObsIntersDirecta obsDV = new ObsIntersDirecta();
+		ObsIntersDirecta obsID = new ObsIntersDirecta();
+		ObsIntersDirecta obsIV = new ObsIntersDirecta();
+		
+		int numeroObservaciones = estadilloObsIntersDirecta.tamanioNubePuntos();
+		for (int i = 0; i < numeroObservaciones; i++) {
+			ObsIntersDirecta observacion = estadilloObsIntersDirecta.getPunto(i);
+			
+			if ("DI".equals(observacion.getCodVisual())) {
+				obsDI.setIdEstacion(observacion.getIdEstacion());
+				obsDI.setIdVisado(observacion.getIdVisado());
+				obsDI.setlH(observacion.getlH());
+				obsDI.setlV(observacion.getlV());
+				obsDI.setDistancia(observacion.getDistancia());
+				obsDI.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("DV".equals(observacion.getCodVisual())) {
+				obsDV.setIdEstacion(observacion.getIdEstacion());
+				obsDV.setIdVisado(observacion.getIdVisado());
+				obsDV.setlH(observacion.getlH());
+				obsDV.setlV(observacion.getlV());
+				obsDV.setDistancia(observacion.getDistancia());
+				obsDV.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("ID".equals(observacion.getCodVisual())) {
+				obsID.setIdEstacion(observacion.getIdEstacion());
+				obsID.setIdVisado(observacion.getIdVisado());
+				obsID.setlH(observacion.getlH());
+				obsID.setlV(observacion.getlV());
+				obsID.setDistancia(observacion.getDistancia());
+				obsID.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("IV".equals(observacion.getCodVisual())) {
+				obsIV.setIdEstacion(observacion.getIdEstacion());
+				obsIV.setIdVisado(observacion.getIdVisado());
+				obsIV.setlH(observacion.getlH());
+				obsIV.setlV(observacion.getlV());
+				obsIV.setDistancia(observacion.getDistancia());
+				obsIV.setCodVisual(observacion.getCodVisual());
+			}
+		}
+		
+        // Calcular los lados del triangulo
+		BigDecimal base_EstDEstI = pEstD.distancia(pEstI);
+		BigDecimal ladoDV = new BigDecimal(obsDV.getDistancia().doubleValue() * Math.sin(Utilidades.convertToRadian(obsDV.getlV()).doubleValue()));
+		BigDecimal ladoIV = new BigDecimal(obsIV.getDistancia().doubleValue() * Math.sin(Utilidades.convertToRadian(obsIV.getlV()).doubleValue()));
+
+        // Por el teorema del coseno se calculan los angulos del triangulo
+		BigDecimal anguloD = Utilidades.convertToGradian(new BigDecimal(
+				Math.acos((Math.pow(ladoDV.doubleValue(), 2) + Math.pow(base_EstDEstI.doubleValue(), 2) - Math.pow(ladoIV.doubleValue(), 2)) 
+						/ (2 * ladoDV.doubleValue() * base_EstDEstI.doubleValue()))));
+		
+		BigDecimal anguloI = Utilidades.convertToGradian(new BigDecimal(
+				Math.acos((Math.pow(ladoIV.doubleValue(), 2) + Math.pow(base_EstDEstI.doubleValue(), 2) - Math.pow(ladoDV.doubleValue(), 2)) 
+						/ (2 * ladoIV.doubleValue() * base_EstDEstI.doubleValue()))));
+        
+		BigDecimal alpha = Constantes.BIGDEC_200.subtract(anguloD).subtract(anguloI);
+
+		BigDecimal comprobacion = alpha.add(anguloD).add(anguloI);
+		logger.debug("Comprobación sumatorio 200g --> " + comprobacion);
+
+		BigDecimal acimutDV = acimutDI.subtract(anguloD);
+		BigDecimal acimutIV = acimutID.add(anguloI);
+
+        // Calcular los incrementos de coordenadas
+		BigDecimal axD = new BigDecimal(ladoDV.doubleValue() * Math.sin(Utilidades.convertToRadian(acimutDV).doubleValue()));
+		BigDecimal ayD = new BigDecimal(ladoDV.doubleValue() * Math.cos(Utilidades.convertToRadian(acimutDV).doubleValue()));
+
+		BigDecimal axI = new BigDecimal(ladoIV.doubleValue() * Math.sin(Utilidades.convertToRadian(acimutIV).doubleValue()));
+		BigDecimal ayI = new BigDecimal(ladoIV.doubleValue() * Math.cos(Utilidades.convertToRadian(acimutIV).doubleValue()));
+
+		
+		// Calcular coordenadas
+		pCalDesdeD = new Punto3D();
+		pCalDesdeI = new Punto3D();
+		
+		pCalDesdeD.setCoordX(pEstD.getCoordX().add(axD));
+		pCalDesdeD.setCoordY(pEstD.getCoordY().add(ayD));
+		
+		pCalDesdeI.setCoordX(pEstI.getCoordX().add(axI));
+		pCalDesdeI.setCoordY(pEstI.getCoordY().add(ayI));
+		
+		// Promedio del punto calculado
+		Punto3D pVisProm = new Punto3D();
+		pVisProm.setId(obsDV.getIdVisado());
+		pVisProm.setCoordX(pCalDesdeD.getCoordX().add(pCalDesdeI.getCoordX()).divide(Constantes.BIGDEC_2).setScale(3, RoundingMode.HALF_DOWN));
+		pVisProm.setCoordY(pCalDesdeD.getCoordY().add(pCalDesdeI.getCoordY()).divide(Constantes.BIGDEC_2).setScale(3, RoundingMode.HALF_DOWN));
+		pVisProm.setCoordZ(BigDecimal.ZERO);
+		
+		nubePuntosCalculados.anadirPunto(pVisProm);
+		escalaGoogle = "18";
+	}
+	
+	private void calcularIntersecInversaTienstra() {
+		// Se calcula el ACIMUT
+		// Se localizan las estaciones D e I mediante el codigo del punto
+		for (int i = 0; i < nubePuntos.tamanioNubePuntos(); i++) {
+            if ("D".equals(nubePuntos.getPunto(i).getCodigo())) {
+                pEstD = nubePuntos.getPunto(i);
+            } else {
+                pEstI = nubePuntos.getPunto(i);
+            }
+		}
+
+		acimutDI = pEstD.acimut(pEstI);
+		acimutID = Utilidades.acimutReciproco(acimutDI);
+		
+		ObsIntersDirecta obsDI = new ObsIntersDirecta();
+		ObsIntersDirecta obsDV = new ObsIntersDirecta();
+		ObsIntersDirecta obsID = new ObsIntersDirecta();
+		ObsIntersDirecta obsIV = new ObsIntersDirecta();
+		
+		int numeroObservaciones = estadilloObsIntersDirecta.tamanioNubePuntos();
+		for (int i = 0; i < numeroObservaciones; i++) {
+			ObsIntersDirecta observacion = estadilloObsIntersDirecta.getPunto(i);
+			
+			if ("DI".equals(observacion.getCodVisual())) {
+				obsDI.setIdEstacion(observacion.getIdEstacion());
+				obsDI.setIdVisado(observacion.getIdVisado());
+				obsDI.setlH(observacion.getlH());
+				obsDI.setlV(observacion.getlV());
+				obsDI.setDistancia(observacion.getDistancia());
+				obsDI.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("DV".equals(observacion.getCodVisual())) {
+				obsDV.setIdEstacion(observacion.getIdEstacion());
+				obsDV.setIdVisado(observacion.getIdVisado());
+				obsDV.setlH(observacion.getlH());
+				obsDV.setlV(observacion.getlV());
+				obsDV.setDistancia(observacion.getDistancia());
+				obsDV.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("ID".equals(observacion.getCodVisual())) {
+				obsID.setIdEstacion(observacion.getIdEstacion());
+				obsID.setIdVisado(observacion.getIdVisado());
+				obsID.setlH(observacion.getlH());
+				obsID.setlV(observacion.getlV());
+				obsID.setDistancia(observacion.getDistancia());
+				obsID.setCodVisual(observacion.getCodVisual());
+				
+			} else if ("IV".equals(observacion.getCodVisual())) {
+				obsIV.setIdEstacion(observacion.getIdEstacion());
+				obsIV.setIdVisado(observacion.getIdVisado());
+				obsIV.setlH(observacion.getlH());
+				obsIV.setlV(observacion.getlV());
+				obsIV.setDistancia(observacion.getDistancia());
+				obsIV.setCodVisual(observacion.getCodVisual());
+			}
+		}
+		
+        // Calcular los lados del triangulo
+		BigDecimal base_EstDEstI = pEstD.distancia(pEstI);
+		BigDecimal ladoDV = new BigDecimal(obsDV.getDistancia().doubleValue() * Math.sin(Utilidades.convertToRadian(obsDV.getlV()).doubleValue()));
+		BigDecimal ladoIV = new BigDecimal(obsIV.getDistancia().doubleValue() * Math.sin(Utilidades.convertToRadian(obsIV.getlV()).doubleValue()));
+
+        // Por el teorema del coseno se calculan los angulos del triangulo
+		BigDecimal anguloD = Utilidades.convertToGradian(new BigDecimal(
+				Math.acos((Math.pow(ladoDV.doubleValue(), 2) + Math.pow(base_EstDEstI.doubleValue(), 2) - Math.pow(ladoIV.doubleValue(), 2)) 
+						/ (2 * ladoDV.doubleValue() * base_EstDEstI.doubleValue()))));
+		
+		BigDecimal anguloI = Utilidades.convertToGradian(new BigDecimal(
+				Math.acos((Math.pow(ladoIV.doubleValue(), 2) + Math.pow(base_EstDEstI.doubleValue(), 2) - Math.pow(ladoDV.doubleValue(), 2)) 
+						/ (2 * ladoIV.doubleValue() * base_EstDEstI.doubleValue()))));
+        
+		BigDecimal alpha = Constantes.BIGDEC_200.subtract(anguloD).subtract(anguloI);
+
+		BigDecimal comprobacion = alpha.add(anguloD).add(anguloI);
+		logger.debug("Comprobación sumatorio 200g --> " + comprobacion);
+
+		BigDecimal acimutDV = acimutDI.subtract(anguloD);
+		BigDecimal acimutIV = acimutID.add(anguloI);
+
+        // Calcular los incrementos de coordenadas
+		BigDecimal axD = new BigDecimal(ladoDV.doubleValue() * Math.sin(Utilidades.convertToRadian(acimutDV).doubleValue()));
+		BigDecimal ayD = new BigDecimal(ladoDV.doubleValue() * Math.cos(Utilidades.convertToRadian(acimutDV).doubleValue()));
+
+		BigDecimal axI = new BigDecimal(ladoIV.doubleValue() * Math.sin(Utilidades.convertToRadian(acimutIV).doubleValue()));
+		BigDecimal ayI = new BigDecimal(ladoIV.doubleValue() * Math.cos(Utilidades.convertToRadian(acimutIV).doubleValue()));
+
+		
+		// Calcular coordenadas
+		pCalDesdeD = new Punto3D();
+		pCalDesdeI = new Punto3D();
+		
+		pCalDesdeD.setCoordX(pEstD.getCoordX().add(axD));
+		pCalDesdeD.setCoordY(pEstD.getCoordY().add(ayD));
+		
+		pCalDesdeI.setCoordX(pEstI.getCoordX().add(axI));
+		pCalDesdeI.setCoordY(pEstI.getCoordY().add(ayI));
+		
+		// Promedio del punto calculado
+		Punto3D pVisProm = new Punto3D();
+		pVisProm.setId(obsDV.getIdVisado());
+		pVisProm.setCoordX(pCalDesdeD.getCoordX().add(pCalDesdeI.getCoordX()).divide(Constantes.BIGDEC_2).setScale(3, RoundingMode.HALF_DOWN));
+		pVisProm.setCoordY(pCalDesdeD.getCoordY().add(pCalDesdeI.getCoordY()).divide(Constantes.BIGDEC_2).setScale(3, RoundingMode.HALF_DOWN));
+		pVisProm.setCoordZ(BigDecimal.ZERO);
+		
+		nubePuntosCalculados.anadirPunto(pVisProm);
+		escalaGoogle = "18";
+	}
+	
+	private void obtenerPoligonoParaGoogleMaps(List<LatLng> listPuntosLatLng) {
+		// Se obtiene el poligono a mostrar en Google Maps
+		Polygon polygon = new Polygon();
+		for (LatLng latLng : listPuntosLatLng) {
+			polygon.getPaths().add(latLng);
+		}
+		
+		// Se customiza el mapa
+		polygon.setStrokeColor("#FF9900");
+		polygon.setFillColor("#FFECC1");
+		polygon.setStrokeOpacity(1);
+		polygon.setFillOpacity(0.6);
+		polygon.setStrokeWeight(2);
+		
+		polygonModel.addOverlay(polygon);
+		obtenerCoordCentroidePoligono(listPuntosLatLng);
+		
+		renderedGoogleMaps = true;
+	}
+	
+	/**
+	 * Metodo que obtiene el centroide de la figura que representa el listado de puntos que se pasan por parámetro
+	 * para centrar el mapa cuando se renderice por pantalla
+	 * @param listPuntosLatLng --> Lista de puntos en coordenadas geográficas
+	 */
 	private void obtenerCoordCentroidePoligono(List<LatLng> listPuntosLatLng) {
 		logger.info(Constantes.INI_METODO);
 		int numPuntos = listPuntosLatLng.size();
@@ -605,118 +918,6 @@ public class PrincipalController implements Serializable {
 		logger.info("Centroide longitud --> " + centroideLng);
 		logger.info(Constantes.FIN_METODO);
 	}
-	
-	private LatLng transformarUTMaGeodesicas(BigDecimal coord_X, BigDecimal coord_Y) {
-		LatLng coordGeograficas = null;
-		try {
-		    double latitud;
-		    double longitud;
-//		    String UTM = "30 S 425197.86 4496306.77";
-//	        String[] parts=UTM.split(" ");
-//	        int Zone=Integer.parseInt(parts[0]);
-//	        char Letter=parts[1].toUpperCase(Locale.ENGLISH).charAt(0);
-//	        double Easting=Double.parseDouble(parts[2]);
-//	        double Northing=Double.parseDouble(parts[3]);
-		    
-//		    String UTM = "  425197.86 4496306.77";
-//	        String[] parts=UTM.split(" ");
-	        int Zone = 30;
-	        char Letter = "S".toUpperCase(Locale.ENGLISH).charAt(0);
-	        double Easting = Double.parseDouble(coord_X.toString());
-	        double Northing = Double.parseDouble(coord_Y.toString());
-		    
-	        double Hem;
-	        if (Letter > 'M') {
-	        	Hem='N';
-	        } else {
-	        	Hem='S';
-	        }
-	        
-	        double north;
-	        if (Hem == 'S') {
-	        	north = Northing - 10000000;
-	        } else {
-	        	north = Northing;
-	        }
-	        
-	        // Se ha obtenido del elipsoide WGS84
-	        double segundaExcentricidadCuadrado = 0.006739433721;
-	        double radioCurvatura = 6399591.4187;
-	        
-	        latitud = (north/6366197.724/0.9996+(1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)-segundaExcentricidadCuadrado*Math.sin(north/6366197.724/0.9996)*Math.cos(north/6366197.724/0.9996)*(Math.atan(Math.cos(Math.atan(( Math.exp((Easting - 500000) / (0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-segundaExcentricidadCuadrado*Math.pow((Easting - 500000) / (0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3))-Math.exp(-(Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*( 1 -  segundaExcentricidadCuadrado*Math.pow((Easting - 500000) / (0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3)))/2/Math.cos((north-0.9996*radioCurvatura*(north/6366197.724/0.9996-segundaExcentricidadCuadrado*3/4*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.pow(segundaExcentricidadCuadrado*3/4,2)*5/3*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996 )/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4-Math.pow(segundaExcentricidadCuadrado*3/4,3)*35/27*(5*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/3))/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-segundaExcentricidadCuadrado*Math.pow((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2))+north/6366197.724/0.9996)))*Math.tan((north-0.9996*radioCurvatura*(north/6366197.724/0.9996 - segundaExcentricidadCuadrado*3/4*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.pow(segundaExcentricidadCuadrado*3/4,2)*5/3*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996 )*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4-Math.pow(segundaExcentricidadCuadrado*3/4,3)*35/27*(5*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/3))/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-segundaExcentricidadCuadrado*Math.pow((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2))+north/6366197.724/0.9996))-north/6366197.724/0.9996)*3/2)*(Math.atan(Math.cos(Math.atan((Math.exp((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-segundaExcentricidadCuadrado*Math.pow((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3))-Math.exp(-(Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-segundaExcentricidadCuadrado*Math.pow((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3)))/2/Math.cos((north-0.9996*radioCurvatura*(north/6366197.724/0.9996-segundaExcentricidadCuadrado*3/4*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.pow(segundaExcentricidadCuadrado*3/4,2)*5/3*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4-Math.pow(segundaExcentricidadCuadrado*3/4,3)*35/27*(5*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/3))/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-segundaExcentricidadCuadrado*Math.pow((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2))+north/6366197.724/0.9996)))*Math.tan((north-0.9996*radioCurvatura*(north/6366197.724/0.9996-segundaExcentricidadCuadrado*3/4*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.pow(segundaExcentricidadCuadrado*3/4,2)*5/3*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4-Math.pow(segundaExcentricidadCuadrado*3/4,3)*35/27*(5*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/3))/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-segundaExcentricidadCuadrado*Math.pow((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2))+north/6366197.724/0.9996))-north/6366197.724/0.9996))*180/Math.PI;
-	        latitud = Math.round(latitud*10000000);
-	        latitud = latitud/10000000;
-	        
-	        longitud = Math.atan((Math.exp((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-segundaExcentricidadCuadrado*Math.pow((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3))-Math.exp(-(Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-segundaExcentricidadCuadrado*Math.pow((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2)/3)))/2/Math.cos((north-0.9996*radioCurvatura*( north/6366197.724/0.9996-segundaExcentricidadCuadrado*3/4*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.pow(segundaExcentricidadCuadrado*3/4,2)*5/3*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2* north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4-Math.pow(segundaExcentricidadCuadrado*3/4,3)*35/27*(5*(3*(north/6366197.724/0.9996+Math.sin(2*north/6366197.724/0.9996)/2)+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/4+Math.sin(2*north/6366197.724/0.9996)*Math.pow(Math.cos(north/6366197.724/0.9996),2)*Math.pow(Math.cos(north/6366197.724/0.9996),2))/3)) / (0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2))))*(1-segundaExcentricidadCuadrado*Math.pow((Easting-500000)/(0.9996*radioCurvatura/Math.sqrt((1+segundaExcentricidadCuadrado*Math.pow(Math.cos(north/6366197.724/0.9996),2)))),2)/2*Math.pow(Math.cos(north/6366197.724/0.9996),2))+north/6366197.724/0.9996))*180/Math.PI+Zone*6-183;
-	        longitud = Math.round(longitud*10000000);
-	        longitud = longitud/10000000;
-	        
-	        coordGeograficas = new LatLng(latitud, longitud);
-	        
-	        logger.info("latitud --> " + latitud);
-			logger.info("longitud --> " + longitud);
-     
-		}  catch (Exception exc) {
-			logger.error("Error tipo Exception", exc);
-		}
-		
-		return coordGeograficas;
-	}
-	
-//	private void transformarUTMaGeodesicas(BigDecimal coord_X, BigDecimal coord_Y) {
-//		try {
-//			File file = new File("E:\\GAITAN\\TFG\\Geodesia_Problema_Directo_Inverso.xlsx");
-//			FileInputStream fileInput = new FileInputStream(file);
-//			XSSFWorkbook libro = new XSSFWorkbook(fileInput);
-//			XSSFSheet hoja = libro.getSheetAt(0);
-//			
-//			// Se comprueba los valores anteriores de las coordenadas geodésicas
-//			XSSFRow filaLongIniOld = hoja.getRow(18);
-//			XSSFCell celdaLongIniOld = filaLongIniOld.getCell(7);
-//			logger.info("Longitud OLD --> " + celdaLongIniOld.getNumericCellValue());
-//			
-//			XSSFRow filaLatiIniOld = hoja.getRow(19);
-//			XSSFCell celdaLatiIniOld = filaLatiIniOld.getCell(7);
-//			logger.info("Latitud OLD --> " + celdaLatiIniOld.getNumericCellValue());
-//			
-//			XSSFRow filaXUtm = hoja.getRow(13);
-//			XSSFCell celdaXUtm = filaXUtm.getCell(2);
-//			logger.info("X_UTM OLD --> " + celdaXUtm.getNumericCellValue());
-//			
-//			// Coordenada X a calcular
-//			celdaXUtm.setCellValue(coord_X.doubleValue());
-//			logger.info("X_UTM --> " + celdaXUtm.getNumericCellValue());
-//			
-//			XSSFRow filaYUtm = hoja.getRow(14);
-//			XSSFCell celdaYUtm = filaYUtm.getCell(2);
-//			logger.info("Y_UTM OLD --> " + celdaYUtm.getNumericCellValue());
-//			
-//			// Coordenada Y a calcular
-//			celdaYUtm.setCellValue(coord_Y.doubleValue());
-//			logger.info("Y_UTM --> " + celdaYUtm.getNumericCellValue());
-//			
-//			// Se evaluan todas las formulas del libro para actualizar resultados
-//			XSSFFormulaEvaluator.evaluateAllFormulaCells(libro);
-//			
-//			XSSFRow filaLong = hoja.getRow(18);
-//			XSSFCell celdaLong = filaLong.getCell(7);
-//			logger.info("Longitud --> " + celdaLong.getNumericCellValue());
-//			
-//			XSSFRow filaLati = hoja.getRow(19);
-//			XSSFCell celdaLati = filaLati.getCell(7);
-//			logger.info("Latitud --> " + celdaLati.getNumericCellValue());
-//			
-//			fileInput.close();
-//			libro.close();
-//			
-//		} catch (FileNotFoundException fnfExc) {
-//			logger.error("Error tipo FileNotFoundException --> Fichero no encontrado", fnfExc);
-//		} catch (IOException ioEcx) {
-//			logger.error("Error tipo IOException --> El fichero no se ha cargado correctamente", ioEcx);
-//		}  catch (Exception exc) {
-//        	logger.error("Error tipo Exception", exc);
-//        }
-//	}
 	
 
 	/*******************************************/
@@ -831,11 +1032,17 @@ public class PrincipalController implements Serializable {
 	public void setEsIntersecDirectaDistancias(boolean esIntersecDirectaDistancias) {
 		this.esIntersecDirectaDistancias = esIntersecDirectaDistancias;
 	}
-	public boolean isEsIntersecInversa() {
-		return esIntersecInversa;
+	public boolean isEsIntersecInversaPothenot() {
+		return esIntersecInversaPothenot;
 	}
-	public void setEsIntersecInversa(boolean esIntersecInversa) {
-		this.esIntersecInversa = esIntersecInversa;
+	public void setEsIntersecInversaPothenot(boolean esIntersecInversaPothenot) {
+		this.esIntersecInversaPothenot = esIntersecInversaPothenot;
+	}
+	public boolean isEsIntersecInversaTienstra() {
+		return esIntersecInversaTienstra;
+	}
+	public void setEsIntersecInversaTienstra(boolean esIntersecInversaTienstra) {
+		this.esIntersecInversaTienstra = esIntersecInversaTienstra;
 	}
 	public MapModel getPolygonModel() {
 		return polygonModel;
@@ -848,6 +1055,12 @@ public class PrincipalController implements Serializable {
 	}
 	public void setPolygonCentroide(Punto2D polygonCentroide) {
 		this.polygonCentroide = polygonCentroide;
+	}
+	public String getEscalaGoogle() {
+		return escalaGoogle;
+	}
+	public void setEscalaGoogle(String escalaGoogle) {
+		this.escalaGoogle = escalaGoogle;
 	}
 
 }

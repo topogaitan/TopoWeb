@@ -23,8 +23,10 @@ public class Constantes {
 	/**             MENSAJES JSF              **/
 	/*******************************************/
 	
-	public static final String ATENCION = "Atención!";
-	public static final String FORMATO_INCORRECTO = "El fichero contiene datos con formato incorrecto";
-	public static final String EXTENSION_FICHERO_INCORRECTA = "La extensión del fichero es incorrecta. Extensiones soportadas (*.pto || *.obs)";
-
+	public static final String MSG_ATENCION = "Atención!";
+	public static final String MSG_FORMATO_INCORRECTO = "El fichero contiene datos con formato incorrecto";
+	public static final String MSG_EXTENSION_FICHERO_INCORRECTA = "La extensión del fichero es incorrecta. Extensiones soportadas (*.pto || *.obs)";
+	public static final String MSG_ERROR_GENERICO = "Incidencia en la aplicación. Por favor, vuelva a iniciar los cálculos o, póngase en contacto con nuestro equipo de soporte técnico";
+	public static final String ERROR_EXCEPTION = "Exception --> ";
+	
 }

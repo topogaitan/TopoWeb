@@ -58,12 +58,15 @@
 								action="#{principalController.doAccionBotonNuevo}" 
 								update="formCalculos">
 							</p:commandButton>
+							
 							<p:commandButton type="button" title="Guardar" icon="ui-icon-disk" 
 								disabled="true">
 							</p:commandButton>
+							
 							<p:commandButton type="button" title="Borrar" icon="ui-icon-trash" 
 								disabled="true">
 							</p:commandButton>
+							
 							<p:commandButton type="button" title="Imprimir" icon="ui-icon-print" 
 								disabled="true">
 							</p:commandButton>
@@ -79,18 +82,16 @@
 										<p:menuitem value="Distancias" actionListener="#{principalController.activarIntersecDirectaDistancias}" 
 											update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
 									</p:submenu>
+									
 									<p:submenu label="Intersección Inversa">
-										<p:menuitem value="Pothenot" actionListener="#{principalController.activarIntersecInversa}" 
+										<p:menuitem value="Pothenot" actionListener="#{principalController.activarIntersecInversaPothenot}" 
 											update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
-										<p:menuitem value="Tienstra" actionListener="#{principalController.activarIntersecInversa}" 
+										<p:menuitem value="Tienstra" actionListener="#{principalController.activarIntersecInversaTienstra}" 
 											update="fragmentToolbarCalculos fragmentCargaFichero fragmentTitleTwo-fragment" />
 									</p:submenu>
 								</p:submenu>
 							</p:tieredMenu>
-								
 							<!-- </p:menuButton> -->
-							
-							
 						</f:facet>
 					</p:toolbar>
 				</p:panel>
@@ -113,8 +114,17 @@
 					<p:separator styleClass="separatorGeneral"></p:separator>
 				</p:fragment>
 				
-				<p:fragment rendered="#{principalController.esIntersecInversa}">
-					<p:outputLabel styleClass="titleTwo">Intersección Inversa</p:outputLabel>
+				<p:fragment rendered="#{principalController.esIntersecInversaPothenot}">
+					<p:graphicImage styleClass="expando floatRight" name="/img/pothenot_mini.jpg" width="40" />
+				
+					<p:outputLabel styleClass="titleTwo">Intersección Inversa Pothenot</p:outputLabel>
+					<p:separator styleClass="separatorGeneral"></p:separator>
+				</p:fragment>
+				
+				<p:fragment rendered="#{principalController.esIntersecInversaTienstra}">
+					<p:graphicImage styleClass="expando floatRight" name="/img/tienstra_mini.jpg" width="40" />
+				
+					<p:outputLabel styleClass="titleTwo">Intersección Inversa Tienstra</p:outputLabel>
 					<p:separator styleClass="separatorGeneral"></p:separator>
 				</p:fragment>
 			</p:fragment>
@@ -129,13 +139,14 @@
 						update="fragmentCargaFichero fragmentDataTableObsIntersecDirecta fragmentDataTableObsIntersecInversa 
 								fragmentDataTablePtosIntersecDirecta fragmentButtonCalcular messagesGrowl" />
 					<h:panelGrid id="pgCheckCargaFicheros" styleClass="centerInFragment" columns="4">
-						<p:outputLabel styleClass="outputLabelMargin" value="Cargado fichero de coordenadas " />
-						<p:selectBooleanCheckbox disabled="true" 
-							value="#{not empty principalController.nubePuntos.listPuntos}" />
 						<p:outputLabel styleClass="outputLabelMargin" value="Cargado fichero de observaciones " />
 						<p:selectBooleanCheckbox disabled="true" 
 							value="#{not empty principalController.estadilloObsIntersDirecta.listObsIntersDirecta 
 									or not empty principalController.estadilloObsIntersInversa.listObsIntersInversa}" />
+									
+						<p:outputLabel styleClass="outputLabelMargin" value="Cargado fichero de coordenadas " />
+						<p:selectBooleanCheckbox disabled="true" 
+							value="#{not empty principalController.nubePuntos.listPuntos}" />
     				</h:panelGrid>
 				</p:panel>
 			</p:fragment>
@@ -341,43 +352,54 @@
 			<!-- INICIO FRAGMENT TITULO TIPO DE CALCULO -->
 			<p:fragment id="fragmentTitleThree-fragment">
 				<p:fragment rendered="#{principalController.mostrarResultados}">
-					<p:graphicImage styleClass="expando floatRight" name="/img/directaAng_mini.jpg" width="40" />
+					<p:graphicImage styleClass="expando floatRight" width="40" 
+						rendered="#{principalController.esIntersecDirectaAngular}" name="/img/directaAng_mini.jpg" />
+						
+					<p:graphicImage styleClass="expando floatRight" width="40" 
+						rendered="#{principalController.esIntersecDirectaDistancias}" name="/img/directaDist_mini.jpg" />
+						
+					<p:graphicImage styleClass="expando floatRight" width="40" 
+						rendered="#{principalController.esIntersecInversaPothenot}" name="/img/pothenot_mini.jpg" />
+						
+					<p:graphicImage styleClass="expando floatRight" width="40" 
+						rendered="#{principalController.esIntersecInversaTienstra}" name="/img/tienstra_mini.jpg" />
 					
 					<p:outputLabel styleClass="titleTwo">Resultados</p:outputLabel>
-					<p:separator styleClass="separatorGeneral"></p:separator>
-				</p:fragment>
-				
-				<!-- <p:fragment rendered="#{principalController.esIntersecDirectaDistancias}">
-					<p:graphicImage styleClass="expando floatRight" name="/img/directaDist_mini.jpg" width="40" />
 					
-					<p:outputLabel styleClass="titleTwo">Intersección Directa Distancias</p:outputLabel>
 					<p:separator styleClass="separatorGeneral"></p:separator>
 				</p:fragment>
-				
-				<p:fragment rendered="#{principalController.esIntersecInversa}">
-					<p:outputLabel styleClass="titleTwo">Intersección Inversa</p:outputLabel>
-					<p:separator styleClass="separatorGeneral"></p:separator>
-				</p:fragment> -->
 			</p:fragment>
 			<!-- FIN FRAGMENT TITULO TIPO DE CALCULO -->
 			
 			
-			
-			
-			
-			
-			
 			<!-- INICIO FRAGMENT TABLA COORDENADAS CALCULADAS -->
 			<p:fragment id="fragmentDataTablePtosCalculados" rendered="#{principalController.mostrarResultados}">
-				<p:fragment id="fragmentAcimutes">
+				<p:fragment id="fragmentAcimutesDirecta" rendered="#{principalController.esIntersecDirectaAngular or principalController.esIntersecDirectaDistancias}">
 					<p:outputLabel styleClass="" value="Acimut-DI (g): " />
 					<p:inputText value="#{principalController.acimutDI}" styleClass="inputAcimutes-5" readonly="true"/>
+				
 					<p:outputLabel styleClass="" value="Acimut-ID (g): " />
 					<p:inputText value="#{principalController.acimutID}" styleClass="inputAcimutes-5" readonly="true"/>
-					<p:outputLabel styleClass="" value="Acimut-DV (g): " />
-					<p:inputText value="#{principalController.acimutDV}" styleClass="inputAcimutes-5" readonly="true"/>
-					<p:outputLabel styleClass="" value="Acimut-IV (g): " />
-					<p:inputText value="#{principalController.acimutIV}" styleClass="inputAcimutes-5" readonly="true"/>
+				
+					<p:outputLabel styleClass="" value="Acimut-DV (g): " rendered="#{principalController.esIntersecDirectaAngular}" />
+					<p:inputText value="#{principalController.acimutDV}" styleClass="inputAcimutes-5" 
+						rendered="#{principalController.esIntersecDirectaAngular}" readonly="true"/>
+				
+					<p:outputLabel styleClass="" value="Acimut-IV (g): " rendered="#{principalController.esIntersecDirectaAngular}" />
+					<p:inputText value="#{principalController.acimutIV}" styleClass="inputAcimutes-5" 
+						rendered="#{principalController.esIntersecDirectaAngular}" readonly="true"/>
+				</p:fragment>
+				
+				<p:fragment id="fragmentAcimutesInversa" rendered="#{principalController.esIntersecInversaPothenot or principalController.esIntersecInversaTienstra}">
+					<p:outputLabel styleClass="" value="Acimut-AB (g): " />
+					<p:inputText value="#{principalController.acimutDI}" styleClass="inputAcimutes-5" readonly="true"/>
+				
+					<p:outputLabel styleClass="" value="Acimut-BC (g): " />
+					<p:inputText value="#{principalController.acimutID}" styleClass="inputAcimutes-5" readonly="true"/>
+				
+					<p:outputLabel styleClass="" value="Acimut-AC (g): " rendered="#{principalController.esIntersecInversaTienstra}" />
+					<p:inputText value="#{principalController.acimutDV}" styleClass="inputAcimutes-5" 
+						rendered="#{principalController.esIntersecInversaTienstra}" readonly="true"/>
 				</p:fragment>
 				
 				<p:panel id="panelToolbarPtosCalculados" styleClass="panel" 
@@ -444,8 +466,10 @@
 					toggleable="true" toggleSpeed="500" collapsed="false" 
 					rendered="#{principalController.renderedGoogleMaps}">
 					<div id="divGmap">
-						<p:gmap id="gmap" styleClass="gmap" center="#{principalController.polygonCentroide.coordX}, #{principalController.polygonCentroide.coordY}" 
-							zoom="13" type="HYBRID" model="#{principalController.polygonModel}">
+						<p:gmap id="gmap" styleClass="gmap" 
+							center="#{principalController.polygonCentroide.coordX}, #{principalController.polygonCentroide.coordY}" 
+							zoom="#{principalController.escalaGoogle}" type="HYBRID" 
+							model="#{principalController.polygonModel}" >
 						</p:gmap>
 					</div>
     			</p:fieldset>
