@@ -550,7 +550,7 @@ public class PrincipalController implements Serializable {
 		alpha = Constantes.BIGDEC_200.subtract(anguloD).subtract(anguloI);
 		BigDecimal comprobacion = alpha.add(anguloD).add(anguloI);
 		
-		logger.debug("Comprobación sumatorio 200g --> " + comprobacion);
+		logger.debug("Comprobacion sumatorio 200g --> " + comprobacion);
 		
 		// Calcular los lados del triangulo
 		BigDecimal ladoDV = new BigDecimal((Math.sin(Utilidades.convertToRadian(anguloI).doubleValue()) * base_EstDEstI.doubleValue()) / 
@@ -663,7 +663,7 @@ public class PrincipalController implements Serializable {
 		BigDecimal alpha = Constantes.BIGDEC_200.subtract(anguloD).subtract(anguloI);
 
 		BigDecimal comprobacion = alpha.add(anguloD).add(anguloI);
-		logger.debug("Comprobación sumatorio 200g --> " + comprobacion);
+		logger.debug("Comprobacion sumatorio 200g --> " + comprobacion);
 
 		BigDecimal acimutDV = acimutDI.subtract(anguloD);
 		BigDecimal acimutIV = acimutID.add(anguloI);
@@ -788,7 +788,7 @@ public class PrincipalController implements Serializable {
 
      // Se comprueba que la suma de todos los ángulos sumen 400g
         BigDecimal comprobacion = angA.add(angB).add(angC).add(alpha).add(beta);
-		logger.debug("Comprobación sumatorio 400g --> " + comprobacion);
+		logger.debug("Comprobacion sumatorio 400g --> " + comprobacion);
 
         BigDecimal acimutAP = acimutAB.add(angA);
         BigDecimal acimutCB = Utilidades.acimutReciproco(acimutBC);
@@ -820,7 +820,7 @@ public class PrincipalController implements Serializable {
         
         // Promedio del punto calculado
 		Punto3D pVisProm = new Punto3D();
-//		pVisProm.setId(obsDV.getIdVisado());
+		pVisProm.setId(obsPA.getIdEstacion());
 		pVisProm.setCoordX(pCalDesdeA.getCoordX().add(pCalDesdeC.getCoordX()).divide(Constantes.BIGDEC_2).setScale(3, RoundingMode.HALF_DOWN));
 		pVisProm.setCoordY(pCalDesdeA.getCoordY().add(pCalDesdeC.getCoordY()).divide(Constantes.BIGDEC_2).setScale(3, RoundingMode.HALF_DOWN));
 		pVisProm.setCoordZ(BigDecimal.ZERO);
@@ -894,14 +894,6 @@ public class PrincipalController implements Serializable {
             beta = obsPC.getlH().subtract(obsPB.getlH());
         }
         delta = Constantes.BIGDEC_400.subtract(alpha).subtract(beta);
-        
-        
-        
-
-        
-        
-        
-        
 		
 		BigDecimal angA = new BigDecimal(Constantes.int_0);
 		BigDecimal angB = new BigDecimal(Constantes.int_0);
@@ -928,9 +920,7 @@ public class PrincipalController implements Serializable {
 
      // Se comprueba que la suma de todos los ángulos sumen 400g
         BigDecimal comprobacion = angA.add(angB).add(angC).add(alpha).add(beta);
-		logger.debug("Comprobación sumatorio 400g --> " + comprobacion);
-		
-		
+		logger.debug("Comprobacion sumatorio 400g --> " + comprobacion);
 		
 	     // Se calculan los pesos según Tienstra
         BigDecimal pesoUno = new BigDecimal(
