@@ -13,6 +13,9 @@ import org.apache.log4j.Logger;
 import es.gaitan.topografia.constants.Constantes;
 import es.gaitan.topografia.interfaces.Estadillo;
 
+/**
+ *	Clase dedicada al estadillo para las observaciones de la intersección inversa
+ */
 public class EstadilloObsIntersInversa implements Estadillo, Serializable {
 	
 	private static final long serialVersionUID = -8997122079393118600L;
@@ -25,6 +28,10 @@ public class EstadilloObsIntersInversa implements Estadillo, Serializable {
 		listObsIntersInversa = new ArrayList<ObsIntersInversa>();
 	}
 	
+	/**
+	 * Añade una linea del fichero de observaciones pasada como parámetro para incluirla 
+	 * en la lista de observaciones
+	 */
 	@Override
 	public boolean anadirObservacion(String linea) {
 		logger.debug(linea);
@@ -69,16 +76,25 @@ public class EstadilloObsIntersInversa implements Estadillo, Serializable {
         return blReturn;
 	}
 	
+	/**
+	 * Deja la lista de observaciones vacia
+	 */
 	@Override
 	public void limpiarEstadillo() {
 		this.listObsIntersInversa.clear();
 	}
 	
+	/**
+	 * Devuelve en formato de tipo primitivo int, el tamaño de la lista de observaciones
+	 */
 	@Override
 	public int tamanioNubePuntos() {
 		return this.listObsIntersInversa.size();
 	}
 	
+	/**
+	 * Devuelve la observación que se encuentra en la lista de observaciones cuya posición sea la pasada por parámetro
+	 */
 	public ObsIntersInversa getPunto(int index) {
 		return listObsIntersInversa.get(index);
 	}

@@ -12,6 +12,10 @@ import org.apache.log4j.Logger;
 
 import es.gaitan.topografia.constants.Constantes;
 
+/**
+ *	Clase dedicada a almacenar los puntos tridimensionales, ya sean los cargados mediante fichero o los obtenidos
+ *	mediante los cálculos de esta aplicación
+ */
 public class NubePuntos implements Serializable {
 	
 	private static final long serialVersionUID = 8208789340900626741L;
@@ -25,6 +29,10 @@ public class NubePuntos implements Serializable {
 		listPuntos = new ArrayList<Punto3D>();
 	}
 
+	/**
+	 * Añade una linea del fichero de puntos pasada como parámetro para incluirla 
+	 * en la lista de puntos
+	 */
 	public boolean anadirPunto(String linea) {
 		logger.debug(linea);
 		
@@ -71,18 +79,30 @@ public class NubePuntos implements Serializable {
         return blReturn;
 	}
 	
+	/**
+	 *	Añade el punto pasado por parámetro a la lista de puntos 
+	 */
 	public void anadirPunto(Punto3D punto) {
 		listPuntos.add(punto);
 	}
 	
+	/**
+	 * Deja la lista de puntos vacia
+	 */
 	public void limpiarNubePuntos() {
 		this.listPuntos.clear();
 	}
 	
+	/**
+	 * Devuelve en formato de tipo primitivo int el tamaño de la lista de puntos
+	 */
 	public int tamanioNubePuntos() {
 		return this.listPuntos.size();
 	}
 	
+	/**
+	 * Devuelve el punto que se encuentra en la lista de puntos cuya posición sea la pasada por parámetro
+	 */
 	public Punto3D getPunto(int index) {
 		return listPuntos.get(index);
 	}

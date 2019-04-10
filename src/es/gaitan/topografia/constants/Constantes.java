@@ -2,6 +2,9 @@ package es.gaitan.topografia.constants;
 
 import java.math.BigDecimal;
 
+/**
+ * Clase de constantes utilizadas en la aplicación 
+ */
 public class Constantes {
 	
 	public static final String INI_METODO = "Inicio del metodo ";
