@@ -7,11 +7,9 @@ import org.apache.log4j.Logger;
 import org.primefaces.model.map.LatLng;
 
 import es.gaitan.topografia.constants.Constantes;
+
 /**
  * Clase de utilidades genéricas para toda la aplicación
- * 
- * @author rafagaitan
- *
  */
 public final class Utilidades {
 	
@@ -21,6 +19,9 @@ public final class Utilidades {
 		super();
 	}
 	
+	/**
+	 * Método encargado de verificar si el objeto pasado por parámetro es nulo o se encuentra vacío
+	 */
 	public static Boolean isNullOrEmpty(Object obj) {
 		Boolean salida = false;
 		
@@ -31,14 +32,23 @@ public final class Utilidades {
 		return salida;
 	}
 
+	/**
+	 * Método encargado de transformar a radianes el ángulo en grados centesimales pasado por parámetro
+	 */
     public static BigDecimal convertToRadian(BigDecimal angulo) {
         return angulo.multiply(new BigDecimal(Math.PI / Constantes.int_200));
     }
 
+    /**
+	 * Método encargado de transformar a gradianes el ángulo en grados centesimales pasado por parámetro
+	 */
 	public static BigDecimal convertToGradian(BigDecimal angulo) {
 		return angulo.multiply(new BigDecimal(Constantes.int_200 / Math.PI));
 	}
 
+	/**
+	 * Método encargado de obtener el acimut recíproco del acimut pasado por parámetro
+	 */
     public static BigDecimal acimutReciproco(BigDecimal acimutEntrada) { 
     	BigDecimal acimutSalida = acimutEntrada;
     	
@@ -100,60 +110,5 @@ public final class Utilidades {
  
 		return coordGeograficas;
 	}
-    
-//	public static void transformarUTMaGeodesicas(BigDecimal coord_X, BigDecimal coord_Y) {
-//	try {
-//		File file = new File("E:\\GAITAN\\TFG\\Geodesia_Problema_Directo_Inverso.xlsx");
-//		FileInputStream fileInput = new FileInputStream(file);
-//		XSSFWorkbook libro = new XSSFWorkbook(fileInput);
-//		XSSFSheet hoja = libro.getSheetAt(0);
-//		
-//		// Se comprueba los valores anteriores de las coordenadas geodésicas
-//		XSSFRow filaLongIniOld = hoja.getRow(18);
-//		XSSFCell celdaLongIniOld = filaLongIniOld.getCell(7);
-//		logger.info("Longitud OLD --> " + celdaLongIniOld.getNumericCellValue());
-//		
-//		XSSFRow filaLatiIniOld = hoja.getRow(19);
-//		XSSFCell celdaLatiIniOld = filaLatiIniOld.getCell(7);
-//		logger.info("Latitud OLD --> " + celdaLatiIniOld.getNumericCellValue());
-//		
-//		XSSFRow filaXUtm = hoja.getRow(13);
-//		XSSFCell celdaXUtm = filaXUtm.getCell(2);
-//		logger.info("X_UTM OLD --> " + celdaXUtm.getNumericCellValue());
-//		
-//		// Coordenada X a calcular
-//		celdaXUtm.setCellValue(coord_X.doubleValue());
-//		logger.info("X_UTM --> " + celdaXUtm.getNumericCellValue());
-//		
-//		XSSFRow filaYUtm = hoja.getRow(14);
-//		XSSFCell celdaYUtm = filaYUtm.getCell(2);
-//		logger.info("Y_UTM OLD --> " + celdaYUtm.getNumericCellValue());
-//		
-//		// Coordenada Y a calcular
-//		celdaYUtm.setCellValue(coord_Y.doubleValue());
-//		logger.info("Y_UTM --> " + celdaYUtm.getNumericCellValue());
-//		
-//		// Se evaluan todas las formulas del libro para actualizar resultados
-//		XSSFFormulaEvaluator.evaluateAllFormulaCells(libro);
-//		
-//		XSSFRow filaLong = hoja.getRow(18);
-//		XSSFCell celdaLong = filaLong.getCell(7);
-//		logger.info("Longitud --> " + celdaLong.getNumericCellValue());
-//		
-//		XSSFRow filaLati = hoja.getRow(19);
-//		XSSFCell celdaLati = filaLati.getCell(7);
-//		logger.info("Latitud --> " + celdaLati.getNumericCellValue());
-//		
-//		fileInput.close();
-//		libro.close();
-//		
-//	} catch (FileNotFoundException fnfExc) {
-//		logger.error("Error tipo FileNotFoundException --> Fichero no encontrado", fnfExc);
-//	} catch (IOException ioEcx) {
-//		logger.error("Error tipo IOException --> El fichero no se ha cargado correctamente", ioEcx);
-//	}  catch (Exception exc) {
-//    	logger.error("Error tipo Exception", exc);
-//    }
-//}
 
 }

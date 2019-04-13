@@ -43,7 +43,6 @@ public class NubePuntos implements Serializable {
         try {
 	        parametros = linea.split(separador, 6);
 	
-	        
 	        // TODO Deberían de ser los campos obligatorios sino fallará el cálculo
 	        Punto3D pto = new Punto3D();
 	        

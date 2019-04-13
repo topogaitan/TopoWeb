@@ -47,9 +47,6 @@ import es.gaitan.topografia.utilities.Utilidades;
 @SessionScoped
 public class PrincipalController implements Serializable {
 
-	// TODO GENERAR DOCUMENTACION A PARTIR DE LA INFORMACION DEL CODIGO
-	
-	
 	private static final long serialVersionUID = 5215987609794388569L;
 	private static final Logger logger = Logger.getLogger(PrincipalController.class);
 	
@@ -100,6 +97,9 @@ public class PrincipalController implements Serializable {
 	private boolean renderedGoogleMaps;
 	private boolean mostrarResultados;
 
+	/**
+	 * Método que inicializa las variables de la aplicación
+	 */
 	@PostConstruct
 	public void reset() {
 		logger.info(Constantes.INI_METODO);
@@ -132,6 +132,10 @@ public class PrincipalController implements Serializable {
 		logger.info(Constantes.FIN_METODO);
 	}
 	
+	/**
+	 * Método encargado de inicializar las variables necesarias para comenzar con los cálculos
+	 * de la intersección directa angular
+	 */
 	public void activarIntersecDirectaAngular() {
 		logger.info(Constantes.INI_METODO);
 		
@@ -159,6 +163,10 @@ public class PrincipalController implements Serializable {
 		logger.info(Constantes.FIN_METODO);
 	}
 	
+	/**
+	 * Método encargado de inicializar las variables necesarias para comenzar con los cálculos
+	 * de la intersección directa de distancias
+	 */
 	public void activarIntersecDirectaDistancias() {
 		logger.info(Constantes.INI_METODO);
 		
@@ -186,6 +194,10 @@ public class PrincipalController implements Serializable {
 		logger.info(Constantes.FIN_METODO);
 	}
 	
+	/**
+	 * Método encargado de inicializar las variables necesarias para comenzar con los cálculos
+	 * de la intersección inversa mediante Pothenot
+	 */
 	public void activarIntersecInversaPothenot() {
 		logger.info(Constantes.INI_METODO);
 		
@@ -217,6 +229,10 @@ public class PrincipalController implements Serializable {
 		logger.info(Constantes.FIN_METODO);
 	}
 	
+	/**
+	 * Método encargado de inicializar las variables necesarias para comenzar con los cálculos
+	 * de la intersección inversa mediante Tienstra
+	 */
 	public void activarIntersecInversaTienstra() {
 		logger.info(Constantes.INI_METODO);
 		
@@ -247,6 +263,9 @@ public class PrincipalController implements Serializable {
 		logger.info(Constantes.FIN_METODO);
 	}
 	
+	/**
+	 * Método encargado de resetear la aplicación e iniciarla de nuevo
+	 */
 	public String doAccionBotonNuevo() {
 		logger.info(Constantes.INI_METODO);
 		
@@ -264,6 +283,9 @@ public class PrincipalController implements Serializable {
 		return "";
 	}
 	
+	/**
+	 * Método encargado de leer desde el fichero y cargar los datos necesarios en los objetos
+	 */
 	public void cargarFichero(FileUploadEvent event) {
 		logger.info(Constantes.INI_METODO);
 		
@@ -292,6 +314,9 @@ public class PrincipalController implements Serializable {
 		logger.info(Constantes.FIN_METODO);
 	}
 	
+	/**
+	 * Método encargado de obtener todos los cálculos necesarios para ser mostrados por pantalla
+	 */
 	public String doObtenerCalculos() {
 		logger.info(Constantes.INI_METODO);
 		
@@ -340,6 +365,9 @@ public class PrincipalController implements Serializable {
 	/**          METODOS PRIVADOS             **/
 	/*******************************************/
 	
+	/**
+	 * Método encargado de cargar las observaciones desde el fichero
+	 */
 	private void cargaFicheroObservaciones(UploadedFile uploadFile) {
 		logger.info(Constantes.INI_METODO);
 		
@@ -379,6 +407,9 @@ public class PrincipalController implements Serializable {
         }
     }
 	
+	/**
+	 * Método encargado de cargar las coordenadas desde el fichero
+	 */
 	private void cargaFicheroCoordenadas(UploadedFile uploadFile) {
 		logger.info(Constantes.INI_METODO);
 		
@@ -415,6 +446,9 @@ public class PrincipalController implements Serializable {
         }
 	}
 	
+	/**
+	 * Método encargado de obtener la ruta completa donde se encuentra almacenado el fichero a cargar
+	 */
 	private String obtenerRutaFicheroCompleta(UploadedFile uploadFile) throws Exception {
 		logger.info(Constantes.INI_METODO);
 		String rutaCompleta = Constantes.CADENA_VACIA;
@@ -464,6 +498,9 @@ public class PrincipalController implements Serializable {
        return br;
 	}
 	
+	/**
+	 * Método encargado de realizar los cálculos de la intersección directa angular
+	 */
 	private void calcularIntersecDirectaAngular() {
 		// Se calcula el ACIMUT
 		// Se localizan las estaciones D e I mediante el codigo del punto
@@ -591,6 +628,9 @@ public class PrincipalController implements Serializable {
 		escalaGoogle = "13";
 	}
 	
+	/**
+	 * Método encargado de realizar los cálculos de la intersección directa de distancias
+	 */
 	private void calcularIntersecDirectaDistancias() {
 		// Se calcula el ACIMUT
 		// Se localizan las estaciones D e I mediante el codigo del punto
@@ -699,6 +739,9 @@ public class PrincipalController implements Serializable {
 		escalaGoogle = "18";
 	}
 	
+	/**
+	 * Método encargado de realizar los cálculos de la intersección inversa mediante Pothenot
+	 */
 	private void calcularIntersecInversaPothenot() {
 		
 		// Se localizan las estaciones D e I mediante el codigo del punto
@@ -831,6 +874,9 @@ public class PrincipalController implements Serializable {
 		escalaGoogle = "18";
 	}
 	
+	/**
+	 * Método encargado de realizar los cálculos de la intersección inversa mediante Tienstra
+	 */
 	private void calcularIntersecInversaTienstra() {
 		
 		// Se localizan las estaciones D e I mediante el codigo del punto
@@ -950,6 +996,10 @@ public class PrincipalController implements Serializable {
 		escalaGoogle = "18";
 	}
 	
+	/**
+	 * Método encargado de cargar las coordenadas de los puntos relacionados con los cálculos para ser mostrados 
+	 * en forma de polígono en Google Maps
+	 */
 	private void obtenerPoligonoParaGoogleMaps(List<LatLng> listPuntosLatLng) {
 		// Se obtiene el poligono a mostrar en Google Maps
 		Polygon polygon = new Polygon();
