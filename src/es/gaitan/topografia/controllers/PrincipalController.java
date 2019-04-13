@@ -39,7 +39,9 @@ import es.gaitan.topografia.constants.Constantes;
 import es.gaitan.topografia.utilities.Utilidades;
 
 /**
- * @author RGAITAN
+ * Clase principal que controla la aplicación. Se encarga de gestionar las acciones que se ejecutan en la vista.
+ * Además, obtiene los resultados en función de la acción demandada y carga el modelo de objetos necesarios para
+ * la visualización a través de las pantallas
  */
 @ManagedBean(name="principalController")
 @SessionScoped
