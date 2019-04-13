@@ -5,6 +5,9 @@ import java.math.RoundingMode;
 
 import es.gaitan.topografia.utilities.Utilidades;
 
+/**
+ *	Clase para la representación de un punto en 3D
+ */
 public class Punto3D extends Punto2D {
 
 	private static final long serialVersionUID = 4193150332407928359L;
@@ -15,7 +18,9 @@ public class Punto3D extends Punto2D {
 		super();
 	}
 
-	
+	/**
+	 * Método que devuelve la distancia reducida con respecto a un punto pasado por parámetro
+	 */
 	public BigDecimal distancia(Punto3D p2) {
         BigDecimal incX = p2.getCoordX().subtract(this.getCoordX());
         BigDecimal incY = p2.getCoordY().subtract(this.getCoordY());
@@ -30,6 +35,9 @@ public class Punto3D extends Punto2D {
 
     }
 	
+	/**
+	 * Método que devuelve el acimut con respecto a un punto pasado por parámetro
+	 */
 	public BigDecimal acimut(Punto3D p2) {
 		BigDecimal incX;
 		BigDecimal incY;
@@ -55,6 +63,9 @@ public class Punto3D extends Punto2D {
         return acimut;
     }
 
+	/**
+	 * Método que devuelve el acimut con respecto a 2 puntos pasados por parámetros
+	 */
     public static BigDecimal acimut(Punto3D p1, Punto3D p2) {
         return p1.acimut(p2);
     }

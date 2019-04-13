@@ -3,6 +3,9 @@ package es.gaitan.topografia.beans;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ * Clase de observaciones generales
+ */
 public class ObsGeneral implements Serializable{
 	
 	private static final long serialVersionUID = 5144653986606702307L;

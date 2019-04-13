@@ -3,6 +3,9 @@ package es.gaitan.topografia.beans;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ *	Clase para la representación de un punto en 2D
+ */
 public class Punto2D implements Serializable {
 
 	private static final long serialVersionUID = 400873602651185848L;
@@ -16,6 +19,9 @@ public class Punto2D implements Serializable {
 		super();
 	}
 	
+	/**
+	 * Método que obtiene el acimut desde la lectura horizontal y la desorientación pasadas por los parámetros de entrada
+	 */
 	public BigDecimal acimut(BigDecimal lH, BigDecimal desorienta) {
 		BigDecimal acimut;
         acimut = desorienta.add(lH);
@@ -27,6 +33,9 @@ public class Punto2D implements Serializable {
         return acimut;
     }
 	
+	/**
+	 * Método que obtiene la desorientación desde la lectura horizontal y el acimut pasados por los parámetros de entrada
+	 */
     public BigDecimal desorientacion(BigDecimal lH, BigDecimal acimut) {
     	BigDecimal desorientacion = acimut.subtract(lH);
     	

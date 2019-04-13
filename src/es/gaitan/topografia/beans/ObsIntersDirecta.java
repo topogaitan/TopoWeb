@@ -2,6 +2,9 @@ package es.gaitan.topografia.beans;
 
 import java.math.BigDecimal;
 
+/**
+ *	Clase de observaciones para la intersección directa
+ */
 public class ObsIntersDirecta extends ObsGeneral {
 
 	private static final long serialVersionUID = -6037032831412479606L;
@@ -11,7 +14,6 @@ public class ObsIntersDirecta extends ObsGeneral {
 	public ObsIntersDirecta() {
 		super();
 	}
-
 
 	
 	/*******************************************/
