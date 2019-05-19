@@ -13,7 +13,7 @@
   </class>  
   <class id="2" language="java" name="es.gaitan.topografia.constants.Constantes" project="RGF_TopoWeb" 
     file="/RGF_TopoWeb/src/es/gaitan/topografia/constants/Constantes.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="351" width="264" x="381" y="2511"/>    
+    <position height="-1" width="-1" x="662" y="2456"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,16 +30,16 @@
     </display>  
   </class>  
   <dependency id="4">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="2"/>  
-  </dependency>  
-  <dependency id="5">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="3"/>  
   </dependency>  
-  <dependency id="6">    
+  <dependency id="5">    
     <bendpoint x="390" y="2282"/>    
     <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="6">    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="2"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
