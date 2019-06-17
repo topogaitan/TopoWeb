@@ -1003,6 +1003,7 @@ public class PrincipalController implements Serializable {
 	private void obtenerPoligonoParaGoogleMaps(List<LatLng> listPuntosLatLng) {
 		// Se obtiene el poligono a mostrar en Google Maps
 		Polygon polygon = new Polygon();
+		
 		for (LatLng latLng : listPuntosLatLng) {
 			polygon.getPaths().add(latLng);
 		}
